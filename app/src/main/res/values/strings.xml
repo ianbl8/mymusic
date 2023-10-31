@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">mymusic</string>
+    <string name="btn_start">start</string>
+    <string name="welcome_line">welcome to</string>
+</resources>
