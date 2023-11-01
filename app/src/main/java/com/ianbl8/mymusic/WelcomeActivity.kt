@@ -15,8 +15,7 @@ class WelcomeActivity : AppCompatActivity() {
 
         btnStart = findViewById(R.id.btnStart)
         btnStart.setOnClickListener {
-            val intent = Intent(this@WelcomeActivity, ListActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this@WelcomeActivity, ListActivity::class.java))
         }
     }
 }
