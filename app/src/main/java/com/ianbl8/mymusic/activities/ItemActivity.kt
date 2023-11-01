@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
 import com.ianbl8.mymusic.databinding.ActivityItemBinding
+import com.ianbl8.mymusic.main.MainApp
 import com.ianbl8.mymusic.models.ItemModel
 import timber.log.Timber.Forest.i
 import java.util.Calendar
@@ -13,7 +14,7 @@ class ItemActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityItemBinding
     var item = ItemModel()
-    var items = ArrayList<ItemModel>()
+    lateinit var app: MainApp
     val thisYear = Calendar.getInstance().get(Calendar.YEAR)
     val nextYear = thisYear + 1
 
@@ -22,6 +23,8 @@ class ItemActivity : AppCompatActivity() {
         binding = ActivityItemBinding.inflate(layoutInflater)
         setContentView(binding.root)
         i("ItemActivity started")
+
+        app = application as MainApp
 
         binding.btnAddItem.setOnClickListener() {
             i("btnAddItem pressed")
@@ -37,11 +40,11 @@ class ItemActivity : AppCompatActivity() {
                 } else {
                     Snackbar.make(it, "\"${item.title}\" by ${item.artist} (${item.year}) added", Snackbar.LENGTH_SHORT).show()
                     item.id = UUID.randomUUID().toString()
-                    items.add(item.copy())
+                    app.items.add(item.copy())
                     i("Valid item: ${item.id}")
                     i("${item.title}, ${item.artist}, ${item.year}; P: ${item.physical}, D: ${item.digital}")
-                    for (i in items.indices) {
-                        i("${this.items[i]}")
+                    for (i in app.items.indices) {
+                        i("${this.app.items[i]}")
                     }
                 }
             } else {
