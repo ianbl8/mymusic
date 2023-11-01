@@ -1,5 +1,21 @@
 <resources>
     <string name="app_name">mymusic</string>
+
+    <!-- ItemActivity -->
+    <string name="tv_title">Title</string>
+    <string name="hint_title">Voyage</string>
+    <string name="tv_artist">Artist</string>
+    <string name="hint_artist">ABBA</string>
+    <string name="tv_year">Year of release</string>
+    <string name="hint_year">2021</string>
+    <string name="tv_type">Type</string>
+    <string name="cb_physical">Physical copy</string>
+    <string name="cb_digital">Digital copy</string>
+    <string name="btn_add_item">Add</string>
+
+    <!-- ListActivity -->
+
+    <!-- WelcomeActivity -->
     <string name="btn_start">start</string>
     <string name="welcome_line">welcome to</string>
 </resources>
