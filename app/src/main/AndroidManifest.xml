@@ -14,13 +14,13 @@
         tools:ignore="ObsoleteSdkInt"
         tools:targetApi="31">
         <activity
-            android:name=".ItemActivity"
+            android:name=".activities.ItemActivity"
             android:exported="false" />
         <activity
-            android:name=".ListActivity"
+            android:name=".activities.ListActivity"
             android:exported="false" />
         <activity
-            android:name=".WelcomeActivity"
+            android:name=".activities.WelcomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
