@@ -14,6 +14,7 @@
     <string name="btn_add_item">Add</string>
 
     <!-- ListActivity -->
+    <string name="menu_add_item">Add</string>
 
     <!-- WelcomeActivity -->
     <string name="btn_start">start</string>

@@ -14,7 +14,7 @@ class MainApp: Application() {
         Timber.plant(Timber.DebugTree())
         i("mymusic started")
 
-        /* Items for testing
+        // Items for testing - comment out if not needed
         items.add(ItemModel("Test0","Ring Ring", "ABBA", "1973", true, true))
         items.add(ItemModel("Test1","Waterloo", "ABBA", "1974", true, true))
         items.add(ItemModel("Test2","ABBA", "ABBA", "1975", true, true))
@@ -25,6 +25,5 @@ class MainApp: Application() {
         items.add(ItemModel("Test7","The Visitors", "ABBA", "1981", true, true))
         items.add(ItemModel("Test8","ABBA Live", "ABBA", "1986", true, true))
         items.add(ItemModel("Test9","Voyage", "ABBA", "2021", true, true))
-         */
     }
 }
