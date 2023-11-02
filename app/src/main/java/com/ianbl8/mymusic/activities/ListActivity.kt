@@ -28,7 +28,7 @@ class ListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.toolbar.title = title
+        binding.toolbar.title = this.resources.getString(R.string.menu_list)
         setSupportActionBar(binding.toolbar)
         i("ListActivity started")
 

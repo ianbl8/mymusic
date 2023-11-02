@@ -2,7 +2,10 @@ package com.ianbl8.mymusic.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import com.google.android.material.snackbar.Snackbar
+import com.ianbl8.mymusic.R
 import com.ianbl8.mymusic.databinding.ActivityItemBinding
 import com.ianbl8.mymusic.main.MainApp
 import com.ianbl8.mymusic.models.ItemModel
@@ -22,6 +25,8 @@ class ItemActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityItemBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.toolbar.title = this.resources.getString(R.string.menu_item)
+        setSupportActionBar(binding.toolbar)
         i("ItemActivity started")
 
         app = application as MainApp
@@ -52,5 +57,19 @@ class ItemActivity : AppCompatActivity() {
                 i("Invalid item")
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_item, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
+        when (menuItem.itemId) {
+            R.id.cancel_item -> {
+                finish()
+            }
+        }
+        return super.onOptionsItemSelected(menuItem)
     }
 }
