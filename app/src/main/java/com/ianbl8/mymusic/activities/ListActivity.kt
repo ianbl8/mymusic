@@ -10,11 +10,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ianbl8.mymusic.R
 import com.ianbl8.mymusic.adapters.ItemAdapter
+import com.ianbl8.mymusic.adapters.ItemListener
 import com.ianbl8.mymusic.databinding.ActivityListBinding
 import com.ianbl8.mymusic.main.MainApp
+import com.ianbl8.mymusic.models.ItemModel
 import timber.log.Timber.Forest.i
 
-class ListActivity : AppCompatActivity() {
+class ListActivity : AppCompatActivity(), ItemListener {
 
     lateinit var app: MainApp
     private lateinit var binding: ActivityListBinding
@@ -31,7 +33,7 @@ class ListActivity : AppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter = ItemAdapter(app.items.findAll())
+        binding.recyclerView.adapter = ItemAdapter(app.items.findAll(), this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -50,6 +52,18 @@ class ListActivity : AppCompatActivity() {
     }
 
     private val getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            (binding.recyclerView.adapter)?.notifyItemRangeChanged(0, app.items.findAll().size)
+        }
+    }
+
+    override fun onItemClick(item: ItemModel) {
+        val launcherIntent = Intent(this, ItemActivity::class.java)
+        launcherIntent.putExtra("item_edit", item)
+        getClickResult.launch(launcherIntent)
+    }
+
+    private val getClickResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
             (binding.recyclerView.adapter)?.notifyItemRangeChanged(0, app.items.findAll().size)
         }

@@ -7,7 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ianbl8.mymusic.databinding.CardItemBinding
 import com.ianbl8.mymusic.models.ItemModel
 
-class ItemAdapter constructor(private var items: List<ItemModel>) : RecyclerView.Adapter<ItemAdapter.MainHolder>() {
+interface ItemListener {
+    fun onItemClick(item: ItemModel)
+}
+
+class ItemAdapter constructor(
+    private var items: List<ItemModel>,
+    private val listener: ItemListener
+) : RecyclerView.Adapter<ItemAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
         val binding = CardItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -16,17 +23,18 @@ class ItemAdapter constructor(private var items: List<ItemModel>) : RecyclerView
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
         val item = items[holder.adapterPosition]
-        holder.bind(item)
+        holder.bind(item, listener)
     }
 
     override fun getItemCount(): Int = items.size
 
     class MainHolder(private val binding: CardItemBinding) : RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
-        fun bind(item: ItemModel) {
+        fun bind(item: ItemModel, listener: ItemListener) {
             binding.itemTitle.text = item.title
             binding.itemArtist.text = item.artist
             binding.itemYear.text = "(${item.year})"
+            binding.root.setOnClickListener { listener.onItemClick(item) }
         }
     }
 }

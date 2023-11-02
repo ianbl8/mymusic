@@ -14,6 +14,18 @@ class ItemMemStore: ItemStore {
         logAll()
     }
 
+    override fun update(item: ItemModel) {
+        val updateItem: ItemModel? = items.find { i -> i.id == item.id }
+        if (updateItem != null) {
+            updateItem.title = item.title
+            updateItem.artist = item.artist
+            updateItem.year = item.year
+            updateItem.physical = item.physical
+            updateItem.digital = item.digital
+            logAll()
+        }
+    }
+
     fun logAll() {
         items.forEach {
             i("${it}")

@@ -21,6 +21,7 @@ class ItemActivity : AppCompatActivity() {
     val thisYear = Calendar.getInstance().get(Calendar.YEAR)
     val nextYear = thisYear + 1
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityItemBinding.inflate(layoutInflater)
@@ -28,6 +29,28 @@ class ItemActivity : AppCompatActivity() {
         binding.toolbar.title = this.resources.getString(R.string.menu_item)
         setSupportActionBar(binding.toolbar)
         i("ItemActivity started")
+
+        var edit = false
+
+        if (intent.hasExtra("item_edit")) {
+            edit = true
+            @Suppress("DEPRECATION")
+            item = intent.extras?.getParcelable("item_edit")!!
+            binding.etTitle.setText(item.title)
+            binding.etArtist.setText(item.artist)
+            binding.etYear.setText(item.year)
+            if (item.physical) {
+                binding.cbPhysical.setChecked(true)
+            } else {
+                binding.cbPhysical.setChecked(false)
+            }
+            if (item.digital) {
+                binding.cbDigital.setChecked(true)
+            } else {
+                binding.cbDigital.setChecked(false)
+            }
+            binding.toolbar.title = "edit ${item.title}"
+        }
 
         app = application as MainApp
 
@@ -43,10 +66,16 @@ class ItemActivity : AppCompatActivity() {
                     Snackbar.make(it, "Choose a valid year between 1900 and $nextYear", Snackbar.LENGTH_LONG).show()
                     i("Invalid year")
                 } else {
-                    Snackbar.make(it, "\"${item.title}\" by ${item.artist} (${item.year}) added", Snackbar.LENGTH_SHORT).show()
-                    item.id = UUID.randomUUID().toString()
-                    i("Valid item: ${item.id}")
-                    app.items.create(item.copy())
+                    if (edit) {
+                        i("Update item: ${item.id}")
+                        app.items.update(item.copy())
+                    } else {
+                        item.id = UUID.randomUUID().toString()
+                        i("Create item: ${item.id}")
+                        app.items.create(item.copy())
+                    }
+                    setResult(RESULT_OK)
+                    finish()
                 }
             } else {
                 Snackbar.make(it, "Enter a valid title, artist and year", Snackbar.LENGTH_LONG).show()
