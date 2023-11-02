@@ -45,12 +45,8 @@ class ItemActivity : AppCompatActivity() {
                 } else {
                     Snackbar.make(it, "\"${item.title}\" by ${item.artist} (${item.year}) added", Snackbar.LENGTH_SHORT).show()
                     item.id = UUID.randomUUID().toString()
-                    app.items.add(item.copy())
                     i("Valid item: ${item.id}")
-                    i("${item.title}, ${item.artist}, ${item.year}; P: ${item.physical}, D: ${item.digital}")
-                    for (i in app.items.indices) {
-                        i("${this.app.items[i]}")
-                    }
+                    app.items.create(item.copy())
                 }
             } else {
                 Snackbar.make(it, "Enter a valid title, artist and year", Snackbar.LENGTH_LONG).show()

@@ -31,7 +31,7 @@ class ListActivity : AppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter = ItemAdapter(app.items)
+        binding.recyclerView.adapter = ItemAdapter(app.items.findAll())
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -51,7 +51,7 @@ class ListActivity : AppCompatActivity() {
 
     private val getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
-            (binding.recyclerView.adapter)?.notifyItemRangeChanged(0, app.items.size)
+            (binding.recyclerView.adapter)?.notifyItemRangeChanged(0, app.items.findAll().size)
         }
     }
 }
