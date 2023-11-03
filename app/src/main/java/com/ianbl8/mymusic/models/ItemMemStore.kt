@@ -28,6 +28,10 @@ class ItemMemStore: ItemStore {
         }
     }
 
+    override fun delete(item: ItemModel) {
+        items.remove(item)
+    }
+
     fun logAll() {
         items.forEach {
             i("${it}")

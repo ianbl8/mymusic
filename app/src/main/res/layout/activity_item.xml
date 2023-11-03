@@ -197,6 +197,18 @@
                         android:src="@drawable/baseline_playlist_add_check_24"
                         android:text="@string/btn_add_item" />
 
+                    <ImageButton
+                        android:id="@+id/btnDeleteItem"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_margin="12dp"
+                        android:background="@drawable/button_shape"
+                        android:contentDescription="@string/btn_delete_item"
+                        android:padding="12dp"
+                        android:src="@drawable/baseline_delete_24"
+                        android:text="@string/btn_delete_item" />
+
                 </LinearLayout>
 
             </LinearLayout>

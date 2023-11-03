@@ -100,6 +100,13 @@ class ItemActivity : AppCompatActivity() {
         }
 
         registerImagePickerCallback()
+
+        binding.btnDeleteItem.setOnClickListener() {
+            i("btnDeleteItem pressed")
+            setResult(99)
+            app.items.delete(item)
+            finish()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

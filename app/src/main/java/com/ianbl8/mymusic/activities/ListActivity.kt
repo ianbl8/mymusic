@@ -20,6 +20,7 @@ class ListActivity : AppCompatActivity(), ItemListener {
 
     lateinit var app: MainApp
     private lateinit var binding: ActivityListBinding
+    private var position: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,15 +58,20 @@ class ListActivity : AppCompatActivity(), ItemListener {
         }
     }
 
-    override fun onItemClick(item: ItemModel) {
+    override fun onItemClick(item: ItemModel, pos: Int) {
         val launcherIntent = Intent(this, ItemActivity::class.java)
         launcherIntent.putExtra("item_edit", item)
+        position = pos
         getClickResult.launch(launcherIntent)
     }
 
     private val getClickResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
             (binding.recyclerView.adapter)?.notifyItemRangeChanged(0, app.items.findAll().size)
+        } else {
+            if (it.resultCode == 99) {
+                (binding.recyclerView.adapter)?.notifyItemRemoved(position)
+            }
         }
     }
 }

@@ -47,6 +47,10 @@ class ItemJSONStore(private val context: Context) : ItemStore {
         }
     }
 
+    override fun delete(item: ItemModel) {
+        items.remove(item)
+        serialize()
+    }
 
     private fun serialize() {
         val jsonString = gsonBuilder.toJson(items, listType)

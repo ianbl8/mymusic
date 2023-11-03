@@ -6,6 +6,7 @@ interface ItemStore {
     fun findAll(): List<ItemModel>
     fun create(item: ItemModel)
     fun update(item: ItemModel)
+    fun delete(item: ItemModel)
     fun generateId(): String {
         return UUID.randomUUID().toString()
     }

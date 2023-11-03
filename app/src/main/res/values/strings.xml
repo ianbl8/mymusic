@@ -17,6 +17,7 @@
     <string name="tv_cover">Cover</string>
     <string name="btn_add_cover">add cover</string>
     <string name="select_cover">select cover image</string>
+    <string name="btn_delete_item">delete from mymusic</string>
 
     <!-- ListActivity -->
     <string name="menu_add_item">add</string>

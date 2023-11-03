@@ -9,7 +9,7 @@ import com.ianbl8.mymusic.models.ItemModel
 import com.squareup.picasso.Picasso
 
 interface ItemListener {
-    fun onItemClick(item: ItemModel)
+    fun onItemClick(item: ItemModel, position: Int)
 }
 
 class ItemAdapter constructor(
@@ -39,7 +39,7 @@ class ItemAdapter constructor(
                 Picasso.get().load(item.cover).centerCrop().resize(200, 200)
                     .into(binding.imageCover)
             }
-            binding.root.setOnClickListener { listener.onItemClick(item) }
+            binding.root.setOnClickListener { listener.onItemClick(item, adapterPosition) }
         }
     }
 }
