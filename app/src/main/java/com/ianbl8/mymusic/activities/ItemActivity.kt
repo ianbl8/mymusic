@@ -16,7 +16,6 @@ import com.ianbl8.mymusic.models.ItemModel
 import com.squareup.picasso.Picasso
 import timber.log.Timber.Forest.i
 import java.util.Calendar
-import java.util.UUID
 
 class ItemActivity : AppCompatActivity() {
 
@@ -83,7 +82,6 @@ class ItemActivity : AppCompatActivity() {
                         i("Update item: ${item.id}")
                         app.items.update(item.copy())
                     } else {
-                        item.id = UUID.randomUUID().toString()
                         i("Create item: ${item.id}")
                         app.items.create(item.copy())
                     }
@@ -98,7 +96,7 @@ class ItemActivity : AppCompatActivity() {
         }
 
         binding.btnAddCover.setOnClickListener() {
-            showImagePicker(imageIntentLauncher)
+            showImagePicker(imageIntentLauncher, this)
         }
 
         registerImagePickerCallback()
@@ -125,10 +123,16 @@ class ItemActivity : AppCompatActivity() {
                     RESULT_OK -> {
                         if (result.data != null) {
                             i("Got result ${result.data!!.data}")
-                            item.cover = result.data!!.data!!
+                            val image = result.data!!.data!!
+                            contentResolver.takePersistableUriPermission(
+                                image,
+                                Intent.FLAG_GRANT_READ_URI_PERMISSION
+                            )
+                            item.cover = image
                             Picasso.get().load(item.cover).into(binding.ivCover)
                         }
                     }
+
                     RESULT_CANCELED -> {}
                     else -> {}
                 }

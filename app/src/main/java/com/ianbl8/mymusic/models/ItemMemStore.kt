@@ -10,6 +10,7 @@ class ItemMemStore: ItemStore {
     }
 
     override fun create(item: ItemModel) {
+        item.id = generateId()
         items.add(item)
         logAll()
     }
