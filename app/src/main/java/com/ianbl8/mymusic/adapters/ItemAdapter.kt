@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ianbl8.mymusic.databinding.CardItemBinding
 import com.ianbl8.mymusic.models.ItemModel
+import com.squareup.picasso.Picasso
 
 interface ItemListener {
     fun onItemClick(item: ItemModel)
@@ -34,6 +35,10 @@ class ItemAdapter constructor(
             binding.itemTitle.text = item.title
             binding.itemArtist.text = item.artist
             binding.itemYear.text = "(${item.year})"
+            if (item.cover.toString().isNotEmpty()) {
+                Picasso.get().load(item.cover).centerCrop().resize(200, 200)
+                    .into(binding.imageCover)
+            }
             binding.root.setOnClickListener { listener.onItemClick(item) }
         }
     }

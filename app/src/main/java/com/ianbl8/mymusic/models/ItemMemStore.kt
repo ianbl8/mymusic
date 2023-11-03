@@ -22,6 +22,7 @@ class ItemMemStore: ItemStore {
             updateItem.year = item.year
             updateItem.physical = item.physical
             updateItem.digital = item.digital
+            updateItem.cover = item.cover
             logAll()
         }
     }

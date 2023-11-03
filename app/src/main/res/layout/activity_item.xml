@@ -59,9 +59,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
+                    android:autofillHints="hint"
                     android:ems="10"
                     android:hint="@string/hint_title"
-                    android:autofillHints="hint"
                     android:inputType="text" />
 
                 <TextView
@@ -81,9 +81,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
+                    android:autofillHints="hint"
                     android:ems="10"
                     android:hint="@string/hint_artist"
-                    android:autofillHints="hint"
                     android:inputType="text" />
 
                 <TextView
@@ -146,17 +146,58 @@
 
                 </LinearLayout>
 
-                <ImageButton
-                    android:id="@+id/btnAddItem"
+                <TextView
+                    android:id="@+id/tvCover"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/tv_cover"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:id="@+id/ivCover"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:maxHeight="300dp"
+                    android:maxWidth="300dp"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/outline_image_100blk"
+                    android:contentDescription="@string/tv_cover"/>
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_margin="12dp"
-                    android:padding="12dp"
-                    android:src="@drawable/baseline_playlist_add_check_24"
-                    android:background="@drawable/button_shape"
-                    android:text="@string/btn_add_item"
-                    android:contentDescription="@string/btn_add_item" />
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/btnAddCover"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_margin="12dp"
+                        android:background="@drawable/button_shape"
+                        android:contentDescription="@string/btn_add_cover"
+                        android:padding="12dp"
+                        android:src="@drawable/outline_image_24"
+                        android:text="@string/btn_add_cover" />
+
+                    <ImageButton
+                        android:id="@+id/btnAddItem"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_margin="12dp"
+                        android:background="@drawable/button_shape"
+                        android:contentDescription="@string/btn_add_item"
+                        android:padding="12dp"
+                        android:src="@drawable/baseline_playlist_add_check_24"
+                        android:text="@string/btn_add_item" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

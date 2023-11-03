@@ -1,5 +1,6 @@
 package com.ianbl8.mymusic.models
 
+import android.net.Uri
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
@@ -11,4 +12,5 @@ data class ItemModel(
     var year: String = "",
     var physical: Boolean = false,
     var digital: Boolean = false,
+    var cover: Uri = Uri.EMPTY
 ) : Parcelable

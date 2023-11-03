@@ -14,6 +14,9 @@
     <string name="btn_add_item" tools:ignore="ButtonCase">add</string>
     <string name="menu_item">add to mymusic</string>
     <string name="menu_cancel_item" tools:ignore="ButtonCase">cancel</string>
+    <string name="tv_cover">Cover</string>
+    <string name="btn_add_cover">add cover</string>
+    <string name="select_cover">select cover image</string>
 
     <!-- ListActivity -->
     <string name="menu_add_item">add</string>
