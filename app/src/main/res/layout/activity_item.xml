@@ -187,7 +187,6 @@
                         android:layout_margin="4dp"
                         android:contentDescription="@string/btn_add_cover"
                         android:text="@string/btn_add_cover"
-                        android:backgroundTint="?attr/colorPrimary"
                         app:icon="@drawable/outline_image_24"
                         tools:ignore="ButtonStyle" />
 
@@ -199,7 +198,6 @@
                         android:layout_margin="4dp"
                         android:contentDescription="@string/btn_tracks"
                         android:text="@string/btn_tracks"
-                        android:backgroundTint="?attr/colorPrimary"
                         app:icon="@drawable/baseline_queue_music_24"
                         tools:ignore="ButtonStyle" />
 
@@ -221,7 +219,6 @@
                         android:layout_margin="4dp"
                         android:contentDescription="@string/btn_add_item"
                         android:text="@string/btn_add_item"
-                        android:backgroundTint="?attr/colorPrimary"
                         app:icon="@drawable/baseline_playlist_add_check_24"
                         tools:ignore="ButtonStyle" />
 
@@ -233,7 +230,6 @@
                         android:layout_margin="4dp"
                         android:contentDescription="@string/btn_delete_item"
                         android:text="@string/btn_delete_item"
-                        android:backgroundTint="?attr/colorPrimary"
                         app:icon="@drawable/baseline_delete_24"
                         android:enabled="false"
                         tools:ignore="ButtonStyle" />
