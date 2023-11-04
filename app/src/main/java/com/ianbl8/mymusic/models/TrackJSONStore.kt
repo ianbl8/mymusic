@@ -39,7 +39,7 @@ class TrackJSONStore(private val context: Context) : TrackStore {
         if (updateTrack != null) {
             updateTrack.discNumber = track.discNumber
             updateTrack.trackNumber = track.trackNumber
-            updateTrack.trackName = track.trackName
+            updateTrack.trackTitle = track.trackTitle
             updateTrack.trackArtist = track.trackArtist
             serialize()
         }

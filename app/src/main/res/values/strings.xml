@@ -23,9 +23,26 @@
     <string name="btn_delete_item">delete</string>
     <string name="btn_tracks">tracks</string>
 
-    <!-- ListActivity -->
+    <!-- ItemListActivity -->
     <string name="menu_add_item">add</string>
     <string name="menu_list">all mymusic</string>
+
+    <!-- TrackActivity -->
+    <string name="tv_disc_number">disc</string>
+    <string name="hint_disc_number">1</string>
+    <string name="tv_track_number">track</string>
+    <string name="hint_track_number">1</string>
+    <string name="tv_track_title">track title</string>
+    <string name="hint_track_title">I Still Have Faith In You</string>
+    <string name="tv_track_artist">track artist</string>
+    <string name="hint_track_artist">ABBA</string>
+    <string name="btn_add_track">add</string>
+    <string name="btn_delete_track">delete</string>
+    <string name="btn_edit_track">update</string>
+    <string name="menu_cancel_track" tools:ignore="ButtonCase">cancel</string>
+
+    <!-- TrackListActivity -->
+    <string name="menu_add_track">add track</string>
 
     <!-- WelcomeActivity -->
     <string name="btn_start">start</string>

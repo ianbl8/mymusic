@@ -102,6 +102,10 @@ class ItemActivity : AppCompatActivity() {
 
         registerImagePickerCallback()
 
+        binding.btnTracks.setOnClickListener {
+            startActivity(Intent(this@ItemActivity, TrackListActivity::class.java))
+        }
+
         binding.btnDeleteItem.setOnClickListener {
             i("btnDeleteItem pressed")
             setResult(99)

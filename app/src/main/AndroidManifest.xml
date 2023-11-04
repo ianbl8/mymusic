@@ -18,6 +18,12 @@
         tools:ignore="ObsoleteSdkInt"
         tools:targetApi="31">
         <activity
+            android:name=".activities.TrackActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.TrackListActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.ItemActivity"
             android:exported="false" />
         <activity
@@ -33,4 +39,5 @@
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

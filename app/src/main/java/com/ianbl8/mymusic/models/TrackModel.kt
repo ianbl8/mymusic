@@ -8,6 +8,6 @@ data class TrackModel(
     var id: String = "",
     var discNumber: Int = 0,
     var trackNumber: Int = 0,
-    var trackName: String = "",
+    var trackTitle: String = "",
     var trackArtist: String = "",
 ) : Parcelable

@@ -9,43 +9,43 @@ import android.view.MenuItem
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ianbl8.mymusic.R
-import com.ianbl8.mymusic.adapters.ItemAdapter
-import com.ianbl8.mymusic.adapters.ItemListener
-import com.ianbl8.mymusic.databinding.ActivityItemListBinding
+import com.ianbl8.mymusic.adapters.TrackAdapter
+import com.ianbl8.mymusic.adapters.TrackListener
+import com.ianbl8.mymusic.databinding.ActivityTrackListBinding
 import com.ianbl8.mymusic.main.MainApp
-import com.ianbl8.mymusic.models.ItemModel
+import com.ianbl8.mymusic.models.TrackModel
 import timber.log.Timber.Forest.i
 
-class ItemListActivity : AppCompatActivity(), ItemListener {
+class TrackListActivity : AppCompatActivity(), TrackListener {
 
     lateinit var app: MainApp
-    private lateinit var binding: ActivityItemListBinding
+    private lateinit var binding: ActivityTrackListBinding
     private var position: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityItemListBinding.inflate(layoutInflater)
+        binding = ActivityTrackListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.toolbar.title = this.resources.getString(R.string.menu_list)
+        binding.toolbar.title = "TRACKS"
         setSupportActionBar(binding.toolbar)
-        i("ItemListActivity started")
+        i("TrackListActivity started")
 
         app = application as MainApp
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter = ItemAdapter(app.items.findAll(), this)
+        binding.recyclerView.adapter = TrackAdapter(app.tracks.findAll(), this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_item_list, menu)
+        menuInflater.inflate(R.menu.menu_track_list, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
-            R.id.add_item -> {
-                val launcherIntent = Intent(this, ItemActivity::class.java)
+            R.id.add_track -> {
+                val launcherIntent = Intent(this, TrackActivity::class.java)
                 getResult.launch(launcherIntent)
             }
         }
@@ -54,20 +54,20 @@ class ItemListActivity : AppCompatActivity(), ItemListener {
 
     private val getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
-            (binding.recyclerView.adapter)?.notifyItemRangeChanged(0, app.items.findAll().size)
+            (binding.recyclerView.adapter)?.notifyItemRangeChanged(0, app.tracks.findAll().size)
         }
     }
 
-    override fun onItemClick(item: ItemModel, pos: Int) {
-        val launcherIntent = Intent(this, ItemActivity::class.java)
-        launcherIntent.putExtra("item_edit", item)
+    override fun onTrackClick(track: TrackModel, pos: Int) {
+        val launcherIntent = Intent(this, TrackActivity::class.java)
+        launcherIntent.putExtra("track_edit", track)
         position = pos
         getClickResult.launch(launcherIntent)
     }
 
     private val getClickResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
-            (binding.recyclerView.adapter)?.notifyItemRangeChanged(0, app.items.findAll().size)
+            (binding.recyclerView.adapter)?.notifyItemRangeChanged(0, app.tracks.findAll().size)
         } else {
             if (it.resultCode == 99) {
                 (binding.recyclerView.adapter)?.notifyItemRemoved(position)
@@ -75,4 +75,3 @@ class ItemListActivity : AppCompatActivity(), ItemListener {
         }
     }
 }
-
