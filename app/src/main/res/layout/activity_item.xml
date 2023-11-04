@@ -86,31 +86,82 @@
                     android:hint="@string/hint_artist"
                     android:inputType="text" />
 
-                <TextView
-                    android:id="@+id/tvYear"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="@string/tv_year"
-                    android:textStyle="bold" />
+                    android:orientation="horizontal"
+                    android:baselineAligned="false">
 
-                <EditText
-                    android:id="@+id/etYear"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:autofillHints="hint"
-                    android:ems="4"
-                    android:hint="@string/hint_year"
-                    android:inputType="number"
-                    android:maxEms="4"
-                    android:minEms="4"
-                    android:numeric="integer"
-                    tools:ignore="Deprecated" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvYear"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:text="@string/tv_year"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/etYear"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:autofillHints="hint"
+                            android:ems="4"
+                            android:hint="@string/hint_year"
+                            android:inputType="number"
+                            android:maxEms="4"
+                            android:minEms="4"
+                            android:numeric="integer"
+                            tools:ignore="Deprecated" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvDiscs"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:text="@string/tv_discs"
+                            android:textStyle="bold" />
+
+                        <EditText
+                            android:id="@+id/etDiscs"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:textAlignment="textEnd"
+                            android:autofillHints="hint"
+                            android:ems="4"
+                            android:hint="@string/hint_discs"
+                            android:inputType="number"
+                            android:maxEms="4"
+                            android:minEms="4"
+                            android:numeric="integer"
+                            tools:ignore="Deprecated" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/tvType"
@@ -126,26 +177,26 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal"
                     android:paddingStart="24dp"
-                    android:paddingEnd="24dp"
-                    android:orientation="horizontal">
+                    android:paddingEnd="24dp">
 
                     <CheckBox
                         android:id="@+id/cbPhysical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
+                        android:layout_weight="1"
                         android:text="@string/cb_physical" />
 
                     <CheckBox
                         android:id="@+id/cbDigital"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
+                        android:layout_weight="1"
                         android:text="@string/cb_digital" />
 
                 </LinearLayout>
@@ -175,16 +226,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal"
                     android:paddingStart="24dp"
-                    android:paddingEnd="24dp"
-                    android:orientation="horizontal">
+                    android:paddingEnd="24dp">
 
                     <Button
                         android:id="@+id/btnAddCover"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_margin="4dp"
+                        android:layout_weight="1"
                         android:contentDescription="@string/btn_add_cover"
                         android:text="@string/btn_add_cover"
                         app:icon="@drawable/outline_image_24"
@@ -194,8 +245,8 @@
                         android:id="@+id/btnTracks"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_margin="4dp"
+                        android:layout_weight="1"
                         android:contentDescription="@string/btn_tracks"
                         android:text="@string/btn_tracks"
                         app:icon="@drawable/baseline_queue_music_24"
@@ -207,16 +258,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal"
                     android:paddingStart="24dp"
-                    android:paddingEnd="24dp"
-                    android:orientation="horizontal">
+                    android:paddingEnd="24dp">
 
                     <Button
                         android:id="@+id/btnAddItem"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_margin="4dp"
+                        android:layout_weight="1"
                         android:contentDescription="@string/btn_add_item"
                         android:text="@string/btn_add_item"
                         app:icon="@drawable/baseline_playlist_add_check_24"
@@ -226,12 +277,12 @@
                         android:id="@+id/btnDeleteItem"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_margin="4dp"
+                        android:layout_weight="1"
                         android:contentDescription="@string/btn_delete_item"
+                        android:enabled="false"
                         android:text="@string/btn_delete_item"
                         app:icon="@drawable/baseline_delete_24"
-                        android:enabled="false"
                         tools:ignore="ButtonStyle" />
 
                 </LinearLayout>

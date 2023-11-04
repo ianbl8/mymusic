@@ -8,6 +8,8 @@
     <string name="hint_artist">ABBA</string>
     <string name="tv_year">year of release</string>
     <string name="hint_year">2021</string>
+    <string name="tv_discs">number of discs</string>
+    <string name="hint_discs">1</string>
     <string name="tv_type">type</string>
     <string name="cb_physical">physical copy</string>
     <string name="cb_digital">digital copy</string>

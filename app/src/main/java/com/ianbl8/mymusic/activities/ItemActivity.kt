@@ -44,6 +44,7 @@ class ItemActivity : AppCompatActivity() {
             binding.etTitle.setText(item.title)
             binding.etArtist.setText(item.artist)
             binding.etYear.setText(item.year)
+            binding.etDiscs.setText(item.discs.toString())
             binding.cbPhysical.isChecked = item.physical
             binding.cbDigital.isChecked = item.digital
             if (item.cover.toString().isNotEmpty()) {
@@ -61,6 +62,12 @@ class ItemActivity : AppCompatActivity() {
             item.title = binding.etTitle.text.toString()
             item.artist = binding.etArtist.text.toString()
             item.year = binding.etYear.text.toString()
+            val discs = binding.etDiscs.text.toString()
+            if (discs.isNotEmpty()) {
+                item.discs = discs.toInt()
+            } else {
+                item.discs = 1
+            }
             item.physical = binding.cbPhysical.isChecked
             item.digital = binding.cbDigital.isChecked
             if (item.title.isNotEmpty() && item.artist.isNotEmpty() && item.year.isNotEmpty()) {

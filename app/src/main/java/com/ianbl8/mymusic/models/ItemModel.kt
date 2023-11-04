@@ -10,6 +10,7 @@ data class ItemModel(
     var title: String = "",
     var artist: String = "",
     var year: String = "",
+    var discs: Int = 0,
     var physical: Boolean = false,
     var digital: Boolean = false,
     var cover: Uri = Uri.EMPTY

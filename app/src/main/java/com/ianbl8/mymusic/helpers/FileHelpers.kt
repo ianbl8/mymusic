@@ -1,9 +1,17 @@
 package com.ianbl8.mymusic.helpers
 
 import android.content.Context
+import android.net.Uri
+import com.google.gson.JsonDeserializationContext
+import com.google.gson.JsonDeserializer
+import com.google.gson.JsonElement
+import com.google.gson.JsonPrimitive
+import com.google.gson.JsonSerializationContext
+import com.google.gson.JsonSerializer
 import java.io.*
 import java.lang.StringBuilder
 import timber.log.Timber.Forest.e
+import java.lang.reflect.Type
 
 fun write(context: Context, fileName: String, data: String) {
     try {
@@ -44,4 +52,22 @@ fun read(context: Context, fileName: String): String {
 fun exists(context: Context, fileName: String): Boolean {
     val file = context.getFileStreamPath(fileName)
     return file.exists()
+}
+
+class UriParser : JsonDeserializer<Uri>, JsonSerializer<Uri> {
+    override fun deserialize(
+        json: JsonElement?,
+        typeOfT: Type?,
+        context: JsonDeserializationContext?
+    ): Uri {
+        return Uri.parse(json?.asString)
+    }
+
+    override fun serialize(
+        src: Uri?,
+        typeOfSrc: Type?,
+        context: JsonSerializationContext?
+    ): JsonElement {
+        return JsonPrimitive(src.toString())
+    }
 }

@@ -21,6 +21,7 @@ class ItemMemStore: ItemStore {
             updateItem.title = item.title
             updateItem.artist = item.artist
             updateItem.year = item.year
+            updateItem.discs = item.discs
             updateItem.physical = item.physical
             updateItem.digital = item.digital
             updateItem.cover = item.cover

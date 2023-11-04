@@ -8,17 +8,17 @@ import com.ianbl8.mymusic.helpers.*
 import timber.log.Timber.Forest.i
 import java.lang.reflect.Type
 
-const val JSON_FILE = "items.json"
+const val ITEMS_JSON_FILE = "items.json"
 val gsonBuilder: Gson =
     GsonBuilder().setPrettyPrinting().registerTypeAdapter(Uri::class.java, UriParser()).create()
-val listType: Type = object : TypeToken<ArrayList<ItemModel>>() {}.type
+val itemsListType: Type = object : TypeToken<ArrayList<ItemModel>>() {}.type
 
 class ItemJSONStore(private val context: Context) : ItemStore {
 
     var items = mutableListOf<ItemModel>()
 
     init {
-        if (exists(context, JSON_FILE)) {
+        if (exists(context, ITEMS_JSON_FILE)) {
             deserialize()
         }
     }
@@ -40,6 +40,7 @@ class ItemJSONStore(private val context: Context) : ItemStore {
             updateItem.title = item.title
             updateItem.artist = item.artist
             updateItem.year = item.year
+            updateItem.discs = item.discs
             updateItem.physical = item.physical
             updateItem.digital = item.digital
             updateItem.cover = item.cover
@@ -53,36 +54,18 @@ class ItemJSONStore(private val context: Context) : ItemStore {
     }
 
     private fun serialize() {
-        val jsonString = gsonBuilder.toJson(items, listType)
-        write(context, JSON_FILE, jsonString)
+        val jsonString = gsonBuilder.toJson(items, itemsListType)
+        write(context, ITEMS_JSON_FILE, jsonString)
     }
 
     private fun deserialize() {
-        val jsonString = read(context, JSON_FILE)
-        items = gsonBuilder.fromJson(jsonString, listType)
+        val jsonString = read(context, ITEMS_JSON_FILE)
+        items = gsonBuilder.fromJson(jsonString, itemsListType)
     }
 
     fun logAll() {
         items.forEach {
             i("${it}")
         }
-    }
-}
-
-class UriParser : JsonDeserializer<Uri>, JsonSerializer<Uri> {
-    override fun deserialize(
-        json: JsonElement?,
-        typeOfT: Type?,
-        context: JsonDeserializationContext?
-    ): Uri {
-        return Uri.parse(json?.asString)
-    }
-
-    override fun serialize(
-        src: Uri?,
-        typeOfSrc: Type?,
-        context: JsonSerializationContext?
-    ): JsonElement {
-        return JsonPrimitive(src.toString())
     }
 }
