@@ -2,22 +2,24 @@
     <string name="app_name">mymusic</string>
 
     <!-- ItemActivity -->
-    <string name="tv_title">Title</string>
+    <string name="tv_title">title</string>
     <string name="hint_title">Voyage</string>
-    <string name="tv_artist">Artist</string>
+    <string name="tv_artist">artist</string>
     <string name="hint_artist">ABBA</string>
-    <string name="tv_year">Year of release</string>
+    <string name="tv_year">year of release</string>
     <string name="hint_year">2021</string>
-    <string name="tv_type">Type</string>
-    <string name="cb_physical">Physical copy</string>
-    <string name="cb_digital">Digital copy</string>
+    <string name="tv_type">type</string>
+    <string name="cb_physical">physical copy</string>
+    <string name="cb_digital">digital copy</string>
     <string name="btn_add_item" tools:ignore="ButtonCase">add</string>
+    <string name="btn_edit_item" tools:ignore="ButtonCase">update</string>
     <string name="menu_item">add to mymusic</string>
     <string name="menu_cancel_item" tools:ignore="ButtonCase">cancel</string>
-    <string name="tv_cover">Cover</string>
-    <string name="btn_add_cover">add cover</string>
+    <string name="tv_cover">cover</string>
+    <string name="btn_add_cover">cover</string>
     <string name="select_cover">select cover image</string>
-    <string name="btn_delete_item">delete from mymusic</string>
+    <string name="btn_delete_item">delete</string>
+    <string name="btn_tracks">tracks</string>
 
     <!-- ListActivity -->
     <string name="menu_add_item">add</string>

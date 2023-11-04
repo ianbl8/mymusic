@@ -44,31 +44,25 @@ class ItemActivity : AppCompatActivity() {
             binding.etTitle.setText(item.title)
             binding.etArtist.setText(item.artist)
             binding.etYear.setText(item.year)
-            if (item.physical) {
-                binding.cbPhysical.setChecked(true)
-            } else {
-                binding.cbPhysical.setChecked(false)
-            }
-            if (item.digital) {
-                binding.cbDigital.setChecked(true)
-            } else {
-                binding.cbDigital.setChecked(false)
-            }
+            binding.cbPhysical.isChecked = item.physical
+            binding.cbDigital.isChecked = item.digital
             if (item.cover.toString().isNotEmpty()) {
                 Picasso.get().load(item.cover).into(binding.ivCover)
             }
             binding.toolbar.title = "edit ${item.title}"
+            binding.btnAddItem.setText(R.string.btn_edit_item)
+            binding.btnDeleteItem.isEnabled = true
         }
 
         app = application as MainApp
 
-        binding.btnAddItem.setOnClickListener() {
+        binding.btnAddItem.setOnClickListener {
             i("btnAddItem pressed")
             item.title = binding.etTitle.text.toString()
             item.artist = binding.etArtist.text.toString()
             item.year = binding.etYear.text.toString()
-            item.physical = binding.cbPhysical.isChecked()
-            item.digital = binding.cbDigital.isChecked()
+            item.physical = binding.cbPhysical.isChecked
+            item.digital = binding.cbDigital.isChecked
             if (item.title.isNotEmpty() && item.artist.isNotEmpty() && item.year.isNotEmpty()) {
                 if (item.year.toLong() < 1900 || item.year.toLong() > nextYear) {
                     Snackbar.make(
@@ -95,13 +89,13 @@ class ItemActivity : AppCompatActivity() {
             }
         }
 
-        binding.btnAddCover.setOnClickListener() {
+        binding.btnAddCover.setOnClickListener {
             showImagePicker(imageIntentLauncher, this)
         }
 
         registerImagePickerCallback()
 
-        binding.btnDeleteItem.setOnClickListener() {
+        binding.btnDeleteItem.setOnClickListener {
             i("btnDeleteItem pressed")
             setResult(99)
             app.items.delete(item)
