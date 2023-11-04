@@ -11,20 +11,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.ianbl8.mymusic.R
 import com.ianbl8.mymusic.adapters.ItemAdapter
 import com.ianbl8.mymusic.adapters.ItemListener
-import com.ianbl8.mymusic.databinding.ActivityListBinding
+import com.ianbl8.mymusic.databinding.ActivityItemListBinding
 import com.ianbl8.mymusic.main.MainApp
 import com.ianbl8.mymusic.models.ItemModel
 import timber.log.Timber.Forest.i
 
-class ListActivity : AppCompatActivity(), ItemListener {
+class ItemListActivity : AppCompatActivity(), ItemListener {
 
     lateinit var app: MainApp
-    private lateinit var binding: ActivityListBinding
+    private lateinit var binding: ActivityItemListBinding
     private var position: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityListBinding.inflate(layoutInflater)
+        binding = ActivityItemListBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.toolbar.title = this.resources.getString(R.string.menu_list)
         setSupportActionBar(binding.toolbar)

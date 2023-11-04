@@ -21,7 +21,7 @@
             android:name=".activities.ItemActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ListActivity"
+            android:name=".activities.ItemListActivity"
             android:exported="false" />
         <activity
             android:name=".activities.WelcomeActivity"
