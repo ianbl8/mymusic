@@ -10,6 +10,8 @@
     <string name="hint_year">2021</string>
     <string name="tv_discs">number of discs</string>
     <string name="hint_discs">1</string>
+    <string name="tv_tracks">number of tracks</string>
+    <string name="hint_tracks">0</string>
     <string name="tv_type">type</string>
     <string name="cb_physical">physical copy</string>
     <string name="cb_digital">digital copy</string>

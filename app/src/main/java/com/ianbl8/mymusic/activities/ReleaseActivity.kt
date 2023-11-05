@@ -45,6 +45,7 @@ class ReleaseActivity : AppCompatActivity() {
             binding.etArtist.setText(release.artist)
             binding.etYear.setText(release.year)
             binding.etDiscs.setText(release.discs.toString())
+            binding.etTracks.setText(release.tracks.size.toString())
             binding.cbPhysical.isChecked = release.physical
             binding.cbDigital.isChecked = release.digital
             if (release.cover.toString().isNotEmpty()) {
