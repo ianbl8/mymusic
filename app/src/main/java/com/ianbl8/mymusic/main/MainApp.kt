@@ -19,14 +19,9 @@ class MainApp: Application() {
         // releases = ReleaseMemStore()
         releases = ReleaseJSONStore(this.applicationContext)
         i("mymusic started")
-
-        // Releases for testing - will be added if none exist
-        if (releases.findAll().isEmpty()) {
-            sampleData()
-        }
     }
 
-    private fun sampleData() {
+    fun sampleData() {
 
         // Ring Ring
         releases.create(ReleaseModel("uuid", "Ring Ring", "ABBA", "1973", 1, true, true))

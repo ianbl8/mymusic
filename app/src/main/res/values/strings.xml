@@ -52,7 +52,8 @@
     <string name="track_heading">track</string>
 
     <!-- WelcomeActivity -->
-    <string name="btn_start">start</string>
+    <string name="btn_sample_start">start with sample data</string>
+    <string name="btn_start">view mymusic</string>
     <string name="welcome_line">welcome to</string>
 
 </resources>
