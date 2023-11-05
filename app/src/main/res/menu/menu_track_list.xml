@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/go_back"
+        android:icon="@drawable/baseline_arrow_back_24"
+        android:title="@string/go_back"
+        app:showAsAction="always" />
+
+    <item
         android:id="@+id/add_track"
         android:icon="@drawable/baseline_add_circle_outline_24"
         android:title="@string/menu_add_track"

@@ -54,6 +54,9 @@ class TrackListActivity : AppCompatActivity(), TrackListener {
                 launcherIntent.putExtra("track_add", release)
                 getResult.launch(launcherIntent)
             }
+            R.id.go_back -> {
+                finish()
+            }
         }
         return super.onOptionsItemSelected(menuItem)
     }

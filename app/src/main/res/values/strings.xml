@@ -52,4 +52,5 @@
     <!-- WelcomeActivity -->
     <string name="btn_start">start</string>
     <string name="welcome_line">welcome to</string>
+    <string name="go_back">back</string>
 </resources>
