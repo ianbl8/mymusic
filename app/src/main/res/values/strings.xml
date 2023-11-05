@@ -1,56 +1,58 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <string name="app_name">mymusic</string>
 
     <!-- ReleaseActivity -->
-    <string name="tv_title">title</string>
-    <string name="hint_title">Voyage</string>
-    <string name="tv_artist">artist</string>
-    <string name="hint_artist">ABBA</string>
-    <string name="tv_year">year of release</string>
-    <string name="hint_year">2021</string>
-    <string name="tv_discs">number of discs</string>
-    <string name="hint_discs">1</string>
-    <string name="tv_tracks">number of tracks</string>
-    <string name="hint_tracks">0</string>
-    <string name="tv_type">type</string>
-    <string name="cb_physical">physical copy</string>
-    <string name="cb_digital">digital copy</string>
-    <string name="btn_add_release" tools:ignore="ButtonCase">add</string>
-    <string name="btn_edit_release" tools:ignore="ButtonCase">update</string>
-    <string name="menu_release">add to mymusic</string>
-    <string name="menu_cancel_release" tools:ignore="ButtonCase">cancel</string>
-    <string name="tv_cover">cover</string>
     <string name="btn_add_cover">cover</string>
-    <string name="select_cover">select cover image</string>
+    <string name="btn_add_release" tools:ignore="ButtonCase">add</string>
     <string name="btn_delete_release">delete</string>
+    <string name="btn_edit_release" tools:ignore="ButtonCase">update</string>
     <string name="btn_tracks">tracks</string>
+    <string name="cb_digital">digital copy</string>
+    <string name="cb_physical">physical copy</string>
+    <string name="hint_artist">ABBA</string>
+    <string name="hint_discs">1</string>
+    <string name="hint_title">Voyage</string>
+    <string name="hint_tracks">0</string>
+    <string name="hint_year">2021</string>
+    <string name="menu_cancel_release" tools:ignore="ButtonCase">cancel</string>
+    <string name="menu_release">add to mymusic</string>
+    <string name="select_cover">select cover image</string>
+    <string name="tv_artist">artist</string>
+    <string name="tv_cover">cover</string>
+    <string name="tv_discs">number of discs</string>
+    <string name="tv_title">title</string>
+    <string name="tv_tracks">number of tracks</string>
+    <string name="tv_type">type</string>
+    <string name="tv_year">year of release</string>
 
     <!-- ReleaseListActivity -->
     <string name="menu_add_release">add</string>
     <string name="menu_list">all mymusic</string>
 
     <!-- TrackActivity -->
-    <string name="tv_disc_number">disc</string>
-    <string name="hint_disc_number">1</string>
-    <string name="tv_track_number">track</string>
-    <string name="hint_track_number">1</string>
-    <string name="tv_track_title">track title</string>
-    <string name="hint_track_title">I Still Have Faith In You</string>
-    <string name="tv_track_artist">track artist</string>
-    <string name="hint_track_artist">ABBA</string>
     <string name="btn_add_track">add</string>
     <string name="btn_delete_track">delete</string>
     <string name="btn_edit_track">update</string>
+    <string name="hint_disc_number">1</string>
+    <string name="hint_track_artist">ABBA</string>
+    <string name="hint_track_number">1</string>
+    <string name="hint_track_title">I Still Have Faith In You</string>
     <string name="menu_cancel_track" tools:ignore="ButtonCase">cancel</string>
+    <string name="tv_disc_number">disc</string>
+    <string name="tv_track_artist">track artist</string>
+    <string name="tv_track_number">track</string>
+    <string name="tv_track_title">track title</string>
 
     <!-- TrackListActivity -->
-    <string name="menu_track_list">tracks</string>
-    <string name="menu_add_track">add track</string>
     <string name="disc_heading">disc</string>
+    <string name="go_back">back</string>
+    <string name="menu_add_track">add track</string>
+    <string name="menu_track_list">tracks</string>
     <string name="track_heading">track</string>
 
     <!-- WelcomeActivity -->
     <string name="btn_start">start</string>
     <string name="welcome_line">welcome to</string>
-    <string name="go_back">back</string>
+
 </resources>
