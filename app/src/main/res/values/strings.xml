@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">mymusic</string>
 
-    <!-- ItemActivity -->
+    <!-- ReleaseActivity -->
     <string name="tv_title">title</string>
     <string name="hint_title">Voyage</string>
     <string name="tv_artist">artist</string>
@@ -13,18 +13,18 @@
     <string name="tv_type">type</string>
     <string name="cb_physical">physical copy</string>
     <string name="cb_digital">digital copy</string>
-    <string name="btn_add_item" tools:ignore="ButtonCase">add</string>
-    <string name="btn_edit_item" tools:ignore="ButtonCase">update</string>
-    <string name="menu_item">add to mymusic</string>
-    <string name="menu_cancel_item" tools:ignore="ButtonCase">cancel</string>
+    <string name="btn_add_release" tools:ignore="ButtonCase">add</string>
+    <string name="btn_edit_release" tools:ignore="ButtonCase">update</string>
+    <string name="menu_release">add to mymusic</string>
+    <string name="menu_cancel_release" tools:ignore="ButtonCase">cancel</string>
     <string name="tv_cover">cover</string>
     <string name="btn_add_cover">cover</string>
     <string name="select_cover">select cover image</string>
-    <string name="btn_delete_item">delete</string>
+    <string name="btn_delete_release">delete</string>
     <string name="btn_tracks">tracks</string>
 
-    <!-- ItemListActivity -->
-    <string name="menu_add_item">add</string>
+    <!-- ReleaseListActivity -->
+    <string name="menu_add_release">add</string>
     <string name="menu_list">all mymusic</string>
 
     <!-- TrackActivity -->

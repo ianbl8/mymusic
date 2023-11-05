@@ -19,7 +19,7 @@ class WelcomeActivity : AppCompatActivity() {
 
         btnStart = findViewById(R.id.btnStart)
         btnStart.setOnClickListener {
-            startActivity(Intent(this@WelcomeActivity, ItemListActivity::class.java))
+            startActivity(Intent(this@WelcomeActivity, ReleaseListActivity::class.java))
         }
     }
 }

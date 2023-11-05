@@ -9,19 +9,19 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import com.google.android.material.snackbar.Snackbar
 import com.ianbl8.mymusic.R
-import com.ianbl8.mymusic.databinding.ActivityItemBinding
+import com.ianbl8.mymusic.databinding.ActivityReleaseBinding
 import com.ianbl8.mymusic.helpers.showImagePicker
 import com.ianbl8.mymusic.main.MainApp
-import com.ianbl8.mymusic.models.ItemModel
+import com.ianbl8.mymusic.models.ReleaseModel
 import com.squareup.picasso.Picasso
 import timber.log.Timber.Forest.i
 import java.util.Calendar
 
-class ItemActivity : AppCompatActivity() {
+class ReleaseActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityItemBinding
+    private lateinit var binding: ActivityReleaseBinding
     private lateinit var imageIntentLauncher: ActivityResultLauncher<Intent>
-    var item = ItemModel()
+    var release = ReleaseModel()
     lateinit var app: MainApp
     val thisYear = Calendar.getInstance().get(Calendar.YEAR)
     val nextYear = thisYear + 1
@@ -29,49 +29,49 @@ class ItemActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityItemBinding.inflate(layoutInflater)
+        binding = ActivityReleaseBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.toolbar.title = this.resources.getString(R.string.menu_item)
+        binding.toolbar.title = this.resources.getString(R.string.menu_release)
         setSupportActionBar(binding.toolbar)
-        i("ItemActivity started")
+        i("ReleaseActivity started")
 
         var edit = false
 
-        if (intent.hasExtra("item_edit")) {
+        if (intent.hasExtra("release_edit")) {
             edit = true
             @Suppress("DEPRECATION")
-            item = intent.extras?.getParcelable("item_edit")!!
-            binding.etTitle.setText(item.title)
-            binding.etArtist.setText(item.artist)
-            binding.etYear.setText(item.year)
-            binding.etDiscs.setText(item.discs.toString())
-            binding.cbPhysical.isChecked = item.physical
-            binding.cbDigital.isChecked = item.digital
-            if (item.cover.toString().isNotEmpty()) {
-                Picasso.get().load(item.cover).into(binding.ivCover)
+            release = intent.extras?.getParcelable("release_edit")!!
+            binding.etTitle.setText(release.title)
+            binding.etArtist.setText(release.artist)
+            binding.etYear.setText(release.year)
+            binding.etDiscs.setText(release.discs.toString())
+            binding.cbPhysical.isChecked = release.physical
+            binding.cbDigital.isChecked = release.digital
+            if (release.cover.toString().isNotEmpty()) {
+                Picasso.get().load(release.cover).into(binding.ivCover)
             }
-            binding.toolbar.title = "edit ${item.title}"
-            binding.btnAddItem.setText(R.string.btn_edit_item)
-            binding.btnDeleteItem.isEnabled = true
+            binding.toolbar.title = "edit ${release.title}"
+            binding.btnAddRelease.setText(R.string.btn_edit_release)
+            binding.btnDeleteRelease.isEnabled = true
         }
 
         app = application as MainApp
 
-        binding.btnAddItem.setOnClickListener {
-            i("btnAddItem pressed")
-            item.title = binding.etTitle.text.toString()
-            item.artist = binding.etArtist.text.toString()
-            item.year = binding.etYear.text.toString()
+        binding.btnAddRelease.setOnClickListener {
+            i("btnAddRelease pressed")
+            release.title = binding.etTitle.text.toString()
+            release.artist = binding.etArtist.text.toString()
+            release.year = binding.etYear.text.toString()
             val discs = binding.etDiscs.text.toString()
             if (discs.isNotEmpty()) {
-                item.discs = discs.toInt()
+                release.discs = discs.toInt()
             } else {
-                item.discs = 1
+                release.discs = 1
             }
-            item.physical = binding.cbPhysical.isChecked
-            item.digital = binding.cbDigital.isChecked
-            if (item.title.isNotEmpty() && item.artist.isNotEmpty() && item.year.isNotEmpty()) {
-                if (item.year.toLong() < 1900 || item.year.toLong() > nextYear) {
+            release.physical = binding.cbPhysical.isChecked
+            release.digital = binding.cbDigital.isChecked
+            if (release.title.isNotEmpty() && release.artist.isNotEmpty() && release.year.isNotEmpty()) {
+                if (release.year.toLong() < 1900 || release.year.toLong() > nextYear) {
                     Snackbar.make(
                         it,
                         "Choose a valid year between 1900 and $nextYear",
@@ -80,11 +80,11 @@ class ItemActivity : AppCompatActivity() {
                     i("Invalid year")
                 } else {
                     if (edit) {
-                        i("Update item: ${item.id}")
-                        app.items.update(item.copy())
+                        i("Update release: ${release.id}")
+                        app.releases.update(release.copy())
                     } else {
-                        i("Create item: ${item.id}")
-                        app.items.create(item.copy())
+                        i("Create release: ${release.id}")
+                        app.releases.create(release.copy())
                     }
                     setResult(RESULT_OK)
                     finish()
@@ -92,7 +92,7 @@ class ItemActivity : AppCompatActivity() {
             } else {
                 Snackbar.make(it, "Enter a valid title, artist and year", Snackbar.LENGTH_LONG)
                     .show()
-                i("Invalid item")
+                i("Invalid release")
             }
         }
 
@@ -103,25 +103,25 @@ class ItemActivity : AppCompatActivity() {
         registerImagePickerCallback()
 
         binding.btnTracks.setOnClickListener {
-            startActivity(Intent(this@ItemActivity, TrackListActivity::class.java))
+            startActivity(Intent(this@ReleaseActivity, TrackListActivity::class.java))
         }
 
-        binding.btnDeleteItem.setOnClickListener {
-            i("btnDeleteItem pressed")
+        binding.btnDeleteRelease.setOnClickListener {
+            i("btnDeleteRelease pressed")
             setResult(99)
-            app.items.delete(item)
+            app.releases.delete(release)
             finish()
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_item, menu)
+        menuInflater.inflate(R.menu.menu_release, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
         when (menuItem.itemId) {
-            R.id.cancel_item -> {
+            R.id.cancel_release -> {
                 finish()
             }
         }
@@ -140,8 +140,8 @@ class ItemActivity : AppCompatActivity() {
                                 image,
                                 Intent.FLAG_GRANT_READ_URI_PERMISSION
                             )
-                            item.cover = image
-                            Picasso.get().load(item.cover).into(binding.ivCover)
+                            release.cover = image
+                            Picasso.get().load(release.cover).into(binding.ivCover)
                         }
                     }
 

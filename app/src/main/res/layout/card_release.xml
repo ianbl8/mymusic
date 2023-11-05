@@ -28,7 +28,7 @@
             android:src="@drawable/outline_image_100blk" />
 
         <TextView
-            android:id="@+id/itemTitle"
+            android:id="@+id/releaseTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -41,7 +41,7 @@
             tools:text="Title" />
 
         <TextView
-            android:id="@+id/itemArtist"
+            android:id="@+id/releaseArtist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -49,20 +49,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.052"
             app:layout_constraintStart_toEndOf="@id/imageCover"
-            app:layout_constraintTop_toBottomOf="@id/itemTitle"
+            app:layout_constraintTop_toBottomOf="@id/releaseTitle"
             android:textSize="16sp"
             tools:text="Artist" />
 
         <TextView
-            android:id="@+id/itemYear"
+            android:id="@+id/releaseYear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:textAlignment="viewStart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.052"
-            app:layout_constraintStart_toEndOf="@id/itemArtist"
-            app:layout_constraintTop_toBottomOf="@id/itemTitle"
+            app:layout_constraintStart_toEndOf="@id/releaseArtist"
+            app:layout_constraintTop_toBottomOf="@id/releaseTitle"
             android:textSize="16sp"
             tools:text="Year" />
 

@@ -5,7 +5,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class ItemModel(
+data class ReleaseModel(
     var id: String = "",
     var title: String = "",
     var artist: String = "",

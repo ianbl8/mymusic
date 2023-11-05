@@ -24,10 +24,10 @@
             android:name=".activities.TrackListActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ItemActivity"
+            android:name=".activities.ReleaseActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ItemListActivity"
+            android:name=".activities.ReleaseListActivity"
             android:exported="false" />
         <activity
             android:name=".activities.WelcomeActivity"
