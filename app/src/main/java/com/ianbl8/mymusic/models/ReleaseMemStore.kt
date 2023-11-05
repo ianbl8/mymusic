@@ -9,6 +9,16 @@ class ReleaseMemStore: ReleaseStore {
         return releases
     }
 
+    override fun findById(searchId: String): ReleaseModel? {
+        val foundRelease: ReleaseModel? = releases.find { r -> r.id == searchId }
+        return foundRelease
+    }
+
+    override fun findByTitle(searchTitle: String): ReleaseModel? {
+        val foundRelease: ReleaseModel? = releases.find { r -> r.title == searchTitle }
+        return foundRelease
+    }
+
     override fun create(release: ReleaseModel) {
         release.id = generateId()
         releases.add(release)
@@ -25,12 +35,30 @@ class ReleaseMemStore: ReleaseStore {
             updateRelease.physical = release.physical
             updateRelease.digital = release.digital
             updateRelease.cover = release.cover
+            updateRelease.tracks = release.tracks
             logAll()
         }
     }
 
     override fun delete(release: ReleaseModel) {
         releases.remove(release)
+    }
+
+    override fun addTrack(release: ReleaseModel, track: TrackModel) {
+        val updateRelease: ReleaseModel? = releases.find { r -> r.id == release.id }
+        if (updateRelease != null) {
+            track.id = generateId()
+            updateRelease.tracks.add(track)
+            logAll()
+        }
+    }
+
+    override fun removeTrack(release: ReleaseModel, track: TrackModel) {
+        val updateRelease: ReleaseModel? = releases.find { r -> r.id == release.id }
+        if (updateRelease != null) {
+            updateRelease.tracks.remove(track)
+            logAll()
+        }
     }
 
     fun logAll() {

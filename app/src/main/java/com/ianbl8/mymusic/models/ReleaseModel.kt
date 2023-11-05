@@ -13,5 +13,6 @@ data class ReleaseModel(
     var discs: Int = 0,
     var physical: Boolean = false,
     var digital: Boolean = false,
-    var cover: Uri = Uri.EMPTY
+    var cover: Uri = Uri.EMPTY,
+    var tracks: MutableList<TrackModel> = mutableListOf()
 ) : Parcelable

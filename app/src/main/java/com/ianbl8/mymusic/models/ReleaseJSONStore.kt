@@ -28,6 +28,16 @@ class ReleaseJSONStore(private val context: Context) : ReleaseStore {
         return releases
     }
 
+    override fun findById(searchId: String): ReleaseModel? {
+        val foundRelease: ReleaseModel? = releases.find { r -> r.id == searchId }
+        return foundRelease
+    }
+
+    override fun findByTitle(searchTitle: String): ReleaseModel? {
+        val foundRelease: ReleaseModel? = releases.find { r -> r.title == searchTitle }
+        return foundRelease
+    }
+
     override fun create(release: ReleaseModel) {
         release.id = generateId()
         releases.add(release)
@@ -44,6 +54,7 @@ class ReleaseJSONStore(private val context: Context) : ReleaseStore {
             updateRelease.physical = release.physical
             updateRelease.digital = release.digital
             updateRelease.cover = release.cover
+            updateRelease.tracks = release.tracks
             serialize()
         }
     }
@@ -61,6 +72,25 @@ class ReleaseJSONStore(private val context: Context) : ReleaseStore {
     private fun deserialize() {
         val jsonString = read(context, RELEASES_JSON_FILE)
         releases = gsonBuilder.fromJson(jsonString, releasesListType)
+    }
+
+    override fun addTrack(release: ReleaseModel, track: TrackModel) {
+        val updateRelease: ReleaseModel? = releases.find { r -> r.id == release.id }
+        if (updateRelease != null) {
+            track.id = generateId()
+            updateRelease.tracks.add(track)
+            logAll()
+            serialize()
+        }
+    }
+
+    override fun removeTrack(release: ReleaseModel, track: TrackModel) {
+        val updateRelease: ReleaseModel? = releases.find { r -> r.id == release.id }
+        if (updateRelease != null) {
+            updateRelease.tracks.remove(track)
+            logAll()
+            serialize()
+        }
     }
 
     fun logAll() {
