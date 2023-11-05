@@ -53,6 +53,7 @@ class ReleaseActivity : AppCompatActivity() {
             }
             binding.toolbar.title = "edit ${release.title}"
             binding.btnAddRelease.setText(R.string.btn_edit_release)
+            binding.btnTracks.isEnabled = true
             binding.btnDeleteRelease.isEnabled = true
         }
 

@@ -277,6 +277,7 @@
                         android:layout_margin="4dp"
                         android:layout_weight="1"
                         android:contentDescription="@string/btn_tracks"
+                        android:enabled="false"
                         android:text="@string/btn_tracks"
                         app:icon="@drawable/baseline_queue_music_24"
                         tools:ignore="ButtonStyle" />
