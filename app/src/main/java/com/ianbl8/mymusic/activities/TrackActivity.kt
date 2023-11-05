@@ -8,6 +8,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.ianbl8.mymusic.R
 import com.ianbl8.mymusic.databinding.ActivityTrackBinding
 import com.ianbl8.mymusic.main.MainApp
+import com.ianbl8.mymusic.models.ReleaseModel
 import com.ianbl8.mymusic.models.TrackModel
 import timber.log.Timber.Forest.i
 
@@ -15,6 +16,7 @@ class TrackActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTrackBinding
     var track = TrackModel()
+    var release = ReleaseModel()
     lateinit var app: MainApp
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,10 +29,13 @@ class TrackActivity : AppCompatActivity() {
 
         var edit = false
 
+        @Suppress("DEPRECATION")
         if (intent.hasExtra("track_edit")) {
             edit = true
-            @Suppress("DEPRECATION")
-            track = intent.extras?.getParcelable("track_edit")!!
+            release = intent.extras?.getParcelable("track_edit")!!
+            track = intent.extras?.getParcelable("track_to_edit")!!
+            i("Edit ${release}")
+            i("Edit ${track}")
             binding.etDiscNumber.setText(track.discNumber.toString())
             binding.etTrackNumber.setText(track.trackNumber.toString())
             binding.etTrackTitle.setText(track.trackTitle)
@@ -38,6 +43,11 @@ class TrackActivity : AppCompatActivity() {
             binding.toolbar.title = "edit ${track.trackTitle}"
             binding.btnAddTrack.setText(R.string.btn_edit_track)
             binding.btnDeleteTrack.isEnabled = true
+        } else if (intent.hasExtra("track_add")) {
+            release = intent.extras?.getParcelable("track_add")!!
+            i("Add to ${release}")
+        } else {
+            finish()
         }
 
         app = application as MainApp
@@ -48,28 +58,31 @@ class TrackActivity : AppCompatActivity() {
             track.trackNumber = binding.etTrackNumber.text.toString().toInt()
             track.trackTitle = binding.etTrackTitle.text.toString()
             track.trackArtist = binding.etTrackArtist.text.toString()
-            // if trackArtist empty, use item.artist
+            if (track.trackArtist.isEmpty()) {
+                track.trackArtist = release.artist
+            }
             if (track.trackTitle.isNotEmpty()) {
                 if (edit) {
-                    i("Update item: ${track.id}")
-                    app.tracks.update(track.copy())
+                    i("Update track: ${track.id}")
+                    app.releases.updateTrack(release, track.copy())
                 } else {
-                    i("Create item: ${track.id}")
-                    app.tracks.create(track.copy())
+                    i("Add track: ${track.trackTitle}")
+                    // app.tracks.create(track.copy())
+                    app.releases.createTrack(release, track.copy())
                 }
                 setResult(RESULT_OK)
                 finish()
             } else {
-                Snackbar.make(it, "Enter a valid title, artist and year", Snackbar.LENGTH_LONG)
+                Snackbar.make(it, "Enter valid track details", Snackbar.LENGTH_LONG)
                     .show()
-                i("Invalid item")
+                i("Invalid track")
             }
         }
 
         binding.btnDeleteTrack.setOnClickListener {
             i("btnDeleteTrack pressed")
             setResult(99)
-            app.tracks.delete(track)
+            app.releases.deleteTrack(release, track)
             finish()
         }
     }

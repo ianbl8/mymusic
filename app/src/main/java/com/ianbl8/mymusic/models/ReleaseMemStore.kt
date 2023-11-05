@@ -44,7 +44,7 @@ class ReleaseMemStore: ReleaseStore {
         releases.remove(release)
     }
 
-    override fun addTrack(release: ReleaseModel, track: TrackModel) {
+    override fun createTrack(release: ReleaseModel, track: TrackModel) {
         val updateRelease: ReleaseModel? = releases.find { r -> r.id == release.id }
         if (updateRelease != null) {
             track.id = generateId()
@@ -53,7 +53,17 @@ class ReleaseMemStore: ReleaseStore {
         }
     }
 
-    override fun removeTrack(release: ReleaseModel, track: TrackModel) {
+    override fun updateTrack(release: ReleaseModel, track: TrackModel) {
+        val updateRelease: ReleaseModel? = releases.find { r -> r.id == release.id }
+        if (updateRelease != null) {
+            /*
+
+             */
+            logAll()
+        }
+    }
+
+    override fun deleteTrack(release: ReleaseModel, track: TrackModel) {
         val updateRelease: ReleaseModel? = releases.find { r -> r.id == release.id }
         if (updateRelease != null) {
             updateRelease.tracks.remove(track)

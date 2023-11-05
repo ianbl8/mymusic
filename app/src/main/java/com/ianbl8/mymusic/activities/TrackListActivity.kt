@@ -13,11 +13,13 @@ import com.ianbl8.mymusic.adapters.TrackAdapter
 import com.ianbl8.mymusic.adapters.TrackListener
 import com.ianbl8.mymusic.databinding.ActivityTrackListBinding
 import com.ianbl8.mymusic.main.MainApp
+import com.ianbl8.mymusic.models.ReleaseModel
 import com.ianbl8.mymusic.models.TrackModel
 import timber.log.Timber.Forest.i
 
 class TrackListActivity : AppCompatActivity(), TrackListener {
 
+    private lateinit var release: ReleaseModel
     lateinit var app: MainApp
     private lateinit var binding: ActivityTrackListBinding
     private var position: Int = 0
@@ -26,7 +28,10 @@ class TrackListActivity : AppCompatActivity(), TrackListener {
         super.onCreate(savedInstanceState)
         binding = ActivityTrackListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.toolbar.title = this.resources.getString(R.string.menu_track_list)
+        @Suppress("DEPRECATION")
+        release = intent.extras?.getParcelable("release_tracks")!!
+        i("Size: ${release.tracks.size}")
+        binding.toolbar.title = "tracks: ${release.title}"
         setSupportActionBar(binding.toolbar)
         i("TrackListActivity started")
 
@@ -34,7 +39,7 @@ class TrackListActivity : AppCompatActivity(), TrackListener {
 
         val layoutManager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = layoutManager
-        binding.recyclerView.adapter = TrackAdapter(app.tracks.findAll(), this)
+        binding.recyclerView.adapter = TrackAdapter(app.releases.findById(release.id)!!.tracks, this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -46,6 +51,7 @@ class TrackListActivity : AppCompatActivity(), TrackListener {
         when (menuItem.itemId) {
             R.id.add_track -> {
                 val launcherIntent = Intent(this, TrackActivity::class.java)
+                launcherIntent.putExtra("track_add", release)
                 getResult.launch(launcherIntent)
             }
         }
@@ -54,20 +60,21 @@ class TrackListActivity : AppCompatActivity(), TrackListener {
 
     private val getResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
-            (binding.recyclerView.adapter)?.notifyItemRangeChanged(0, app.tracks.findAll().size)
+            (binding.recyclerView.adapter)?.notifyItemRangeChanged(0, app.releases.findById(release.id)!!.tracks.size)
         }
     }
 
     override fun onTrackClick(track: TrackModel, pos: Int) {
         val launcherIntent = Intent(this, TrackActivity::class.java)
-        launcherIntent.putExtra("track_edit", track)
+        launcherIntent.putExtra("track_edit", release)
+        launcherIntent.putExtra("track_to_edit", track)
         position = pos
         getClickResult.launch(launcherIntent)
     }
 
     private val getClickResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
-            (binding.recyclerView.adapter)?.notifyItemRangeChanged(0, app.tracks.findAll().size)
+            (binding.recyclerView.adapter)?.notifyItemRangeChanged(0, app.releases.findById(release.id)!!.tracks.size)
         } else {
             if (it.resultCode == 99) {
                 (binding.recyclerView.adapter)?.notifyItemRemoved(position)

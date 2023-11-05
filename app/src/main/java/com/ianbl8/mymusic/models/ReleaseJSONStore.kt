@@ -74,7 +74,7 @@ class ReleaseJSONStore(private val context: Context) : ReleaseStore {
         releases = gsonBuilder.fromJson(jsonString, releasesListType)
     }
 
-    override fun addTrack(release: ReleaseModel, track: TrackModel) {
+    override fun createTrack(release: ReleaseModel, track: TrackModel) {
         val updateRelease: ReleaseModel? = releases.find { r -> r.id == release.id }
         if (updateRelease != null) {
             track.id = generateId()
@@ -84,7 +84,19 @@ class ReleaseJSONStore(private val context: Context) : ReleaseStore {
         }
     }
 
-    override fun removeTrack(release: ReleaseModel, track: TrackModel) {
+    override fun updateTrack(release: ReleaseModel, track: TrackModel) {
+        val updateRelease: ReleaseModel? = releases.find { r -> r.id == release.id }
+        if (updateRelease != null) {
+            val updateTrack: TrackModel? = updateRelease.tracks.find { t -> t.id == track.id }
+            val index = updateRelease.tracks.indexOf(updateTrack)
+            i("index = ${index}")
+            updateRelease.tracks[index] = track
+            logAll()
+            serialize()
+        }
+    }
+
+    override fun deleteTrack(release: ReleaseModel, track: TrackModel) {
         val updateRelease: ReleaseModel? = releases.find { r -> r.id == release.id }
         if (updateRelease != null) {
             updateRelease.tracks.remove(track)

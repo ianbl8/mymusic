@@ -9,8 +9,9 @@ interface ReleaseStore {
     fun create(release: ReleaseModel)
     fun update(release: ReleaseModel)
     fun delete(release: ReleaseModel)
-    fun addTrack(release: ReleaseModel, track: TrackModel)
-    fun removeTrack(release: ReleaseModel, track: TrackModel)
+    fun createTrack(release: ReleaseModel, track: TrackModel)
+    fun updateTrack(release: ReleaseModel, track: TrackModel)
+    fun deleteTrack(release: ReleaseModel, track: TrackModel)
     fun generateId(): String {
         return UUID.randomUUID().toString()
     }

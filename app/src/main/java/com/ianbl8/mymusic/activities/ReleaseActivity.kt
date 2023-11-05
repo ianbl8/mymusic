@@ -104,7 +104,10 @@ class ReleaseActivity : AppCompatActivity() {
         registerImagePickerCallback()
 
         binding.btnTracks.setOnClickListener {
-            startActivity(Intent(this@ReleaseActivity, TrackListActivity::class.java))
+            // startActivity(Intent(this@ReleaseActivity, TrackListActivity::class.java))
+            val launcherIntent = Intent(this, TrackListActivity::class.java)
+            launcherIntent.putExtra("release_tracks", release)
+            startActivity(launcherIntent)
         }
 
         binding.btnDeleteRelease.setOnClickListener {
