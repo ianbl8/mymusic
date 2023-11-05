@@ -26,7 +26,7 @@ class TrackListActivity : AppCompatActivity(), TrackListener {
         super.onCreate(savedInstanceState)
         binding = ActivityTrackListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.toolbar.title = "TRACKS"
+        binding.toolbar.title = this.resources.getString(R.string.menu_track_list)
         setSupportActionBar(binding.toolbar)
         i("TrackListActivity started")
 

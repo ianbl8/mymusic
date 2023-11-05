@@ -53,7 +53,7 @@ class MainApp: Application() {
             tracks.create(TrackModel("uuid", 1, 5, "Just A Notion", "ABBA"))
             tracks.create(TrackModel("uuid", 1, 6, "I Can Be That Woman", "ABBA"))
             tracks.create(TrackModel("uuid", 1, 7, "Keep An Eye On Dan", "ABBA"))
-            tracks.create(TrackModel("uuid", 1, 8, "Bumbleebee", "ABBA"))
+            tracks.create(TrackModel("uuid", 1, 8, "Bumblebee", "ABBA"))
             tracks.create(TrackModel("uuid", 1, 9, "No Doubt ABout It", "ABBA"))
             tracks.create(TrackModel("uuid", 1, 10, "Ode To Freedom", "ABBA"))
         }

@@ -21,7 +21,7 @@ class TrackActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityTrackBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.toolbar.title = "ADD TRACK"
+        binding.toolbar.title = this.resources.getString(R.string.menu_add_track)
         setSupportActionBar(binding.toolbar)
         i("TrackActivity started")
 
@@ -31,10 +31,11 @@ class TrackActivity : AppCompatActivity() {
             edit = true
             @Suppress("DEPRECATION")
             track = intent.extras?.getParcelable("track_edit")!!
-            binding.etDiscNumber.setText(track.discNumber)
-            binding.etTrackNumber.setText(track.trackNumber)
+            binding.etDiscNumber.setText(track.discNumber.toString())
+            binding.etTrackNumber.setText(track.trackNumber.toString())
             binding.etTrackTitle.setText(track.trackTitle)
             binding.etTrackArtist.setText(track.trackArtist)
+            binding.toolbar.title = "edit ${track.trackTitle}"
             binding.btnAddTrack.setText(R.string.btn_edit_track)
             binding.btnDeleteTrack.isEnabled = true
         }

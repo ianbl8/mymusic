@@ -11,7 +11,7 @@ interface TrackListener {
 }
 
 class TrackAdapter constructor(
-    private val tracks: List<TrackModel>,
+    private var tracks: List<TrackModel>,
     private val listener: TrackListener
 ) : RecyclerView.Adapter<TrackAdapter.MainHolder>() {
 
@@ -29,8 +29,8 @@ class TrackAdapter constructor(
 
     class MainHolder(private val binding: CardTrackBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(track: TrackModel, listener: TrackListener) {
-            binding.trackDiscNumber.text = "${track.discNumber}"
-            binding.trackTrackNumber.text = "${track.trackNumber}"
+            binding.trackDiscNumber.text = track.discNumber.toString()
+            binding.trackTrackNumber.text = track.trackNumber.toString()
             binding.trackTitle.text = track.trackTitle
             binding.trackArtist.text = track.trackArtist
             binding.root.setOnClickListener { listener.onTrackClick(track, adapterPosition) }
