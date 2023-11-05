@@ -12,14 +12,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="4dp"
-        android:padding="12dp">
+        android:padding="4dp">
+
+        <TextView
+            android:id="@+id/trackDiscNumberHeading"
+            android:layout_width="32dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="sans-serif-condensed"
+            android:paddingEnd="4dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textSize="12sp"
+            android:text="@string/disc_heading"
+            tools:ignore="RtlSymmetry" />
 
         <TextView
             android:id="@+id/trackDiscNumber"
-            android:layout_width="40dp"
-            android:layout_height="64dp"
-            android:layout_marginTop="4dp"
+            android:layout_width="32dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="16dp"
+            android:fontFamily="sans-serif-condensed"
             android:paddingEnd="4dp"
             android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
@@ -31,11 +49,30 @@
             tools:ignore="RtlSymmetry" />
 
         <TextView
-            android:id="@+id/trackTrackNumber"
-            android:layout_width="40dp"
-            android:layout_height="64dp"
+            android:id="@+id/trackTrackNumberHeading"
+            android:layout_width="32dp"
+            android:layout_height="16dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="16dp"
+            android:fontFamily="sans-serif-condensed"
+            android:paddingStart="4dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/trackDiscNumber"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:text="@string/track_heading"
+            tools:ignore="RtlSymmetry" />
+
+        <TextView
+            android:id="@+id/trackTrackNumber"
+            android:layout_width="32dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="sans-serif-condensed"
             android:paddingStart="4dp"
             android:gravity="center"
             app:layout_constraintEnd_toEndOf="parent"
@@ -49,28 +86,32 @@
 
         <TextView
             android:id="@+id/trackTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="320dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginStart="8dp"
+            android:fontFamily="sans-serif"
             android:textAlignment="viewStart"
+            android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.048"
             app:layout_constraintStart_toEndOf="@id/trackTrackNumber"
             app:layout_constraintTop_toTopOf="parent"
-            android:textSize="24sp"
+            android:ellipsize="end"
+            android:maxLines="1"
             tools:text="Title" />
 
         <TextView
             android:id="@+id/trackArtist"
-            android:layout_width="wrap_content"
+            android:layout_width="320dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginStart="8dp"
+            android:fontFamily="sans-serif"
             android:textAlignment="viewStart"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.052"
             app:layout_constraintStart_toEndOf="@id/trackTrackNumber"
             app:layout_constraintTop_toBottomOf="@id/trackTitle"
             android:textSize="16sp"
+            android:ellipsize="end"
+            android:maxLines="1"
             tools:text="Artist" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -46,6 +46,8 @@
     <!-- TrackListActivity -->
     <string name="menu_track_list">tracks</string>
     <string name="menu_add_track">add track</string>
+    <string name="disc_heading">disc</string>
+    <string name="track_heading">track</string>
 
     <!-- WelcomeActivity -->
     <string name="btn_start">start</string>
