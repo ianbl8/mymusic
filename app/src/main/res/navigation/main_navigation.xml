@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/releaseListFragment">
+
+    <fragment
+        android:id="@+id/releaseListFragment"
+        android:name="com.ianbl8.mymusic.ReleaseListFragment"
+        android:label="fragment_release_list"
+        tools:layout="@layout/fragment_release_list" />
+    <fragment
+        android:id="@+id/releaseFragment"
+        android:name="com.ianbl8.mymusic.ReleaseFragment"
+        android:label="fragment_release"
+        tools:layout="@layout/fragment_release" />
+    <fragment
+        android:id="@+id/trackListFragment"
+        android:name="com.ianbl8.mymusic.TrackListFragment"
+        android:label="fragment_track_list"
+        tools:layout="@layout/fragment_track_list" />
+    <fragment
+        android:id="@+id/trackFragment"
+        android:name="com.ianbl8.mymusic.TrackFragment"
+        android:label="fragment_track"
+        tools:layout="@layout/fragment_track" />
+</navigation>
