@@ -12,6 +12,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ianbl8.mymusic.adapters.ReleaseAdapter
@@ -34,11 +35,6 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
         super.onCreate(savedInstanceState)
         app = activity?.application as MainApp
 
-        // use setFragmentResultListener to get save success or delete success from ReleaseFragment
-        setFragmentResultListener("Release_ReleaseList") { requestKey, bundle ->
-            status = bundle.getString("release_update")!!
-        }
-
         setHasOptionsMenu(true)
     }
 
@@ -49,6 +45,11 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
         _fragBinding = FragmentReleaseListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         activity?.title = getString(R.string.menu_list)
+
+        // use setFragmentResultListener to get save success or delete success from ReleaseFragment
+        setFragmentResultListener("Release_ReleaseList") { requestKey, bundle ->
+            status = bundle.getString("release_update")!!
+        }
 
         fragBinding.recyclerView.setLayoutManager(LinearLayoutManager(activity))
         fragBinding.recyclerView.adapter = ReleaseAdapter(app.releases.findAll(), this)
@@ -79,7 +80,7 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
             Pair("release", release),
             Pair("release_edit", true)
         ))
-        requireView().findNavController().navigate(R.id.action_releaseListFragment_to_releaseFragment)
+        findNavController().navigate(R.id.releaseFragment)
     }
 
     companion object {

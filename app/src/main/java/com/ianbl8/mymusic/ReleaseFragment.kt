@@ -12,6 +12,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.snackbar.Snackbar
 import com.ianbl8.mymusic.databinding.FragmentReleaseBinding
@@ -40,12 +41,6 @@ class ReleaseFragment : Fragment() {
         super.onCreate(savedInstanceState)
         app = activity?.application as MainApp
 
-        // get release details from ReleaseListFragment 
-        setFragmentResultListener("ReleaseList_Release") { requestKey, bundle ->
-            release = bundle.getParcelable("release")!!
-            edit = bundle.getBoolean("release_edit")
-        }
-
         setHasOptionsMenu(true)
     }
 
@@ -56,6 +51,12 @@ class ReleaseFragment : Fragment() {
         _fragBinding = FragmentReleaseBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         activity?.title = getString(R.string.menu_release)
+
+        // get release details from ReleaseListFragment
+        setFragmentResultListener("ReleaseList_Release") { requestKey, bundle ->
+            release = bundle.getParcelable("release")!!
+            edit = bundle.getBoolean("release_edit")
+        }
 
         // if edit, populate fields from release
         if (edit) {
@@ -136,7 +137,7 @@ class ReleaseFragment : Fragment() {
             setFragmentResult("Release_TrackList", bundleOf(
                 Pair("release", release),
             ))
-            requireView().findNavController().navigate(R.id.action_releaseFragment_to_trackListFragment)
+            findNavController().navigate(R.id.trackListFragment)
         }
 
         layout.btnDeleteRelease.setOnClickListener {
@@ -145,7 +146,7 @@ class ReleaseFragment : Fragment() {
             setFragmentResult("Release_ReleaseList", bundleOf(
                 Pair("release_update", "delete"),
             ))
-            requireView().findNavController().navigate(R.id.action_releaseFragment_to_releaseListFragment)
+            findNavController().navigate(R.id.releaseListFragment)
         }
     }
 

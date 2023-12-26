@@ -12,6 +12,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.snackbar.Snackbar
 import com.ianbl8.mymusic.databinding.FragmentTrackBinding
@@ -34,13 +35,6 @@ class TrackFragment : Fragment() {
         super.onCreate(savedInstanceState)
         app = activity?.application as MainApp
 
-        // get release and track details from TrackListFragment
-        setFragmentResultListener("TrackList_Track") { requestKey, bundle ->
-            release = bundle.getParcelable("release")!!
-            track = bundle.getParcelable("track")!!
-            edit = bundle.getBoolean("track_edit")
-        }
-
         setHasOptionsMenu(true)
     }
 
@@ -51,6 +45,13 @@ class TrackFragment : Fragment() {
         _fragBinding = FragmentTrackBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         activity?.title = getString(R.string.menu_add_track)
+
+        // get release and track details from TrackListFragment
+        setFragmentResultListener("TrackList_Track") { requestKey, bundle ->
+            release = bundle.getParcelable("release")!!
+            track = bundle.getParcelable("track")!!
+            edit = bundle.getBoolean("track_edit")
+        }
 
         // if edit, populate fields from track
         if (edit) {
@@ -90,7 +91,7 @@ class TrackFragment : Fragment() {
                 setFragmentResult("Track_TrackList", bundleOf(
                     Pair("track_update", "save"),
                 ))
-                requireView().findNavController().navigate(R.id.action_trackFragment_to_trackListFragment)
+                findNavController().navigate(R.id.trackListFragment)
             } else {
                 Snackbar.make(it, "Enter valid track details", Snackbar.LENGTH_LONG).show()
                 Timber.i("Invalid track")
@@ -103,7 +104,7 @@ class TrackFragment : Fragment() {
             setFragmentResult("Track_TrackList", bundleOf(
                 Pair("track_update", "delete"),
             ))
-            requireView().findNavController().navigate(R.id.action_trackFragment_to_trackListFragment)
+            findNavController().navigate(R.id.trackListFragment)
         }
     }
 

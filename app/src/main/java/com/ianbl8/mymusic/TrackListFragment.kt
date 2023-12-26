@@ -12,6 +12,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ianbl8.mymusic.adapters.TrackAdapter
@@ -36,16 +37,6 @@ class TrackListFragment : Fragment(), TrackListener {
         super.onCreate(savedInstanceState)
         app = activity?.application as MainApp
 
-        // use setFragmentResultListener to get release from ReleaseFragment
-        setFragmentResultListener("Release_TrackList") { requestKey, bundle ->
-            release = bundle.getParcelable("release")!!
-        }
-
-        // use setFragmentResultListener to get save success or delete success from TrackFragment
-        setFragmentResultListener("Track_TrackList") { requestKey, bundle ->
-            status = bundle.getString("track_update")!!
-        }
-
         setHasOptionsMenu(true)
     }
 
@@ -56,6 +47,17 @@ class TrackListFragment : Fragment(), TrackListener {
         _fragBinding = FragmentTrackListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         activity?.title = "tracks: ${release.title}"
+
+        // use setFragmentResultListener to get release from ReleaseFragment
+        setFragmentResultListener("Release_TrackList") { requestKey, bundle ->
+            release = bundle.getParcelable("release")!!
+        }
+
+        // use setFragmentResultListener to get save success or delete success from TrackFragment
+        setFragmentResultListener("Track_TrackList") { requestKey, bundle ->
+            status = bundle.getString("track_update")!!
+        }
+
         fragBinding.recyclerView.setLayoutManager(LinearLayoutManager(activity))
         fragBinding.recyclerView.adapter = TrackAdapter(app.releases.findById(release.id)!!.tracks, this)
         return root
@@ -89,7 +91,7 @@ class TrackListFragment : Fragment(), TrackListener {
             Pair("track", track),
             Pair("track_edit", true)
         ))
-        requireView().findNavController().navigate(R.id.action_trackListFragment_to_trackFragment)
+        findNavController().navigate(R.id.trackFragment)
     }
 
     companion object {
