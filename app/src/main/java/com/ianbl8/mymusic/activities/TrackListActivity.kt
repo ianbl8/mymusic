@@ -48,7 +48,6 @@ class TrackListActivity : AppCompatActivity(), TrackListener {
     }
 
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
-        /*
         when (menuItem.itemId) {
             R.id.add_track -> {
                 val launcherIntent = Intent(this, TrackActivity::class.java)
@@ -59,7 +58,6 @@ class TrackListActivity : AppCompatActivity(), TrackListener {
                 finish()
             }
         }
-         */
         return super.onOptionsItemSelected(menuItem)
     }
 

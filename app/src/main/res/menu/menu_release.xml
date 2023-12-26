@@ -2,8 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!-- To be updated -->
     <item
-        android:id="@+id/releaseListFragment"
+        android:id="@+id/cancel_release"
         android:icon="@drawable/baseline_cancel_24"
         android:title="@string/menu_cancel_release"
         app:showAsAction="always" />

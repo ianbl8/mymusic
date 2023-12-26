@@ -93,13 +93,11 @@ class TrackActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
-        /*
         when (menuItem.itemId) {
             R.id.cancel_track -> {
                 finish()
             }
         }
-         */
         return super.onOptionsItemSelected(menuItem)
     }
 }

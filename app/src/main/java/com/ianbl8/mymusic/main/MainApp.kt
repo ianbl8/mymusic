@@ -17,7 +17,7 @@ class MainApp: Application() {
         super.onCreate()
         Timber.plant(Timber.DebugTree())
         // releases = ReleaseMemStore()
-        // releases = ReleaseJSONStore(this.applicationContext)
+        releases = ReleaseJSONStore(this.applicationContext)
         i("mymusic started")
     }
 

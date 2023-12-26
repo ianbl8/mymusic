@@ -125,13 +125,11 @@ class ReleaseActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
-        /*
         when (menuItem.itemId) {
             R.id.cancel_release -> {
                 finish()
             }
         }
-         */
         return super.onOptionsItemSelected(menuItem)
     }
 
