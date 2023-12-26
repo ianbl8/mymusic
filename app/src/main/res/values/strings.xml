@@ -2,7 +2,7 @@
 
     <string name="app_name">mymusic</string>
 
-    <!-- ReleaseActivity -->
+    <!-- Release -->
     <string name="btn_add_cover">cover</string>
     <string name="btn_add_release" tools:ignore="ButtonCase">add</string>
     <string name="btn_delete_release">delete</string>
@@ -25,12 +25,14 @@
     <string name="tv_tracks">number of tracks</string>
     <string name="tv_type">type</string>
     <string name="tv_year">year of release</string>
+    <string name="error_release">Unable to save this release</string>
 
-    <!-- ReleaseListActivity -->
+    <!-- ReleaseList -->
     <string name="menu_add_release">add</string>
     <string name="menu_list">all mymusic</string>
+    <string name="no_releases_found">You don\'t have any music.\n\nWhy not add some now?</string>
 
-    <!-- TrackActivity -->
+    <!-- Track -->
     <string name="btn_add_track">add</string>
     <string name="btn_delete_track">delete</string>
     <string name="btn_edit_track">update</string>
@@ -44,14 +46,14 @@
     <string name="tv_track_number">track</string>
     <string name="tv_track_title">track title</string>
 
-    <!-- TrackListActivity -->
+    <!-- TrackList -->
     <string name="disc_heading">disc</string>
     <string name="go_back">back</string>
     <string name="menu_add_track">add track</string>
     <string name="menu_track_list">tracks</string>
     <string name="track_heading">track</string>
 
-    <!-- WelcomeActivity -->
+    <!-- Welcome -->
     <string name="btn_sample_start">start with sample data</string>
     <string name="btn_start">view mymusic</string>
     <string name="welcome_line">welcome to</string>

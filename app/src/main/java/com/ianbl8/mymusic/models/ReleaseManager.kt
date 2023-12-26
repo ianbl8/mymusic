@@ -2,7 +2,7 @@ package com.ianbl8.mymusic.models
 
 import timber.log.Timber.Forest.i
 
-class ReleaseMemStore: ReleaseStore {
+object ReleaseManager: ReleaseStore {
     val releases = ArrayList<ReleaseModel>()
 
     override fun findAll(): List<ReleaseModel> {

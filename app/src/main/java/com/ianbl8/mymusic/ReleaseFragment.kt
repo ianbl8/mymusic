@@ -8,9 +8,16 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -19,6 +26,7 @@ import com.ianbl8.mymusic.databinding.FragmentReleaseBinding
 import com.ianbl8.mymusic.helpers.showImagePicker
 import com.ianbl8.mymusic.main.MainApp
 import com.ianbl8.mymusic.models.ReleaseModel
+import com.ianbl8.mymusic.ui.ReleaseViewModel
 import com.squareup.picasso.Picasso
 import timber.log.Timber
 import java.util.Calendar
@@ -26,21 +34,19 @@ import java.util.Calendar
 @Suppress("DEPRECATION")
 class ReleaseFragment : Fragment() {
 
-    lateinit var app: MainApp
     val thisYear = Calendar.getInstance().get(Calendar.YEAR)
     val nextYear = thisYear + 1
     var release = ReleaseModel()
     var edit = false
     private var _fragBinding: FragmentReleaseBinding? = null
     private val fragBinding get() = _fragBinding!!
+    lateinit var releaseViewModel: ReleaseViewModel
 
     // registerImagePickerCallback() and showImagePicker() require updating
     // private lateinit var imageIntentLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        app = activity?.application as MainApp
-
         setHasOptionsMenu(true)
     }
 
@@ -51,6 +57,12 @@ class ReleaseFragment : Fragment() {
         _fragBinding = FragmentReleaseBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         activity?.title = getString(R.string.menu_release)
+        setupMenu()
+
+        releaseViewModel = ViewModelProvider(this).get(ReleaseViewModel::class.java)
+        releaseViewModel.observableStatus.observe(viewLifecycleOwner, Observer {
+            status -> status?.let { render(status) }
+        })
 
         // get release details from ReleaseListFragment
         setFragmentResultListener("ReleaseList_Release") { requestKey, bundle ->
@@ -155,16 +167,29 @@ class ReleaseFragment : Fragment() {
         _fragBinding = null
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_release, menu)
-        super.onCreateOptionsMenu(menu, inflater)
+    private fun setupMenu() {
+        (requireActivity() as MenuHost).addMenuProvider(object: MenuProvider {
+            override fun onPrepareMenu(menu: Menu) {
+                // super.onPrepareMenu(menu)
+            }
+
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_release, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return NavigationUI.onNavDestinationSelected(menuItem, requireView().findNavController())
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return NavigationUI.onNavDestinationSelected(
-            item,
-            requireView().findNavController()
-        ) || super.onOptionsItemSelected(item)
+    private fun render(status: Boolean) {
+        when (status) {
+            true -> {
+                view?.let {  }
+            }
+            false -> Toast.makeText(context, getString(R.string.error_release), Toast.LENGTH_SHORT).show()
+        }
     }
 
     companion object {
