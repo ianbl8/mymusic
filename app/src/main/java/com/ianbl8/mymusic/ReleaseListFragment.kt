@@ -8,6 +8,9 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +25,7 @@ import timber.log.Timber
 class ReleaseListFragment : Fragment(), ReleaseListener {
 
     lateinit var app: MainApp
+    private lateinit var status: String
     private var position: Int = 0
     private var _fragBinding: FragmentReleaseListBinding? = null
     private val fragBinding get() = _fragBinding!!
@@ -29,6 +33,12 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         app = activity?.application as MainApp
+
+        // use setFragmentResultListener to get save success or delete success from ReleaseFragment
+        setFragmentResultListener("Release_ReleaseList") { requestKey, bundle ->
+            status = bundle.getString("release_update")!!
+        }
+
         setHasOptionsMenu(true)
     }
 
@@ -39,8 +49,10 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
         _fragBinding = FragmentReleaseListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         activity?.title = getString(R.string.menu_list)
+
         fragBinding.recyclerView.setLayoutManager(LinearLayoutManager(activity))
         fragBinding.recyclerView.adapter = ReleaseAdapter(app.releases.findAll(), this)
+
         return root
     }
 
@@ -63,12 +75,12 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
 
     override fun onReleaseClick(release: ReleaseModel, position: Int) {
         Timber.i("Release $position clicked")
-        // use setFragmentResult to send release to ReleaseFragment
-        // set release_edit
-        // navigate to ReleaseFragment
+        setFragmentResult("ReleaseList_Release", bundleOf(
+            Pair("release", release),
+            Pair("release_edit", true)
+        ))
+        requireView().findNavController().navigate(R.id.action_releaseListFragment_to_releaseFragment)
     }
-
-    // implement other functions from ReleaseListActivity
 
     companion object {
         @JvmStatic

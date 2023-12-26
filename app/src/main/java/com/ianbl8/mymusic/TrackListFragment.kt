@@ -8,6 +8,9 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
+import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,16 +27,24 @@ class TrackListFragment : Fragment(), TrackListener {
 
     lateinit var app: MainApp
     private lateinit var release: ReleaseModel
+    private lateinit var status: String
     private var position: Int = 0
     private var _fragBinding: FragmentTrackListBinding? = null
     private val fragBinding get() = _fragBinding!!
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         app = activity?.application as MainApp
 
-        // use setFragmentResultListener to get release from Release Fragment
+        // use setFragmentResultListener to get release from ReleaseFragment
+        setFragmentResultListener("Release_TrackList") { requestKey, bundle ->
+            release = bundle.getParcelable("release")!!
+        }
+
+        // use setFragmentResultListener to get save success or delete success from TrackFragment
+        setFragmentResultListener("Track_TrackList") { requestKey, bundle ->
+            status = bundle.getString("track_update")!!
+        }
 
         setHasOptionsMenu(true)
     }
@@ -44,7 +55,7 @@ class TrackListFragment : Fragment(), TrackListener {
     ): View? {
         _fragBinding = FragmentTrackListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        activity?.title = "tracks" // fix
+        activity?.title = "tracks: ${release.title}"
         fragBinding.recyclerView.setLayoutManager(LinearLayoutManager(activity))
         fragBinding.recyclerView.adapter = TrackAdapter(app.releases.findById(release.id)!!.tracks, this)
         return root
@@ -61,6 +72,10 @@ class TrackListFragment : Fragment(), TrackListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        setFragmentResult("TrackList_Track", bundleOf(
+            Pair("release", release),
+            Pair("track_edit", false)
+        ))
         return NavigationUI.onNavDestinationSelected(
             item,
             requireView().findNavController()
@@ -69,12 +84,13 @@ class TrackListFragment : Fragment(), TrackListener {
 
     override fun onTrackClick(track: TrackModel, position: Int) {
         Timber.i("Track $position clicked")
-        // use setFragmentResult to send release and track to TrackFragment
-        // set track_edit
-        // navigate to TrackFragment
+        setFragmentResult("TrackList_Track", bundleOf(
+            Pair("release", release),
+            Pair("track", track),
+            Pair("track_edit", true)
+        ))
+        requireView().findNavController().navigate(R.id.action_trackListFragment_to_trackFragment)
     }
-
-    // implement other functions from TrackListActivity
 
     companion object {
         @JvmStatic

@@ -43,12 +43,14 @@ class ReleaseListActivity : AppCompatActivity(), ReleaseListener {
     }
 
     override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
+        /*
         when (menuItem.itemId) {
             R.id.add_release -> {
                 val launcherIntent = Intent(this, ReleaseActivity::class.java)
                 getResult.launch(launcherIntent)
             }
         }
+         */
         return super.onOptionsItemSelected(menuItem)
     }
 
