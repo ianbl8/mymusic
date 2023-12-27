@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.ianbl8.mymusic.models.ReleaseManager
 import com.ianbl8.mymusic.models.ReleaseModel
+import timber.log.Timber
 
 class ReleaseListViewModel: ViewModel() {
 
@@ -14,10 +15,15 @@ class ReleaseListViewModel: ViewModel() {
         get() = releasesList
 
     init {
-        load()
+        loadAll()
     }
 
-    fun load() {
-        releasesList.value = ReleaseManager.findAll()
+    fun loadAll() {
+        try {
+            releasesList.value = ReleaseManager.findAll()
+            Timber.i("loadAll success")
+        } catch (e: Exception) {
+            Timber.i("loadAll error: ${e.message}")
+        }
     }
 }
