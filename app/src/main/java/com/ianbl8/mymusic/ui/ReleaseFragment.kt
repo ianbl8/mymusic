@@ -1,4 +1,4 @@
-package com.ianbl8.mymusic
+package com.ianbl8.mymusic.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,13 +8,18 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.snackbar.Snackbar
+import com.ianbl8.mymusic.R
 import com.ianbl8.mymusic.databinding.FragmentReleaseBinding
 import com.ianbl8.mymusic.helpers.showImagePicker
-import com.ianbl8.mymusic.main.MainApp
 import com.ianbl8.mymusic.models.ReleaseModel
 import com.squareup.picasso.Picasso
 import timber.log.Timber
@@ -23,21 +28,19 @@ import java.util.Calendar
 @Suppress("DEPRECATION")
 class ReleaseFragment : Fragment() {
 
-    lateinit var app: MainApp
     val thisYear = Calendar.getInstance().get(Calendar.YEAR)
     val nextYear = thisYear + 1
-    var release = ReleaseModel()
     var edit = false
     private var _fragBinding: FragmentReleaseBinding? = null
     private val fragBinding get() = _fragBinding!!
+    private lateinit var releaseViewModel: ReleaseViewModel
+    private lateinit var release: ReleaseModel
 
     // registerImagePickerCallback() and showImagePicker() require updating
     // private lateinit var imageIntentLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        app = activity?.application as MainApp
-
         setHasOptionsMenu(true)
     }
 
@@ -48,14 +51,9 @@ class ReleaseFragment : Fragment() {
         _fragBinding = FragmentReleaseBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         activity?.title = getString(R.string.menu_release)
-
-        /*
-        // get release details from ReleaseListFragment
-        setFragmentResultListener("ReleaseList_Release") { requestKey, bundle ->
-            release = bundle.getParcelable("release")!!
-            edit = bundle.getBoolean("release_edit")
-        }
-         */
+        setupMenu()
+        releaseViewModel = ViewModelProvider(this).get(ReleaseViewModel::class.java)
+        releaseViewModel.observableRelease.observe(viewLifecycleOwner, Observer { release })
 
         // if edit, populate fields from release
         if (edit) {
@@ -83,22 +81,39 @@ class ReleaseFragment : Fragment() {
         return root
     }
 
+    private fun setupMenu() {
+        (requireActivity() as MenuHost).addMenuProvider(object: MenuProvider {
+            override fun onPrepareMenu(menu: Menu) {
+                // handle visibility of menu items
+            }
+
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_release, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return NavigationUI.onNavDestinationSelected(menuItem, requireView().findNavController())
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
     private fun setButtonListener(layout: FragmentReleaseBinding) {
         layout.btnAddRelease.setOnClickListener {
             Timber.i("btnAddRelease pressed")
-            release.title = fragBinding.etTitle.text.toString()
-            release.artist = fragBinding.etArtist.text.toString()
-            release.year = fragBinding.etYear.text.toString()
+            val addRelease = ReleaseModel()
+            addRelease.title = fragBinding.etTitle.text.toString()
+            addRelease.artist = fragBinding.etArtist.text.toString()
+            addRelease.year = fragBinding.etYear.text.toString()
             val discs = fragBinding.etDiscs.text.toString()
             if (discs.isNotEmpty()) {
-                release.discs = discs.toInt()
+                addRelease.discs = discs.toInt()
             } else {
-                release.discs = 1
+                addRelease.discs = 1
             }
-            release.physical = fragBinding.cbPhysical.isChecked
-            release.digital = fragBinding.cbDigital.isChecked
-            if (release.title.isNotEmpty() && release.artist.isNotEmpty() && release.year.isNotEmpty()) {
-                if (release.year.toLong() < 1900 || release.year.toLong() > nextYear) {
+            addRelease.physical = fragBinding.cbPhysical.isChecked
+            addRelease.digital = fragBinding.cbDigital.isChecked
+            if (addRelease.title.isNotEmpty() && addRelease.artist.isNotEmpty() && addRelease.year.isNotEmpty()) {
+                if (addRelease.year.toLong() < 1900 || addRelease.year.toLong() > nextYear) {
                     Snackbar.make(
                         it,
                         "Choose a valid year between 1900 and $nextYear",
@@ -107,11 +122,11 @@ class ReleaseFragment : Fragment() {
                     Timber.i("Invalid year")
                 } else {
                     if (edit) {
-                        Timber.i("Update release: ${release.id}")
-                        app.releases.update(release.copy())
+                        Timber.i("Update release: ${addRelease.id}")
+                        releaseViewModel.updateRelease(addRelease.copy())
                     } else {
-                        Timber.i("Create release: ${release.id}")
-                        app.releases.create(release.copy())
+                        Timber.i("Create release: ${addRelease.id}")
+                        releaseViewModel.createRelease(addRelease.copy())
                     }
                     // setResult(AppCompatActivity.RESULT_OK)
                     // finish()
@@ -143,7 +158,7 @@ class ReleaseFragment : Fragment() {
 
         layout.btnDeleteRelease.setOnClickListener {
             Timber.i("btnDeleteRelease pressed")
-            app.releases.delete(release)
+            releaseViewModel.deleteRelease(release)
             /*
             setFragmentResult("Release_ReleaseList", bundleOf(
                 Pair("release_update", "delete"),

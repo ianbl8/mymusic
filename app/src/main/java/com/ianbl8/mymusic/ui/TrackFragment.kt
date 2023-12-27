@@ -1,4 +1,4 @@
-package com.ianbl8.mymusic
+package com.ianbl8.mymusic.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,6 +12,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.snackbar.Snackbar
+import com.ianbl8.mymusic.R
 import com.ianbl8.mymusic.databinding.FragmentTrackBinding
 import com.ianbl8.mymusic.main.MainApp
 import com.ianbl8.mymusic.models.ReleaseModel

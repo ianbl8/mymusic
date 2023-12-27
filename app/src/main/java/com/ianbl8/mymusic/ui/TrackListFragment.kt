@@ -1,4 +1,4 @@
-package com.ianbl8.mymusic
+package com.ianbl8.mymusic.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,20 +12,23 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ianbl8.mymusic.adapters.ReleaseAdapter
-import com.ianbl8.mymusic.adapters.ReleaseListener
-import com.ianbl8.mymusic.databinding.FragmentReleaseListBinding
+import com.ianbl8.mymusic.R
+import com.ianbl8.mymusic.adapters.TrackAdapter
+import com.ianbl8.mymusic.adapters.TrackListener
+import com.ianbl8.mymusic.databinding.FragmentTrackListBinding
 import com.ianbl8.mymusic.main.MainApp
 import com.ianbl8.mymusic.models.ReleaseModel
+import com.ianbl8.mymusic.models.TrackModel
 import timber.log.Timber
 
 @Suppress("DEPRECATION")
-class ReleaseListFragment : Fragment(), ReleaseListener {
+class TrackListFragment : Fragment(), TrackListener {
 
     lateinit var app: MainApp
+    private lateinit var release: ReleaseModel
     private lateinit var status: String
     private var position: Int = 0
-    private var _fragBinding: FragmentReleaseListBinding? = null
+    private var _fragBinding: FragmentTrackListBinding? = null
     private val fragBinding get() = _fragBinding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,20 +42,24 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _fragBinding = FragmentReleaseListBinding.inflate(inflater, container, false)
+        _fragBinding = FragmentTrackListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        activity?.title = getString(R.string.menu_list)
+        activity?.title = "tracks: ${release.title}"
 
         /*
-        // use setFragmentResultListener to get save success or delete success from ReleaseFragment
-        setFragmentResultListener("Release_ReleaseList") { requestKey, bundle ->
-            status = bundle.getString("release_update")!!
+        // use setFragmentResultListener to get release from ReleaseFragment
+        setFragmentResultListener("Release_TrackList") { requestKey, bundle ->
+            release = bundle.getParcelable("release")!!
+        }
+
+        // use setFragmentResultListener to get save success or delete success from TrackFragment
+        setFragmentResultListener("Track_TrackList") { requestKey, bundle ->
+            status = bundle.getString("track_update")!!
         }
          */
 
         fragBinding.recyclerView.setLayoutManager(LinearLayoutManager(activity))
-        fragBinding.recyclerView.adapter = ReleaseAdapter(app.releases.findAll(), this)
-
+        fragBinding.recyclerView.adapter = TrackAdapter(app.releases.findById(release.id)!!.tracks, this)
         return root
     }
 
@@ -62,32 +69,39 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_release_list, menu)
+        inflater.inflate(R.menu.menu_track_list, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        /*
+        setFragmentResult("TrackList_Track", bundleOf(
+            Pair("release", release),
+            Pair("track_edit", false)
+        ))
+         */
         return NavigationUI.onNavDestinationSelected(
             item,
             requireView().findNavController()
         ) || super.onOptionsItemSelected(item)
     }
 
-    override fun onReleaseClick(release: ReleaseModel, position: Int) {
-        Timber.i("Release $position clicked")
+    override fun onTrackClick(track: TrackModel, position: Int) {
+        Timber.i("Track $position clicked")
         /*
-        setFragmentResult("ReleaseList_Release", bundleOf(
+        setFragmentResult("TrackList_Track", bundleOf(
             Pair("release", release),
-            Pair("release_edit", true)
+            Pair("track", track),
+            Pair("track_edit", true)
         ))
          */
-        findNavController().navigate(R.id.releaseFragment)
+        findNavController().navigate(R.id.trackFragment)
     }
 
     companion object {
         @JvmStatic
         fun newInstance() =
-            ReleaseListFragment().apply {
+            TrackListFragment().apply {
                 arguments = Bundle().apply {}
             }
     }
