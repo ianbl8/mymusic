@@ -60,10 +60,9 @@ class ReleaseListActivity : AppCompatActivity(), ReleaseListener {
         }
     }
 
-    override fun onReleaseClick(release: ReleaseModel, pos: Int) {
+    override fun onReleaseClick(release: ReleaseModel) {
         val launcherIntent = Intent(this, ReleaseActivity::class.java)
         launcherIntent.putExtra("release_edit", release)
-        position = pos
         getClickResult.launch(launcherIntent)
     }
 

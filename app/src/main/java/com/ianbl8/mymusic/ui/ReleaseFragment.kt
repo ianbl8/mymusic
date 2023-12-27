@@ -15,11 +15,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.snackbar.Snackbar
 import com.ianbl8.mymusic.R
 import com.ianbl8.mymusic.databinding.FragmentReleaseBinding
 import com.ianbl8.mymusic.helpers.showImagePicker
+import com.ianbl8.mymusic.models.ReleaseManager
 import com.ianbl8.mymusic.models.ReleaseModel
 import com.squareup.picasso.Picasso
 import timber.log.Timber
@@ -30,11 +32,11 @@ class ReleaseFragment : Fragment() {
 
     val thisYear = Calendar.getInstance().get(Calendar.YEAR)
     val nextYear = thisYear + 1
-    var edit = false
+    private lateinit var releaseViewModel: ReleaseViewModel
+    private val args by navArgs<ReleaseFragmentArgs>()
     private var _fragBinding: FragmentReleaseBinding? = null
     private val fragBinding get() = _fragBinding!!
-    private lateinit var releaseViewModel: ReleaseViewModel
-    private lateinit var release: ReleaseModel
+    var release = ReleaseModel()
 
     // registerImagePickerCallback() and showImagePicker() require updating
     // private lateinit var imageIntentLauncher: ActivityResultLauncher<Intent>
@@ -53,10 +55,11 @@ class ReleaseFragment : Fragment() {
         activity?.title = getString(R.string.menu_release)
         setupMenu()
         releaseViewModel = ViewModelProvider(this).get(ReleaseViewModel::class.java)
-        releaseViewModel.observableRelease.observe(viewLifecycleOwner, Observer { release })
+        releaseViewModel.observableRelease.observe(viewLifecycleOwner, Observer { render() })
 
-        // if edit, populate fields from release
-        if (edit) {
+        val releaseid = args.releaseid
+        if (releaseid.isNotEmpty()) {
+            release = ReleaseManager.findById(releaseid)!!
             fragBinding.etTitle.setText(release.title)
             fragBinding.etArtist.setText(release.artist)
             fragBinding.etYear.setText(release.year)
@@ -82,7 +85,7 @@ class ReleaseFragment : Fragment() {
     }
 
     private fun setupMenu() {
-        (requireActivity() as MenuHost).addMenuProvider(object: MenuProvider {
+        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
             override fun onPrepareMenu(menu: Menu) {
                 // handle visibility of menu items
             }
@@ -92,15 +95,23 @@ class ReleaseFragment : Fragment() {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return NavigationUI.onNavDestinationSelected(menuItem, requireView().findNavController())
+                return NavigationUI.onNavDestinationSelected(
+                    menuItem,
+                    requireView().findNavController()
+                )
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun render() {
+        //
     }
 
     private fun setButtonListener(layout: FragmentReleaseBinding) {
         layout.btnAddRelease.setOnClickListener {
             Timber.i("btnAddRelease pressed")
             val addRelease = ReleaseModel()
+            val releaseid = args.releaseid
             addRelease.title = fragBinding.etTitle.text.toString()
             addRelease.artist = fragBinding.etArtist.text.toString()
             addRelease.year = fragBinding.etYear.text.toString()
@@ -121,11 +132,12 @@ class ReleaseFragment : Fragment() {
                     ).show()
                     Timber.i("Invalid year")
                 } else {
-                    if (edit) {
-                        Timber.i("Update release: ${addRelease.id}")
+                    if (releaseid.isNotEmpty()) {
+                        Timber.i("Update release: ${addRelease.title}")
+                        addRelease.id = releaseid
                         releaseViewModel.updateRelease(addRelease.copy())
                     } else {
-                        Timber.i("Create release: ${addRelease.id}")
+                        Timber.i("Create release: ${addRelease.title}")
                         releaseViewModel.createRelease(addRelease.copy())
                     }
                     // setResult(AppCompatActivity.RESULT_OK)

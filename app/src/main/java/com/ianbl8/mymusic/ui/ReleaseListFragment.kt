@@ -14,6 +14,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ianbl8.mymusic.R
@@ -89,9 +90,10 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
         _fragBinding = null
     }
 
-    override fun onReleaseClick(release: ReleaseModel, position: Int) {
-        Timber.i("Release $position clicked")
-        // implement navigation to ReleaseFragment
+    override fun onReleaseClick(release: ReleaseModel) {
+        Timber.i("ReleaseClick $release")
+        val action = ReleaseListFragmentDirections.actionReleaseListFragmentToReleaseFragment(release.id)
+        findNavController().navigate(action)
     }
 
 }

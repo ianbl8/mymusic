@@ -26,6 +26,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- Original activities
         <activity
             android:name=".activities.TrackActivity"
             android:exported="false" />
@@ -41,14 +42,13 @@
         <activity
             android:name=".activities.WelcomeActivity"
             android:exported="true">
-            <!-- Original Launcher Activity
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            -->
         </activity>
+        -->
     </application>
 
 </manifest>
