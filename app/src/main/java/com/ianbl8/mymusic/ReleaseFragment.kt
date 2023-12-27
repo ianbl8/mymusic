@@ -8,9 +8,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -52,11 +49,13 @@ class ReleaseFragment : Fragment() {
         val root = fragBinding.root
         activity?.title = getString(R.string.menu_release)
 
+        /*
         // get release details from ReleaseListFragment
         setFragmentResultListener("ReleaseList_Release") { requestKey, bundle ->
             release = bundle.getParcelable("release")!!
             edit = bundle.getBoolean("release_edit")
         }
+         */
 
         // if edit, populate fields from release
         if (edit) {
@@ -134,18 +133,22 @@ class ReleaseFragment : Fragment() {
 
         layout.btnTracks.setOnClickListener {
             Timber.i("btnTracks pressed")
+            /*
             setFragmentResult("Release_TrackList", bundleOf(
                 Pair("release", release),
             ))
+             */
             findNavController().navigate(R.id.trackListFragment)
         }
 
         layout.btnDeleteRelease.setOnClickListener {
             Timber.i("btnDeleteRelease pressed")
             app.releases.delete(release)
+            /*
             setFragmentResult("Release_ReleaseList", bundleOf(
                 Pair("release_update", "delete"),
             ))
+             */
             findNavController().navigate(R.id.releaseListFragment)
         }
     }

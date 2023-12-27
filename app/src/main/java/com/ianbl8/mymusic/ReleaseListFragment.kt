@@ -8,9 +8,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -46,10 +43,12 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
         val root = fragBinding.root
         activity?.title = getString(R.string.menu_list)
 
+        /*
         // use setFragmentResultListener to get save success or delete success from ReleaseFragment
         setFragmentResultListener("Release_ReleaseList") { requestKey, bundle ->
             status = bundle.getString("release_update")!!
         }
+         */
 
         fragBinding.recyclerView.setLayoutManager(LinearLayoutManager(activity))
         fragBinding.recyclerView.adapter = ReleaseAdapter(app.releases.findAll(), this)
@@ -76,10 +75,12 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
 
     override fun onReleaseClick(release: ReleaseModel, position: Int) {
         Timber.i("Release $position clicked")
+        /*
         setFragmentResult("ReleaseList_Release", bundleOf(
             Pair("release", release),
             Pair("release_edit", true)
         ))
+         */
         findNavController().navigate(R.id.releaseFragment)
     }
 
