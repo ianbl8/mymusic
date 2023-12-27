@@ -8,9 +8,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -48,6 +45,7 @@ class TrackListFragment : Fragment(), TrackListener {
         val root = fragBinding.root
         activity?.title = "tracks: ${release.title}"
 
+        /*
         // use setFragmentResultListener to get release from ReleaseFragment
         setFragmentResultListener("Release_TrackList") { requestKey, bundle ->
             release = bundle.getParcelable("release")!!
@@ -57,6 +55,7 @@ class TrackListFragment : Fragment(), TrackListener {
         setFragmentResultListener("Track_TrackList") { requestKey, bundle ->
             status = bundle.getString("track_update")!!
         }
+         */
 
         fragBinding.recyclerView.setLayoutManager(LinearLayoutManager(activity))
         fragBinding.recyclerView.adapter = TrackAdapter(app.releases.findById(release.id)!!.tracks, this)
@@ -74,10 +73,12 @@ class TrackListFragment : Fragment(), TrackListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        /*
         setFragmentResult("TrackList_Track", bundleOf(
             Pair("release", release),
             Pair("track_edit", false)
         ))
+         */
         return NavigationUI.onNavDestinationSelected(
             item,
             requireView().findNavController()
@@ -86,11 +87,13 @@ class TrackListFragment : Fragment(), TrackListener {
 
     override fun onTrackClick(track: TrackModel, position: Int) {
         Timber.i("Track $position clicked")
+        /*
         setFragmentResult("TrackList_Track", bundleOf(
             Pair("release", release),
             Pair("track", track),
             Pair("track_edit", true)
         ))
+         */
         findNavController().navigate(R.id.trackFragment)
     }
 

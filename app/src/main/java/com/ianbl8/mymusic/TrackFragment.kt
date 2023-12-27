@@ -8,9 +8,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
-import androidx.fragment.app.setFragmentResultListener
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -46,12 +43,14 @@ class TrackFragment : Fragment() {
         val root = fragBinding.root
         activity?.title = getString(R.string.menu_add_track)
 
+        /*
         // get release and track details from TrackListFragment
         setFragmentResultListener("TrackList_Track") { requestKey, bundle ->
             release = bundle.getParcelable("release")!!
             track = bundle.getParcelable("track")!!
             edit = bundle.getBoolean("track_edit")
         }
+         */
 
         // if edit, populate fields from track
         if (edit) {
@@ -88,9 +87,11 @@ class TrackFragment : Fragment() {
                     app.releases.createTrack(release, track.copy())
                 }
                 edit = false
+                /*
                 setFragmentResult("Track_TrackList", bundleOf(
                     Pair("track_update", "save"),
                 ))
+                 */
                 findNavController().navigate(R.id.trackListFragment)
             } else {
                 Snackbar.make(it, "Enter valid track details", Snackbar.LENGTH_LONG).show()
@@ -101,9 +102,11 @@ class TrackFragment : Fragment() {
         layout.btnDeleteTrack.setOnClickListener {
             Timber.i("btnDeleteTrack pressed")
             app.releases.deleteTrack(release, track)
+            /*
             setFragmentResult("Track_TrackList", bundleOf(
                 Pair("track_update", "delete"),
             ))
+             */
             findNavController().navigate(R.id.trackListFragment)
         }
     }
