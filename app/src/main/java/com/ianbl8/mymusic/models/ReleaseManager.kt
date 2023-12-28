@@ -44,6 +44,12 @@ object ReleaseManager: ReleaseStore {
         releases.remove(release)
     }
 
+    override fun findTrack(releaseId: String, trackId: String): TrackModel? {
+        val foundRelease: ReleaseModel? = releases.find { r -> r.id == releaseId }
+        val foundTrack: TrackModel? = foundRelease?.tracks!!.find { t -> t.id == trackId }
+        return foundTrack
+    }
+
     override fun createTrack(release: ReleaseModel, track: TrackModel) {
         val updateRelease: ReleaseModel? = releases.find { r -> r.id == release.id }
         if (updateRelease != null) {
@@ -56,9 +62,9 @@ object ReleaseManager: ReleaseStore {
     override fun updateTrack(release: ReleaseModel, track: TrackModel) {
         val updateRelease: ReleaseModel? = releases.find { r -> r.id == release.id }
         if (updateRelease != null) {
-            /*
-
-             */
+            val updateTrack: TrackModel? = updateRelease.tracks.find { t -> t.id == track.id }
+            val index = updateRelease.tracks.indexOf(updateTrack)
+            updateRelease.tracks[index] = track
             logAll()
         }
     }

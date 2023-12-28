@@ -8,13 +8,22 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.NavigationUI
+import com.github.ajalt.timberkt.i
 import com.google.android.material.snackbar.Snackbar
 import com.ianbl8.mymusic.R
 import com.ianbl8.mymusic.databinding.FragmentTrackBinding
-import com.ianbl8.mymusic.main.MainApp
+import com.ianbl8.mymusic.models.ReleaseManager
 import com.ianbl8.mymusic.models.ReleaseModel
 import com.ianbl8.mymusic.models.TrackModel
 import timber.log.Timber
@@ -22,17 +31,16 @@ import timber.log.Timber
 @Suppress("DEPRECATION")
 class TrackFragment : Fragment() {
 
-    lateinit var app: MainApp
-    var track = TrackModel()
-    var release = ReleaseModel()
-    var edit = false
+    private lateinit var releaseViewModel: ReleaseViewModel
+    private lateinit var trackViewModel: TrackViewModel
+    private val args by navArgs<TrackFragmentArgs>()
     private var _fragBinding: FragmentTrackBinding? = null
     private val fragBinding get() = _fragBinding!!
+    var release = ReleaseModel()
+    var track = TrackModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        app = activity?.application as MainApp
-
         setHasOptionsMenu(true)
     }
 
@@ -42,24 +50,23 @@ class TrackFragment : Fragment() {
     ): View? {
         _fragBinding = FragmentTrackBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        activity?.title = getString(R.string.menu_add_track)
+        setupMenu()
+        releaseViewModel = ViewModelProvider(this).get(ReleaseViewModel::class.java)
+        releaseViewModel.observableRelease.observe(viewLifecycleOwner, Observer { render() })
+        trackViewModel = ViewModelProvider(this).get(TrackViewModel::class.java)
+        trackViewModel.observableTrack.observe(viewLifecycleOwner, Observer { render() })
 
-        /*
-        // get release and track details from TrackListFragment
-        setFragmentResultListener("TrackList_Track") { requestKey, bundle ->
-            release = bundle.getParcelable("release")!!
-            track = bundle.getParcelable("track")!!
-            edit = bundle.getBoolean("track_edit")
-        }
-         */
+        Timber.i("args.releaseid ${args.releaseid}")
+        Timber.i("args.trackid ${args.trackid}")
 
-        // if edit, populate fields from track
-        if (edit) {
+        val releaseid = args.releaseid
+        val trackid = args.trackid
+        if (releaseid.isNotEmpty() && trackid.isNotEmpty()) {
+            release = ReleaseManager.findById(releaseid)!!
             fragBinding.etDiscNumber.setText(track.discNumber.toString())
             fragBinding.etTrackNumber.setText(track.trackNumber.toString())
             fragBinding.etTrackTitle.setText(track.trackTitle)
             fragBinding.etTrackArtist.setText(track.trackArtist)
-            activity?.title = "edit ${track.trackTitle}"
             fragBinding.btnAddTrack.setText(R.string.btn_edit_track)
             fragBinding.btnDeleteTrack.isEnabled = true
         }
@@ -69,30 +76,64 @@ class TrackFragment : Fragment() {
         return root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val releaseid = args.releaseid
+        val trackid = args.trackid
+        if (releaseid.isNotEmpty() && trackid.isNotEmpty()) {
+            track = ReleaseManager.findTrack(releaseid, trackid)!!
+            (activity as AppCompatActivity).supportActionBar?.title = "edit ${track.trackTitle}"
+        }
+    }
+
+    private fun setupMenu() {
+        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
+            override fun onPrepareMenu(menu: Menu) {
+                // handle visibility of menu items
+            }
+
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_track, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return NavigationUI.onNavDestinationSelected(
+                    menuItem,
+                    requireView().findNavController()
+                )
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun render() {
+        //
+    }
+
     private fun setButtonListener(layout: FragmentTrackBinding) {
         layout.btnAddTrack.setOnClickListener {
             Timber.i("btnAddTrack pressed")
-            track.discNumber = fragBinding.etDiscNumber.text.toString().toInt()
-            track.trackNumber = fragBinding.etTrackNumber.text.toString().toInt()
-            track.trackTitle = fragBinding.etTrackTitle.text.toString()
-            track.trackArtist = fragBinding.etTrackArtist.text.toString()
-            if (track.trackArtist.isEmpty()) {
-                track.trackArtist = release.artist
+            val addTrack = TrackModel()
+            val releaseid = args.releaseid
+            if (releaseid.isNotEmpty()) {
+                release = ReleaseManager.findById(releaseid)!!
             }
-            if (track.trackTitle.isNotEmpty()) {
-                if (edit) {
-                    Timber.i("Update track: ${track.id}")
-                    app.releases.updateTrack(release, track.copy())
+            val trackid = args.trackid
+            addTrack.discNumber = fragBinding.etDiscNumber.text.toString().toInt()
+            addTrack.trackNumber = fragBinding.etTrackNumber.text.toString().toInt()
+            addTrack.trackTitle = fragBinding.etTrackTitle.text.toString()
+            addTrack.trackArtist = fragBinding.etTrackArtist.text.toString()
+            if (addTrack.trackArtist.isEmpty()) {
+                addTrack.trackArtist = release.artist
+            }
+            if (addTrack.trackTitle.isNotEmpty()) {
+                if (releaseid.isNotEmpty() && trackid.isNotEmpty()) {
+                    Timber.i("Update track: ${addTrack.trackTitle}")
+                    trackViewModel.updateTrack(release, track.copy())
                 } else {
-                    Timber.i("Add track: ${track.trackTitle}")
-                    app.releases.createTrack(release, track.copy())
+                    Timber.i("Add track: ${addTrack.trackTitle}")
+                    trackViewModel.createTrack(release, track.copy())
                 }
-                edit = false
-                /*
-                setFragmentResult("Track_TrackList", bundleOf(
-                    Pair("track_update", "save"),
-                ))
-                 */
                 findNavController().navigate(R.id.trackListFragment)
             } else {
                 Snackbar.make(it, "Enter valid track details", Snackbar.LENGTH_LONG).show()
@@ -102,12 +143,7 @@ class TrackFragment : Fragment() {
 
         layout.btnDeleteTrack.setOnClickListener {
             Timber.i("btnDeleteTrack pressed")
-            app.releases.deleteTrack(release, track)
-            /*
-            setFragmentResult("Track_TrackList", bundleOf(
-                Pair("track_update", "delete"),
-            ))
-             */
+            trackViewModel.deleteTrack(release, track)
             findNavController().navigate(R.id.trackListFragment)
         }
     }
@@ -115,25 +151,5 @@ class TrackFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _fragBinding = null
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_track, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return NavigationUI.onNavDestinationSelected(
-            item,
-            requireView().findNavController()
-        ) || super.onOptionsItemSelected(item)
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() =
-            TrackFragment().apply {
-                arguments = Bundle().apply {}
-            }
     }
 }

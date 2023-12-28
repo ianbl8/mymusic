@@ -15,9 +15,9 @@ class TrackViewModel: ViewModel() {
     val observableTrack: LiveData<TrackModel>
         get() = track
 
-    fun findTrack(id: String) {
+    fun findTrack(releaseId: String, trackId: String) {
         try {
-            ReleaseManager.findById(id)
+            ReleaseManager.findTrack(releaseId, trackId)
             Timber.i("findTrack success: $track")
         } catch (e: Exception) {
             Timber.i("findTrack error: ${e.message}")

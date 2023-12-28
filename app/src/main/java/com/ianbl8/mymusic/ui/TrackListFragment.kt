@@ -8,8 +8,13 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ianbl8.mymusic.R
@@ -17,6 +22,7 @@ import com.ianbl8.mymusic.adapters.TrackAdapter
 import com.ianbl8.mymusic.adapters.TrackListener
 import com.ianbl8.mymusic.databinding.FragmentTrackListBinding
 import com.ianbl8.mymusic.main.MainApp
+import com.ianbl8.mymusic.models.ReleaseManager
 import com.ianbl8.mymusic.models.ReleaseModel
 import com.ianbl8.mymusic.models.TrackModel
 import timber.log.Timber
@@ -26,15 +32,12 @@ class TrackListFragment : Fragment(), TrackListener {
 
     lateinit var app: MainApp
     private lateinit var release: ReleaseModel
-    private lateinit var status: String
-    private var position: Int = 0
+    private val args by navArgs<TrackListFragmentArgs>()
     private var _fragBinding: FragmentTrackListBinding? = null
     private val fragBinding get() = _fragBinding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        app = activity?.application as MainApp
-
         setHasOptionsMenu(true)
     }
 
@@ -44,23 +47,39 @@ class TrackListFragment : Fragment(), TrackListener {
     ): View? {
         _fragBinding = FragmentTrackListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        activity?.title = "tracks: ${release.title}"
-
-        /*
-        // use setFragmentResultListener to get release from ReleaseFragment
-        setFragmentResultListener("Release_TrackList") { requestKey, bundle ->
-            release = bundle.getParcelable("release")!!
-        }
-
-        // use setFragmentResultListener to get save success or delete success from TrackFragment
-        setFragmentResultListener("Track_TrackList") { requestKey, bundle ->
-            status = bundle.getString("track_update")!!
-        }
-         */
-
+        setupMenu()
+        val releaseid = args.releaseid
+        release = ReleaseManager.findById(releaseid)!!
         fragBinding.recyclerView.setLayoutManager(LinearLayoutManager(activity))
-        fragBinding.recyclerView.adapter = TrackAdapter(app.releases.findById(release.id)!!.tracks, this)
+        fragBinding.recyclerView.adapter = TrackAdapter(release.tracks, this)
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val releaseid = args.releaseid
+        release = ReleaseManager.findById(releaseid)!!
+        (activity as AppCompatActivity).supportActionBar?.title = "tracks: ${release.title}"
+    }
+
+    private fun setupMenu() {
+        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
+            override fun onPrepareMenu(menu: Menu) {
+                // handle visibility of menu items
+            }
+
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_track_list, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return NavigationUI.onNavDestinationSelected(
+                    menuItem,
+                    requireView().findNavController()
+                )
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     override fun onDestroyView() {
@@ -68,41 +87,11 @@ class TrackListFragment : Fragment(), TrackListener {
         _fragBinding = null
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_track_list, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        /*
-        setFragmentResult("TrackList_Track", bundleOf(
-            Pair("release", release),
-            Pair("track_edit", false)
-        ))
-         */
-        return NavigationUI.onNavDestinationSelected(
-            item,
-            requireView().findNavController()
-        ) || super.onOptionsItemSelected(item)
-    }
-
-    override fun onTrackClick(track: TrackModel, position: Int) {
-        Timber.i("Track $position clicked")
-        /*
-        setFragmentResult("TrackList_Track", bundleOf(
-            Pair("release", release),
-            Pair("track", track),
-            Pair("track_edit", true)
-        ))
-         */
-        findNavController().navigate(R.id.trackFragment)
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() =
-            TrackListFragment().apply {
-                arguments = Bundle().apply {}
-            }
+    override fun onTrackClick(release: ReleaseModel, track: TrackModel) {
+        Timber.i("TrackClick $track")
+        val releaseid = release.id
+        val trackid = track.id
+        val action = TrackListFragmentDirections.actionTrackListFragmentToTrackFragment(releaseid, trackid)
+        findNavController().navigate(action)
     }
 }

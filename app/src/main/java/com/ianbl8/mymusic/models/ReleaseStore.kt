@@ -9,6 +9,7 @@ interface ReleaseStore {
     fun create(release: ReleaseModel)
     fun update(release: ReleaseModel)
     fun delete(release: ReleaseModel)
+    fun findTrack(releaseId: String, trackId: String): TrackModel?
     fun createTrack(release: ReleaseModel, track: TrackModel)
     fun updateTrack(release: ReleaseModel, track: TrackModel)
     fun deleteTrack(release: ReleaseModel, track: TrackModel)

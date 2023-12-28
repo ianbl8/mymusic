@@ -53,7 +53,6 @@ class ReleaseFragment : Fragment() {
     ): View? {
         _fragBinding = FragmentReleaseBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        activity?.title = getString(R.string.menu_release)
         setupMenu()
         releaseViewModel = ViewModelProvider(this).get(ReleaseViewModel::class.java)
         releaseViewModel.observableRelease.observe(viewLifecycleOwner, Observer { render() })
@@ -150,8 +149,7 @@ class ReleaseFragment : Fragment() {
                         Timber.i("Create release: ${addRelease.title}")
                         releaseViewModel.createRelease(addRelease.copy())
                     }
-                    // setResult(AppCompatActivity.RESULT_OK)
-                    // finish()
+                    findNavController().navigate(R.id.releaseListFragment)
                 }
             } else {
                 Snackbar.make(it, "Enter a valid title, artist and year", Snackbar.LENGTH_LONG)
@@ -170,22 +168,13 @@ class ReleaseFragment : Fragment() {
 
         layout.btnTracks.setOnClickListener {
             Timber.i("btnTracks pressed")
-            /*
-            setFragmentResult("Release_TrackList", bundleOf(
-                Pair("release", release),
-            ))
-             */
-            findNavController().navigate(R.id.trackListFragment)
+            val action = ReleaseFragmentDirections.actionReleaseFragmentToTrackListFragment(release.id)
+            findNavController().navigate(action)
         }
 
         layout.btnDeleteRelease.setOnClickListener {
             Timber.i("btnDeleteRelease pressed")
             releaseViewModel.deleteRelease(release)
-            /*
-            setFragmentResult("Release_ReleaseList", bundleOf(
-                Pair("release_update", "delete"),
-            ))
-             */
             findNavController().navigate(R.id.releaseListFragment)
         }
     }

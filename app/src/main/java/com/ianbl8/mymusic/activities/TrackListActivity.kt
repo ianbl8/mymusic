@@ -69,11 +69,10 @@ class TrackListActivity : AppCompatActivity(), TrackListener {
         }
     }
 
-    override fun onTrackClick(track: TrackModel, pos: Int) {
+    override fun onTrackClick(release: ReleaseModel, track: TrackModel) {
         val launcherIntent = Intent(this, TrackActivity::class.java)
         launcherIntent.putExtra("track_edit", release)
         launcherIntent.putExtra("track_to_edit", track)
-        position = pos
         getClickResult.launch(launcherIntent)
     }
 
