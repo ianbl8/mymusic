@@ -151,10 +151,10 @@ class TrackFragment : Fragment() {
             if (addTrack.trackTitle.isNotEmpty()) {
                 if (releaseid.isNotEmpty() && trackid.isNotEmpty()) {
                     Timber.i("Update track: ${addTrack.trackTitle}")
-                    trackViewModel.updateTrack(release, track.copy())
+                    trackViewModel.updateTrack(release, addTrack.copy())
                 } else {
                     Timber.i("Add track: ${addTrack.trackTitle}")
-                    trackViewModel.createTrack(release, track.copy())
+                    trackViewModel.createTrack(release, addTrack.copy())
                 }
                 val action = TrackFragmentDirections.actionTrackFragmentToTrackListFragment(release.id)
                 findNavController().navigate(action)
