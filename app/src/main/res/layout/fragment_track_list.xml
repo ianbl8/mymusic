@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".ui.ReleaseListFragment">
 
+    <!--
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
@@ -24,6 +25,7 @@
             android:theme="?attr/actionBarTheme" />
 
     </com.google.android.material.appbar.AppBarLayout>
+    -->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

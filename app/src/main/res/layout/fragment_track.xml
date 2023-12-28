@@ -12,6 +12,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!--
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout"
             android:layout_width="match_parent"
@@ -30,11 +31,11 @@
                 android:theme="?attr/actionBarTheme" />
 
         </com.google.android.material.appbar.AppBarLayout>
+        -->
 
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/appBarLayout"
             android:fillViewport="true">
 
             <LinearLayout

@@ -59,7 +59,7 @@ class TrackFragment : Fragment() {
             fragBinding.etTrackNumber.setText(track.trackNumber.toString())
             fragBinding.etTrackTitle.setText(track.trackTitle)
             fragBinding.etTrackArtist.setText(track.trackArtist)
-            fragBinding.toolbar.title = "edit ${track.trackTitle}"
+            activity?.title = "edit ${track.trackTitle}"
             fragBinding.btnAddTrack.setText(R.string.btn_edit_track)
             fragBinding.btnDeleteTrack.isEnabled = true
         }

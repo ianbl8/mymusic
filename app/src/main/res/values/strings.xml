@@ -58,4 +58,9 @@
     <string name="btn_start">view mymusic</string>
     <string name="welcome_line">welcome to</string>
 
+    <!-- Navigation header -->
+    <string name="nav_header_title">mymusic</string>
+    <string name="nav_header_subtitle">account</string>
+    <string name="nav_header_description">Navigation header</string>
+
 </resources>
