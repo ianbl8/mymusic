@@ -41,6 +41,7 @@
     <string name="hint_track_number">1</string>
     <string name="hint_track_title">I Still Have Faith In You</string>
     <string name="menu_cancel_track" tools:ignore="ButtonCase">cancel</string>
+    <string name="menu_track">track</string>
     <string name="tv_disc_number">disc</string>
     <string name="tv_track_artist">track artist</string>
     <string name="tv_track_number">track</string>

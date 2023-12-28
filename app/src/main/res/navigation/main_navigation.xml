@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/releaseListFragment"
         android:name="com.ianbl8.mymusic.ui.ReleaseListFragment"
-        android:label="fragment_release_list"
+        android:label="@string/menu_list"
         tools:layout="@layout/fragment_release_list" >
         <action
             android:id="@+id/action_releaseListFragment_to_releaseFragment"
@@ -18,7 +18,7 @@
     <fragment
         android:id="@+id/releaseFragment"
         android:name="com.ianbl8.mymusic.ui.ReleaseFragment"
-        android:label="fragment_release"
+        android:label="@string/menu_release"
         tools:layout="@layout/fragment_release" >
         <action
             android:id="@+id/action_releaseFragment_to_trackListFragment"
@@ -35,7 +35,7 @@
     <fragment
         android:id="@+id/trackListFragment"
         android:name="com.ianbl8.mymusic.ui.TrackListFragment"
-        android:label="fragment_track_list"
+        android:label="@string/menu_track_list"
         tools:layout="@layout/fragment_track_list" >
         <action
             android:id="@+id/action_trackListFragment_to_trackFragment"
@@ -52,7 +52,7 @@
     <fragment
         android:id="@+id/trackFragment"
         android:name="com.ianbl8.mymusic.ui.TrackFragment"
-        android:label="fragment_track"
+        android:label="@string/menu_track"
         tools:layout="@layout/fragment_track" >
         <action
             android:id="@+id/action_trackFragment_to_trackListFragment"
