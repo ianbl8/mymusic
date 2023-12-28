@@ -58,11 +58,7 @@
             android:id="@+id/action_trackFragment_to_trackListFragment"
             app:destination="@id/trackListFragment" />
         <argument
-            android:name="releaseid"
-            app:argType="string"
-            android:defaultValue=""/>
-        <argument
-            android:name="trackid"
+            android:name="ridtid"
             app:argType="string"
             android:defaultValue=""/>
     </fragment>

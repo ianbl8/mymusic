@@ -74,10 +74,16 @@ class TrackListFragment : Fragment(), TrackListener {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return NavigationUI.onNavDestinationSelected(
-                    menuItem,
-                    requireView().findNavController()
-                )
+                when (menuItem?.itemId) {
+                    R.id.trackFragment -> {
+                        val releaseid = release.id
+                        val ridtid = releaseid.plus("#")
+                        val action = TrackListFragmentDirections.actionTrackListFragmentToTrackFragment(ridtid)
+                        findNavController().navigate(action)
+                        return true
+                    }
+                    else -> return NavigationUI.onNavDestinationSelected(menuItem, requireView().findNavController())
+                }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
@@ -91,7 +97,8 @@ class TrackListFragment : Fragment(), TrackListener {
         Timber.i("TrackClick $track")
         val releaseid = release.id
         val trackid = track.id
-        val action = TrackListFragmentDirections.actionTrackListFragmentToTrackFragment(releaseid, trackid)
+        val ridtid = releaseid.plus("#").plus(trackid)
+        val action = TrackListFragmentDirections.actionTrackListFragmentToTrackFragment(ridtid)
         findNavController().navigate(action)
     }
 }
