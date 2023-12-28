@@ -185,26 +185,6 @@ class ReleaseFragment : Fragment() {
         _fragBinding = null
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_release, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return NavigationUI.onNavDestinationSelected(
-            item,
-            requireView().findNavController()
-        ) || super.onOptionsItemSelected(item)
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() =
-            ReleaseFragment().apply {
-                arguments = Bundle().apply {}
-            }
-    }
-
     // registerImagePickerCallback() and showImagePicker() require updating
     /*
     private fun registerImagePickerCallback() {
