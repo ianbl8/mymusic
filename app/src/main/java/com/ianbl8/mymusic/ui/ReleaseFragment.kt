@@ -8,6 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.lifecycle.Lifecycle
@@ -70,7 +71,6 @@ class ReleaseFragment : Fragment() {
             if (release.cover.toString().isNotEmpty()) {
                 Picasso.get().load(release.cover).into(fragBinding.ivCover)
             }
-            activity?.title = "edit ${release.title}"
             fragBinding.btnAddRelease.setText(R.string.btn_edit_release)
             fragBinding.btnTracks.isEnabled = true
             fragBinding.btnDeleteRelease.isEnabled = true
@@ -82,6 +82,16 @@ class ReleaseFragment : Fragment() {
         // registerImagePickerCallback()
 
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val releaseid = args.releaseid
+        if (releaseid.isNotEmpty()) {
+            release = ReleaseManager.findById(releaseid)!!
+            (activity as AppCompatActivity).supportActionBar?.title = "edit ${release.title}"
+        }
     }
 
     private fun setupMenu() {
