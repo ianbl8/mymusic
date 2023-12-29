@@ -77,6 +77,7 @@ class TrackFragment : Fragment() {
 
         if (releaseid.isNotEmpty() && trackid.isNotEmpty()) {
             release = ReleaseManager.findById(releaseid)!!
+            track = ReleaseManager.findTrack(releaseid, trackid)!!
             fragBinding.etDiscNumber.setText(track.discNumber.toString())
             fragBinding.etTrackNumber.setText(track.trackNumber.toString())
             fragBinding.etTrackTitle.setText(track.trackTitle)
@@ -151,6 +152,7 @@ class TrackFragment : Fragment() {
             if (addTrack.trackTitle.isNotEmpty()) {
                 if (releaseid.isNotEmpty() && trackid.isNotEmpty()) {
                     Timber.i("Update track: ${addTrack.trackTitle}")
+                    addTrack.id = trackid
                     trackViewModel.updateTrack(release, addTrack.copy())
                 } else {
                     Timber.i("Add track: ${addTrack.trackTitle}")
