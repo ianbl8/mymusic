@@ -65,4 +65,7 @@
     <string name="nav_header_subtitle">account</string>
     <string name="nav_header_description">Navigation header</string>
 
+    <!-- Nav Drawer -->
+    <string name="nav_drawer_mymusic">mymusic</string>
+
 </resources>
