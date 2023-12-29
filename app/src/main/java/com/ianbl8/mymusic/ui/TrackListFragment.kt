@@ -52,6 +52,7 @@ class TrackListFragment : Fragment(), TrackListener {
         release = ReleaseManager.findById(releaseid)!!
         fragBinding.recyclerView.setLayoutManager(LinearLayoutManager(activity))
         fragBinding.recyclerView.adapter = TrackAdapter(release.tracks, this)
+        render(release)
         return root
     }
 
@@ -90,6 +91,19 @@ class TrackListFragment : Fragment(), TrackListener {
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
+
+    private fun render(release: ReleaseModel) {
+        fragBinding.recyclerView.adapter = TrackAdapter(release.tracks, this)
+        val noTracks: String = getString(R.string.no_tracks_found).plus(release.title)
+        fragBinding.noTracksFound.text = noTracks
+        if (release.tracks.isEmpty()) {
+            fragBinding.recyclerView.visibility = View.GONE
+            fragBinding.noTracksFound.visibility = View.VISIBLE
+        } else {
+            fragBinding.recyclerView.visibility = View.VISIBLE
+            fragBinding.noTracksFound.visibility = View.GONE
+        }
     }
 
     override fun onDestroyView() {

@@ -52,6 +52,7 @@
     <string name="go_back">back</string>
     <string name="menu_add_track">add track</string>
     <string name="menu_track_list">tracks</string>
+    <string name="no_tracks_found">No tracks listed yet for\n\n</string>
     <string name="track_heading">track</string>
 
     <!-- Welcome -->
