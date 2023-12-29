@@ -74,6 +74,12 @@ class ReleaseJSONStore(private val context: Context) : ReleaseStore {
         releases = gsonBuilder.fromJson(jsonString, releasesListType)
     }
 
+    override fun findTrack(releaseId: String, trackId: String): TrackModel? {
+        val foundRelease: ReleaseModel? = ReleaseManager.releases.find { r -> r.id == releaseId }
+        val foundTrack: TrackModel? = foundRelease?.tracks!!.find { t -> t.id == trackId }
+        return foundTrack
+    }
+
     override fun createTrack(release: ReleaseModel, track: TrackModel) {
         val updateRelease: ReleaseModel? = releases.find { r -> r.id == release.id }
         if (updateRelease != null) {

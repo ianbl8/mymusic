@@ -1,8 +1,8 @@
 package com.ianbl8.mymusic.models
 
-import timber.log.Timber.Forest.i
+import timber.log.Timber
 
-class ReleaseMemStore: ReleaseStore {
+object ReleaseManager: ReleaseStore {
     val releases = ArrayList<ReleaseModel>()
 
     override fun findAll(): List<ReleaseModel> {
@@ -44,6 +44,12 @@ class ReleaseMemStore: ReleaseStore {
         releases.remove(release)
     }
 
+    override fun findTrack(releaseId: String, trackId: String): TrackModel? {
+        val foundRelease: ReleaseModel? = releases.find { r -> r.id == releaseId }
+        val foundTrack: TrackModel? = foundRelease?.tracks!!.find { t -> t.id == trackId }
+        return foundTrack
+    }
+
     override fun createTrack(release: ReleaseModel, track: TrackModel) {
         val updateRelease: ReleaseModel? = releases.find { r -> r.id == release.id }
         if (updateRelease != null) {
@@ -56,9 +62,9 @@ class ReleaseMemStore: ReleaseStore {
     override fun updateTrack(release: ReleaseModel, track: TrackModel) {
         val updateRelease: ReleaseModel? = releases.find { r -> r.id == release.id }
         if (updateRelease != null) {
-            /*
-
-             */
+            val updateTrack: TrackModel? = updateRelease.tracks.find { t -> t.id == track.id }
+            val index = updateRelease.tracks.indexOf(updateTrack)
+            updateRelease.tracks[index] = track
             logAll()
         }
     }
@@ -73,7 +79,7 @@ class ReleaseMemStore: ReleaseStore {
 
     fun logAll() {
         releases.forEach {
-            i("${it}")
+            Timber.i("${it}")
         }
     }
 }

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/releaseListFragment">
+
+    <fragment
+        android:id="@+id/releaseListFragment"
+        android:name="com.ianbl8.mymusic.ui.ReleaseListFragment"
+        android:label="@string/menu_list"
+        tools:layout="@layout/fragment_release_list" >
+        <action
+            android:id="@+id/action_releaseListFragment_to_releaseFragment"
+            app:destination="@id/releaseFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/releaseFragment"
+        android:name="com.ianbl8.mymusic.ui.ReleaseFragment"
+        android:label="@string/menu_release"
+        tools:layout="@layout/fragment_release" >
+        <action
+            android:id="@+id/action_releaseFragment_to_trackListFragment"
+            app:destination="@id/trackListFragment" />
+        <action
+            android:id="@+id/action_releaseFragment_to_releaseListFragment"
+            app:destination="@id/releaseListFragment" />
+        <argument
+            android:name="releaseid"
+            app:argType="string"
+            android:defaultValue=""/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/trackListFragment"
+        android:name="com.ianbl8.mymusic.ui.TrackListFragment"
+        android:label="@string/menu_track_list"
+        tools:layout="@layout/fragment_track_list" >
+        <action
+            android:id="@+id/action_trackListFragment_to_trackFragment"
+            app:destination="@id/trackFragment" />
+        <action
+            android:id="@+id/action_trackListFragment_to_releaseFragment"
+            app:destination="@id/releaseFragment" />
+        <argument
+            android:name="releaseid"
+            app:argType="string"
+            android:defaultValue=""/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/trackFragment"
+        android:name="com.ianbl8.mymusic.ui.TrackFragment"
+        android:label="@string/menu_track"
+        tools:layout="@layout/fragment_track" >
+        <action
+            android:id="@+id/action_trackFragment_to_trackListFragment"
+            app:destination="@id/trackListFragment" />
+        <argument
+            android:name="ridtid"
+            app:argType="string"
+            android:defaultValue=""/>
+    </fragment>
+</navigation>

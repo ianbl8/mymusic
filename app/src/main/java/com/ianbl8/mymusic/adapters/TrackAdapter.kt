@@ -4,10 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ianbl8.mymusic.databinding.CardTrackBinding
+import com.ianbl8.mymusic.models.ReleaseManager
+import com.ianbl8.mymusic.models.ReleaseModel
 import com.ianbl8.mymusic.models.TrackModel
 
 interface TrackListener {
-        fun onTrackClick(track: TrackModel, position: Int)
+        fun onTrackClick(release: ReleaseModel, track: TrackModel)
 }
 
 class TrackAdapter constructor(
@@ -22,18 +24,20 @@ class TrackAdapter constructor(
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
         val track = tracks[holder.adapterPosition]
-        holder.bind(track, listener)
+        val releases = ReleaseManager.findAll()
+        val release: ReleaseModel? = releases.find { r -> r.tracks == tracks }
+        holder.bind(release!!, track, listener)
     }
 
     override fun getItemCount(): Int = tracks.size
 
     class MainHolder(private val binding: CardTrackBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(track: TrackModel, listener: TrackListener) {
+        fun bind(release: ReleaseModel, track: TrackModel, listener: TrackListener) {
             binding.trackDiscNumber.text = track.discNumber.toString()
             binding.trackTrackNumber.text = track.trackNumber.toString()
             binding.trackTitle.text = track.trackTitle
             binding.trackArtist.text = track.trackArtist
-            binding.root.setOnClickListener { listener.onTrackClick(track, adapterPosition) }
+            binding.root.setOnClickListener { listener.onTrackClick(release, track) }
         }
     }
 

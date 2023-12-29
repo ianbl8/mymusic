@@ -9,7 +9,7 @@ import com.ianbl8.mymusic.models.ReleaseModel
 import com.squareup.picasso.Picasso
 
 interface ReleaseListener {
-    fun onReleaseClick(release: ReleaseModel, position: Int)
+    fun onReleaseClick(release: ReleaseModel)
 }
 
 class ReleaseAdapter constructor(
@@ -29,9 +29,11 @@ class ReleaseAdapter constructor(
 
     override fun getItemCount(): Int = releases.size
 
-    class MainHolder(private val binding: CardReleaseBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MainHolder(val binding: CardReleaseBinding) : RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(release: ReleaseModel, listener: ReleaseListener) {
+            binding.release = release
+            /*
             binding.releaseTitle.text = release.title
             binding.releaseArtist.text = release.artist
             binding.releaseYear.text = "(${release.year})"
@@ -39,7 +41,9 @@ class ReleaseAdapter constructor(
                 Picasso.get().load(release.cover).centerCrop().resize(200, 200)
                     .into(binding.imageCover)
             }
-            binding.root.setOnClickListener { listener.onReleaseClick(release, adapterPosition) }
+             */
+            binding.root.setOnClickListener { listener.onReleaseClick(release) }
+            binding.executePendingBindings()
         }
     }
 }
