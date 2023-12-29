@@ -28,18 +28,6 @@
         </activity>
         <!-- Original activities
         <activity
-            android:name=".activities.TrackActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.TrackListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.ReleaseActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.ReleaseListActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.WelcomeActivity"
             android:exported="true">
             <intent-filter>

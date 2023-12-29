@@ -1,6 +1,5 @@
 package com.ianbl8.mymusic.activities
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
@@ -25,12 +24,12 @@ class WelcomeActivity : AppCompatActivity() {
         btnSampleStart = findViewById(R.id.btnSampleStart)
         btnSampleStart.setOnClickListener {
             app.sampleData()
-            startActivity(Intent(this@WelcomeActivity, ReleaseListActivity::class.java))
+            // startActivity(Intent(this@WelcomeActivity, ReleaseListActivity::class.java))
         }
 
         btnStart = findViewById(R.id.btnStart)
         btnStart.setOnClickListener {
-            startActivity(Intent(this@WelcomeActivity, ReleaseListActivity::class.java))
+            // startActivity(Intent(this@WelcomeActivity, ReleaseListActivity::class.java))
         }
     }
 }
