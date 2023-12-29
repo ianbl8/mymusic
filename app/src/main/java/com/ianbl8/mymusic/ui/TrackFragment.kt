@@ -117,10 +117,13 @@ class TrackFragment : Fragment() {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return NavigationUI.onNavDestinationSelected(
-                    menuItem,
-                    requireView().findNavController()
-                )
+                when (menuItem?.itemId) {
+                    R.id.trackListFragment -> {
+                        findNavController().popBackStack()
+                        return true
+                    }
+                    else -> return NavigationUI.onNavDestinationSelected(menuItem, requireView().findNavController())
+                }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
@@ -158,8 +161,9 @@ class TrackFragment : Fragment() {
                     Timber.i("Add track: ${addTrack.trackTitle}")
                     trackViewModel.createTrack(release, addTrack.copy())
                 }
-                val action = TrackFragmentDirections.actionTrackFragmentToTrackListFragment(release.id)
-                findNavController().navigate(action)
+                // val action = TrackFragmentDirections.actionTrackFragmentToTrackListFragment(release.id)
+                // findNavController().navigate(action)
+                findNavController().popBackStack()
             } else {
                 Snackbar.make(it, "Enter valid track details", Snackbar.LENGTH_LONG).show()
                 Timber.i("Invalid track")
@@ -169,8 +173,9 @@ class TrackFragment : Fragment() {
         layout.btnDeleteTrack.setOnClickListener {
             Timber.i("btnDeleteTrack pressed")
             trackViewModel.deleteTrack(release, track)
-            val action = TrackFragmentDirections.actionTrackFragmentToTrackListFragment(release.id)
-            findNavController().navigate(action)
+            // val action = TrackFragmentDirections.actionTrackFragmentToTrackListFragment(release.id)
+            // findNavController().navigate(action)
+            findNavController().popBackStack()
         }
     }
 

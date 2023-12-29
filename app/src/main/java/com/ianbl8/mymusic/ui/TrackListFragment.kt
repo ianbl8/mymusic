@@ -82,6 +82,10 @@ class TrackListFragment : Fragment(), TrackListener {
                         findNavController().navigate(action)
                         return true
                     }
+                    R.id.releaseFragment -> {
+                        findNavController().popBackStack()
+                        return true
+                    }
                     else -> return NavigationUI.onNavDestinationSelected(menuItem, requireView().findNavController())
                 }
             }

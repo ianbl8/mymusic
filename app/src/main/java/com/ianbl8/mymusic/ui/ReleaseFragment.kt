@@ -104,10 +104,13 @@ class ReleaseFragment : Fragment() {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return NavigationUI.onNavDestinationSelected(
-                    menuItem,
-                    requireView().findNavController()
-                )
+                when (menuItem?.itemId) {
+                    R.id.releaseListFragment -> {
+                        findNavController().popBackStack()
+                        return true
+                    }
+                    else -> return NavigationUI.onNavDestinationSelected(menuItem, requireView().findNavController())
+                }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
@@ -149,7 +152,8 @@ class ReleaseFragment : Fragment() {
                         Timber.i("Create release: ${addRelease.title}")
                         releaseViewModel.createRelease(addRelease.copy())
                     }
-                    findNavController().navigate(R.id.releaseListFragment)
+                    // findNavController().navigate(R.id.releaseListFragment)
+                    findNavController().popBackStack()
                 }
             } else {
                 Snackbar.make(it, "Enter a valid title, artist and year", Snackbar.LENGTH_LONG)
@@ -175,7 +179,8 @@ class ReleaseFragment : Fragment() {
         layout.btnDeleteRelease.setOnClickListener {
             Timber.i("btnDeleteRelease pressed")
             releaseViewModel.deleteRelease(release)
-            findNavController().navigate(R.id.releaseListFragment)
+            // findNavController().navigate(R.id.releaseListFragment)
+            findNavController().popBackStack()
         }
     }
 
