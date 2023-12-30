@@ -32,6 +32,7 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
     private var _fragBinding: FragmentReleaseListBinding? = null
     private val fragBinding get() = _fragBinding!!
     private lateinit var releaseListViewModel: ReleaseListViewModel
+    private var releaseListEmpty: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +59,9 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
         (requireActivity() as MenuHost).addMenuProvider(object: MenuProvider {
             override fun onPrepareMenu(menu: Menu) {
                 // handle visibility of menu items
+                if (!releaseListEmpty) {
+                    menu.removeItem(R.id.btnSampleData)
+                }
             }
 
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -65,7 +69,17 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return NavigationUI.onNavDestinationSelected(menuItem, requireView().findNavController())
+                return when (menuItem?.itemId) {
+                    R.id.btnSampleData -> {
+                        releaseListViewModel.sampleData()
+                        releaseListEmpty = false
+                        val fragmentid = findNavController().currentDestination?.id
+                        findNavController().popBackStack(fragmentid!!, true)
+                        findNavController().navigate(fragmentid)
+                        true
+                    }
+                    else -> NavigationUI.onNavDestinationSelected(menuItem, requireView().findNavController())
+                }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
@@ -75,9 +89,11 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
         if (releasesList.isEmpty()) {
             fragBinding.recyclerView.visibility = View.GONE
             fragBinding.noReleasesFound.visibility = View.VISIBLE
+            releaseListEmpty = true
         } else {
             fragBinding.recyclerView.visibility = View.VISIBLE
             fragBinding.noReleasesFound.visibility = View.GONE
+            releaseListEmpty = false
         }
     }
 

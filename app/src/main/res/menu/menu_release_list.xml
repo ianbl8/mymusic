@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/btnSampleData"
+        android:icon="@drawable/outline_sd_24"
+        android:title="@string/menu_sample_data"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/releaseFragment"
         android:icon="@drawable/baseline_playlist_add_24"
         android:title="@string/menu_add_release"

@@ -30,7 +30,8 @@
     <!-- ReleaseList -->
     <string name="menu_add_release">add</string>
     <string name="menu_list">all mymusic</string>
-    <string name="no_releases_found">You don\'t have any music.\n\nWhy not add some now?</string>
+    <string name="menu_sample_data">sample data</string>
+    <string name="no_releases_found">You don\'t have any music?\n\nWhy not add some now,\nor press the SD button\nfor sample data</string>
 
     <!-- Track -->
     <string name="btn_add_track">add</string>
