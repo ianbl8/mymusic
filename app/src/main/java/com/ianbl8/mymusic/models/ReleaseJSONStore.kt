@@ -75,7 +75,7 @@ class ReleaseJSONStore(private val context: Context) : ReleaseStore {
     }
 
     override fun findTrack(releaseId: String, trackId: String): TrackModel? {
-        val foundRelease: ReleaseModel? = ReleaseManager.releases.find { r -> r.id == releaseId }
+        val foundRelease: ReleaseModel? = releases.find { r -> r.id == releaseId }
         val foundTrack: TrackModel? = foundRelease?.tracks!!.find { t -> t.id == trackId }
         return foundTrack
     }
