@@ -4,7 +4,10 @@ import android.content.Context
 import android.net.Uri
 import com.google.gson.*
 import com.google.gson.reflect.TypeToken
-import com.ianbl8.mymusic.helpers.*
+import com.ianbl8.mymusic.utils.UriParser
+import com.ianbl8.mymusic.utils.exists
+import com.ianbl8.mymusic.utils.read
+import com.ianbl8.mymusic.utils.write
 import timber.log.Timber.Forest.i
 import java.lang.reflect.Type
 

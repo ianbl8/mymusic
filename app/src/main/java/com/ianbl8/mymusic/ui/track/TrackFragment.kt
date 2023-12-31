@@ -1,4 +1,4 @@
-package com.ianbl8.mymusic.ui
+package com.ianbl8.mymusic.ui.track
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -24,6 +24,7 @@ import com.ianbl8.mymusic.databinding.FragmentTrackBinding
 import com.ianbl8.mymusic.models.ReleaseManager
 import com.ianbl8.mymusic.models.ReleaseModel
 import com.ianbl8.mymusic.models.TrackModel
+import com.ianbl8.mymusic.ui.release.ReleaseViewModel
 import timber.log.Timber
 
 @Suppress("DEPRECATION")

@@ -1,4 +1,4 @@
-package com.ianbl8.mymusic.helpers
+package com.ianbl8.mymusic.utils
 
 import android.content.Context
 import android.content.Intent

@@ -1,4 +1,4 @@
-package com.ianbl8.mymusic.ui
+package com.ianbl8.mymusic.ui.tracklist
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -23,8 +23,8 @@ import com.ianbl8.mymusic.R
 import com.ianbl8.mymusic.adapters.TrackAdapter
 import com.ianbl8.mymusic.adapters.TrackListener
 import com.ianbl8.mymusic.databinding.FragmentTrackListBinding
-import com.ianbl8.mymusic.helpers.SwipeToDeleteCallback
-import com.ianbl8.mymusic.helpers.SwipeToEditCallback
+import com.ianbl8.mymusic.utils.SwipeToDeleteCallback
+import com.ianbl8.mymusic.utils.SwipeToEditCallback
 import com.ianbl8.mymusic.main.MainApp
 import com.ianbl8.mymusic.models.ReleaseManager
 import com.ianbl8.mymusic.models.ReleaseModel

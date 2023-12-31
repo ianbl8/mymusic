@@ -1,4 +1,4 @@
-package com.ianbl8.mymusic.activities
+package com.ianbl8.mymusic.ui.auth
 
 import android.app.AlertDialog
 import android.os.Bundle

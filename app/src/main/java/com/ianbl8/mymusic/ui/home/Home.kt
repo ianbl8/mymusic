@@ -1,4 +1,4 @@
-package com.ianbl8.mymusic.activities
+package com.ianbl8.mymusic.ui.home
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar

@@ -1,4 +1,4 @@
-package com.ianbl8.mymusic.ui
+package com.ianbl8.mymusic.ui.release
 
 import android.content.Intent
 import android.net.Uri
@@ -25,7 +25,7 @@ import androidx.navigation.ui.NavigationUI
 import com.google.android.material.snackbar.Snackbar
 import com.ianbl8.mymusic.R
 import com.ianbl8.mymusic.databinding.FragmentReleaseBinding
-import com.ianbl8.mymusic.helpers.showImagePicker
+import com.ianbl8.mymusic.utils.showImagePicker
 import com.ianbl8.mymusic.models.ReleaseManager
 import com.ianbl8.mymusic.models.ReleaseModel
 import com.squareup.picasso.Picasso
