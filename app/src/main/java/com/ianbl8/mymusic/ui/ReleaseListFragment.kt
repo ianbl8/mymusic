@@ -24,6 +24,7 @@ import com.ianbl8.mymusic.adapters.ReleaseAdapter
 import com.ianbl8.mymusic.adapters.ReleaseListener
 import com.ianbl8.mymusic.databinding.FragmentReleaseListBinding
 import com.ianbl8.mymusic.helpers.SwipeToDeleteCallback
+import com.ianbl8.mymusic.helpers.SwipeToEditCallback
 import com.ianbl8.mymusic.main.MainApp
 import com.ianbl8.mymusic.models.ReleaseModel
 import timber.log.Timber
@@ -64,6 +65,17 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
 
         val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
         itemTouchDeleteHelper.attachToRecyclerView(fragBinding.recyclerView)
+
+        val swipeEditHandler = object: SwipeToEditCallback(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val release = viewHolder.itemView.tag as ReleaseModel
+                val action = ReleaseListFragmentDirections.actionReleaseListFragmentToReleaseFragment(release.id)
+                findNavController().navigate(action)
+            }
+        }
+
+        val itemTouchEditHelper = ItemTouchHelper(swipeEditHandler)
+        itemTouchEditHelper.attachToRecyclerView(fragBinding.recyclerView)
 
         return root
     }

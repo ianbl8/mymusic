@@ -37,6 +37,7 @@ class ReleaseAdapter constructor(
     inner class MainHolder(val binding: CardReleaseBinding) : RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")
         fun bind(release: ReleaseModel, listener: ReleaseListener) {
+            binding.root.tag = release
             binding.release = release
             if (release.cover.toString().isNotEmpty()) {
                 Picasso.get().load(release.cover).centerCrop().resize(200, 200)

@@ -24,6 +24,7 @@ import com.ianbl8.mymusic.adapters.TrackAdapter
 import com.ianbl8.mymusic.adapters.TrackListener
 import com.ianbl8.mymusic.databinding.FragmentTrackListBinding
 import com.ianbl8.mymusic.helpers.SwipeToDeleteCallback
+import com.ianbl8.mymusic.helpers.SwipeToEditCallback
 import com.ianbl8.mymusic.main.MainApp
 import com.ianbl8.mymusic.models.ReleaseManager
 import com.ianbl8.mymusic.models.ReleaseModel
@@ -66,6 +67,17 @@ class TrackListFragment : Fragment(), TrackListener {
 
         val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
         itemTouchDeleteHelper.attachToRecyclerView(fragBinding.recyclerView)
+
+        val swipeEditHandler = object: SwipeToEditCallback(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val ridtid = viewHolder.itemView.tag.toString()
+                val action = TrackListFragmentDirections.actionTrackListFragmentToTrackFragment(ridtid)
+                findNavController().navigate(action)
+            }
+        }
+
+        val itemTouchEditHelper = ItemTouchHelper(swipeEditHandler)
+        itemTouchEditHelper.attachToRecyclerView(fragBinding.recyclerView)
 
         return root
     }

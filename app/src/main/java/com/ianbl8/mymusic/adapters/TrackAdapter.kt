@@ -40,6 +40,10 @@ class TrackAdapter constructor(
 
     class MainHolder(private val binding: CardTrackBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(release: ReleaseModel, track: TrackModel, listener: TrackListener) {
+            val releaseid = release.id
+            val trackid = track.id
+            val ridtid = releaseid.plus("#").plus(trackid)
+            binding.root.tag = ridtid
             binding.trackDiscNumber.text = track.discNumber.toString()
             binding.trackTrackNumber.text = track.trackNumber.toString()
             binding.trackTitle.text = track.trackTitle
