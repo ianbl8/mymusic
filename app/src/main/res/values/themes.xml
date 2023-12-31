@@ -19,18 +19,4 @@
 
     <style name="Theme.Mymusic.PopUpOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style name="ThemeOverlay.FirebaseIcon" parent="Theme.Mymusic">
-        <item name="android:layout_marginTop">@dimen/icon_top_margin</item>
-        <item name="android:layout_marginBottom">@dimen/icon_bottom_margin</item>
-    </style>
-
-    <style name="ThemeOverlay.TextDetail" parent="Theme.Mymusic">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:gravity">center</item>
-        <item name="maxLines">4</item>
-        <item name="android:padding">4dp</item>
-        <item name="android:textSize">16sp</item>
-    </style>
-
 </resources>

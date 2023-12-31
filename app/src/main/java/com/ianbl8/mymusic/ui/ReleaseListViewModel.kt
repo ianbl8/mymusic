@@ -3,7 +3,6 @@ package com.ianbl8.mymusic.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.auth.FirebaseUser
 import com.ianbl8.mymusic.models.ReleaseManager
 import com.ianbl8.mymusic.models.ReleaseModel
 import timber.log.Timber
@@ -15,15 +14,13 @@ class ReleaseListViewModel: ViewModel() {
     val observableReleasesList: LiveData<List<ReleaseModel>>
         get() = releasesList
 
-    var liveFirebaseUser = MutableLiveData<FirebaseUser>()
-
     init {
         loadAll()
     }
 
     fun loadAll() {
         try {
-            ReleaseManager.findAll(liveFirebaseUser.value?.email!!)
+            releasesList.value = ReleaseManager.findAll()
             Timber.i("loadAll success")
         } catch (e: Exception) {
             Timber.i("loadAll error: ${e.message}")

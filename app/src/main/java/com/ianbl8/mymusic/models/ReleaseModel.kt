@@ -14,6 +14,5 @@ data class ReleaseModel(
     var physical: Boolean = false,
     var digital: Boolean = false,
     var cover: Uri = Uri.EMPTY,
-    var tracks: MutableList<TrackModel> = mutableListOf(),
-    var email: String = "nouser@ianbl8.com"
+    var tracks: MutableList<TrackModel> = mutableListOf()
 ) : Parcelable

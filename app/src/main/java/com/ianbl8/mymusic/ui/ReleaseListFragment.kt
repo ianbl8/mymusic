@@ -1,6 +1,5 @@
 package com.ianbl8.mymusic.ui
 
-import android.app.AlertDialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,9 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -24,21 +23,15 @@ import com.ianbl8.mymusic.adapters.ReleaseListener
 import com.ianbl8.mymusic.databinding.FragmentReleaseListBinding
 import com.ianbl8.mymusic.main.MainApp
 import com.ianbl8.mymusic.models.ReleaseModel
-import com.ianbl8.mymusic.ui.auth.LoggedInViewModel
-import com.ianbl8.mymusic.utils.createLoader
-import com.ianbl8.mymusic.utils.hideLoader
-import com.ianbl8.mymusic.utils.showLoader
 import timber.log.Timber
 
 @Suppress("DEPRECATION")
 class ReleaseListFragment : Fragment(), ReleaseListener {
 
     lateinit var app: MainApp
-    private val releaseListViewModel: ReleaseListViewModel by activityViewModels()
-    private val loggedInViewModel: LoggedInViewModel by activityViewModels()
-    lateinit var loader: AlertDialog
     private var _fragBinding: FragmentReleaseListBinding? = null
     private val fragBinding get() = _fragBinding!!
+    private lateinit var releaseListViewModel: ReleaseListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,23 +45,17 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
         _fragBinding = FragmentReleaseListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         setupMenu()
-        loader = createLoader(requireActivity())
         fragBinding.recyclerView.layoutManager = LinearLayoutManager(activity)
-        showLoader(loader, "downloading collection")
-        releaseListViewModel.observableReleasesList.observe(
-            viewLifecycleOwner,
-            Observer { releases ->
-                releases?.let {
-                    render(releases as ArrayList<ReleaseModel>)
-                    hideLoader(loader)
-                }
-            })
+        releaseListViewModel = ViewModelProvider(this).get(ReleaseListViewModel::class.java)
+        releaseListViewModel.observableReleasesList.observe(viewLifecycleOwner, Observer {
+            releases -> releases?.let { render(releases) }
+        })
 
         return root
     }
 
     private fun setupMenu() {
-        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
+        (requireActivity() as MenuHost).addMenuProvider(object: MenuProvider {
             override fun onPrepareMenu(menu: Menu) {
                 // handle visibility of menu items
             }
@@ -78,10 +65,7 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return NavigationUI.onNavDestinationSelected(
-                    menuItem,
-                    requireView().findNavController()
-                )
+                return NavigationUI.onNavDestinationSelected(menuItem, requireView().findNavController())
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
@@ -99,15 +83,8 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
 
     override fun onResume() {
         super.onResume()
-        showLoader(loader, "downloading collection")
-        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner, Observer { firebaseUser ->
-            if (firebaseUser != null) {
-                releaseListViewModel.liveFirebaseUser.value = firebaseUser
-                releaseListViewModel.loadAll()
-            }
-        })
+        releaseListViewModel.loadAll()
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _fragBinding = null
@@ -115,8 +92,7 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
 
     override fun onReleaseClick(release: ReleaseModel) {
         Timber.i("ReleaseClick $release")
-        val action =
-            ReleaseListFragmentDirections.actionReleaseListFragmentToReleaseFragment(release.id)
+        val action = ReleaseListFragmentDirections.actionReleaseListFragmentToReleaseFragment(release.id)
         findNavController().navigate(action)
     }
 

@@ -9,10 +9,6 @@ object ReleaseManager: ReleaseStore {
         return releases
     }
 
-    override fun findAll(email: String): List<ReleaseModel> {
-        return releases
-    }
-
     override fun findById(searchId: String): ReleaseModel? {
         val foundRelease: ReleaseModel? = releases.find { r -> r.id == searchId }
         return foundRelease

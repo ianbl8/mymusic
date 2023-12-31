@@ -4,7 +4,6 @@ import java.util.UUID
 
 interface ReleaseStore {
     fun findAll(): List<ReleaseModel>
-    fun findAll(email: String): List<ReleaseModel>
     fun findById(searchId: String): ReleaseModel?
     fun findByTitle(searchTitle: String): ReleaseModel?
     fun create(release: ReleaseModel)
