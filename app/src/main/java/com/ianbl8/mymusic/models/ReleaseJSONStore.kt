@@ -28,6 +28,11 @@ class ReleaseJSONStore(private val context: Context) : ReleaseStore {
         return releases
     }
 
+    override fun findAll(email: String): List<ReleaseModel> {
+        logAll()
+        return releases
+    }
+
     override fun findById(searchId: String): ReleaseModel? {
         val foundRelease: ReleaseModel? = releases.find { r -> r.id == searchId }
         return foundRelease
