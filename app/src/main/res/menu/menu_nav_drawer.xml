@@ -9,5 +9,14 @@
             android:icon="@drawable/ic_menu_list"
             android:title="@string/nav_drawer_mymusic" />
     </group>
+    <item android:title="@string/nav_drawer_account">
+        <menu>
+            <item
+                android:id="@+id/nav_sign_out"
+                android:icon="@android:drawable/ic_menu_revert"
+                android:onClick="signOut"
+                android:title="@string/sign_out" />
+        </menu>
+    </item>
 
 </menu>
