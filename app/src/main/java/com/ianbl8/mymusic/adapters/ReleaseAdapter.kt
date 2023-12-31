@@ -33,15 +33,10 @@ class ReleaseAdapter constructor(
         @SuppressLint("SetTextI18n")
         fun bind(release: ReleaseModel, listener: ReleaseListener) {
             binding.release = release
-            /*
-            binding.releaseTitle.text = release.title
-            binding.releaseArtist.text = release.artist
-            binding.releaseYear.text = "(${release.year})"
             if (release.cover.toString().isNotEmpty()) {
                 Picasso.get().load(release.cover).centerCrop().resize(200, 200)
                     .into(binding.imageCover)
             }
-             */
             binding.root.setOnClickListener { listener.onReleaseClick(release) }
             binding.executePendingBindings()
         }

@@ -1,5 +1,7 @@
 package com.ianbl8.mymusic.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,6 +10,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
@@ -38,9 +42,9 @@ class ReleaseFragment : Fragment() {
     private var _fragBinding: FragmentReleaseBinding? = null
     private val fragBinding get() = _fragBinding!!
     var release = ReleaseModel()
+    private var imageUri: Uri? = null
 
-    // registerImagePickerCallback() and showImagePicker() require updating
-    // private lateinit var imageIntentLauncher: ActivityResultLauncher<Intent>
+    private lateinit var imageIntentLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,8 +81,7 @@ class ReleaseFragment : Fragment() {
 
         setButtonListener(fragBinding)
 
-        // registerImagePickerCallback() and showImagePicker() require updating
-        // registerImagePickerCallback()
+        registerImagePickerCallback()
 
         return root
     }
@@ -124,6 +127,14 @@ class ReleaseFragment : Fragment() {
             Timber.i("btnAddRelease pressed")
             val addRelease = ReleaseModel()
             val releaseid = args.releaseid
+            if (releaseid.isNotEmpty()) {
+                release = ReleaseManager.findById(releaseid)!!
+                addRelease.tracks = release.tracks
+                addRelease.cover = release.cover
+            }
+            if (imageUri != null) {
+                addRelease.cover = imageUri as Uri
+            }
             addRelease.title = fragBinding.etTitle.text.toString()
             addRelease.artist = fragBinding.etArtist.text.toString()
             addRelease.year = fragBinding.etYear.text.toString()
@@ -164,10 +175,7 @@ class ReleaseFragment : Fragment() {
 
         layout.btnAddCover.setOnClickListener {
             Timber.i("btnAddCover pressed")
-            Snackbar.make(it, "Add Cover pressed", Snackbar.LENGTH_SHORT)
-                .show()
-            // registerImagePickerCallback() and showImagePicker() require updating
-            // showImagePicker(imageIntentLauncher, this)
+            showImagePicker(imageIntentLauncher, requireContext())
         }
 
         layout.btnTracks.setOnClickListener {
@@ -189,8 +197,6 @@ class ReleaseFragment : Fragment() {
         _fragBinding = null
     }
 
-    // registerImagePickerCallback() and showImagePicker() require updating
-    /*
     private fun registerImagePickerCallback() {
         imageIntentLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -199,12 +205,12 @@ class ReleaseFragment : Fragment() {
                         if (result.data != null) {
                             Timber.i("Got result ${result.data!!.data}")
                             val image = result.data!!.data!!
-                            contentResolver.takePersistableUriPermission(
+                            requireActivity().contentResolver.takePersistableUriPermission(
                                 image,
                                 Intent.FLAG_GRANT_READ_URI_PERMISSION
                             )
-                            release.cover = image
-                            Picasso.get().load(release.cover).into(fragBinding.ivCover)
+                            imageUri = image
+                            Picasso.get().load(imageUri).into(fragBinding.ivCover)
                         }
                     }
 
@@ -213,6 +219,5 @@ class ReleaseFragment : Fragment() {
                 }
             }
     }
-     */
 
 }
