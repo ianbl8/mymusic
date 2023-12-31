@@ -79,8 +79,8 @@
     <string name="welcome_line">welcome to</string>
 
     <!-- Navigation header -->
-    <string name="nav_header_title">mymusic</string>
-    <string name="nav_header_subtitle">account</string>
+    <string name="nav_header_title">user name</string>
+    <string name="nav_header_subtitle">user email</string>
     <string name="nav_header_description">Navigation header</string>
 
     <!-- Nav Drawer -->
