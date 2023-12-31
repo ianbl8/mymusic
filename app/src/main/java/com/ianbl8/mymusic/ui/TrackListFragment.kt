@@ -16,11 +16,14 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.NavigationUI
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ianbl8.mymusic.R
 import com.ianbl8.mymusic.adapters.TrackAdapter
 import com.ianbl8.mymusic.adapters.TrackListener
 import com.ianbl8.mymusic.databinding.FragmentTrackListBinding
+import com.ianbl8.mymusic.helpers.SwipeToDeleteCallback
 import com.ianbl8.mymusic.main.MainApp
 import com.ianbl8.mymusic.models.ReleaseManager
 import com.ianbl8.mymusic.models.ReleaseModel
@@ -51,8 +54,19 @@ class TrackListFragment : Fragment(), TrackListener {
         val releaseid = args.releaseid
         release = ReleaseManager.findById(releaseid)!!
         fragBinding.recyclerView.setLayoutManager(LinearLayoutManager(activity))
-        fragBinding.recyclerView.adapter = TrackAdapter(release.tracks, this)
+        fragBinding.recyclerView.adapter = TrackAdapter(release.tracks as ArrayList, this)
         render(release)
+
+        val swipeDeleteHandler = object: SwipeToDeleteCallback(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val adapter = fragBinding.recyclerView.adapter as TrackAdapter
+                adapter.removeAt(viewHolder.adapterPosition)
+            }
+        }
+
+        val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
+        itemTouchDeleteHelper.attachToRecyclerView(fragBinding.recyclerView)
+
         return root
     }
 
@@ -94,7 +108,7 @@ class TrackListFragment : Fragment(), TrackListener {
     }
 
     private fun render(release: ReleaseModel) {
-        fragBinding.recyclerView.adapter = TrackAdapter(release.tracks, this)
+        fragBinding.recyclerView.adapter = TrackAdapter(release.tracks as ArrayList<TrackModel>, this)
         val noTracks: String = getString(R.string.no_tracks_found).plus(release.title)
         fragBinding.noTracksFound.text = noTracks
         if (release.tracks.isEmpty()) {

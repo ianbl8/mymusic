@@ -13,7 +13,7 @@ interface ReleaseListener {
 }
 
 class ReleaseAdapter constructor(
-    private var releases: List<ReleaseModel>,
+    private var releases: ArrayList<ReleaseModel>,
     private val listener: ReleaseListener
 ) : RecyclerView.Adapter<ReleaseAdapter.MainHolder>() {
 
@@ -28,6 +28,11 @@ class ReleaseAdapter constructor(
     }
 
     override fun getItemCount(): Int = releases.size
+
+    fun removeAt(position: Int) {
+        releases.removeAt(position)
+        notifyItemRemoved(position)
+    }
 
     inner class MainHolder(val binding: CardReleaseBinding) : RecyclerView.ViewHolder(binding.root) {
         @SuppressLint("SetTextI18n")

@@ -16,11 +16,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ianbl8.mymusic.R
 import com.ianbl8.mymusic.adapters.ReleaseAdapter
 import com.ianbl8.mymusic.adapters.ReleaseListener
 import com.ianbl8.mymusic.databinding.FragmentReleaseListBinding
+import com.ianbl8.mymusic.helpers.SwipeToDeleteCallback
 import com.ianbl8.mymusic.main.MainApp
 import com.ianbl8.mymusic.models.ReleaseModel
 import timber.log.Timber
@@ -49,8 +52,18 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
         fragBinding.recyclerView.layoutManager = LinearLayoutManager(activity)
         releaseListViewModel = ViewModelProvider(this).get(ReleaseListViewModel::class.java)
         releaseListViewModel.observableReleasesList.observe(viewLifecycleOwner, Observer {
-            releases -> releases?.let { render(releases) }
+            releases -> releases?.let { render(releases as ArrayList<ReleaseModel>) }
         })
+
+        val swipeDeleteHandler = object: SwipeToDeleteCallback(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val adapter = fragBinding.recyclerView.adapter as ReleaseAdapter
+                adapter.removeAt(viewHolder.adapterPosition)
+            }
+        }
+
+        val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
+        itemTouchDeleteHelper.attachToRecyclerView(fragBinding.recyclerView)
 
         return root
     }
@@ -84,7 +97,7 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    private fun render(releasesList: List<ReleaseModel>) {
+    private fun render(releasesList: ArrayList<ReleaseModel>) {
         fragBinding.recyclerView.adapter = ReleaseAdapter(releasesList, this)
         if (releasesList.isEmpty()) {
             fragBinding.recyclerView.visibility = View.GONE

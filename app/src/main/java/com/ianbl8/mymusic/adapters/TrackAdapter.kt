@@ -13,7 +13,7 @@ interface TrackListener {
 }
 
 class TrackAdapter constructor(
-    private var tracks: List<TrackModel>,
+    private var tracks: ArrayList<TrackModel>,
     private val listener: TrackListener
 ) : RecyclerView.Adapter<TrackAdapter.MainHolder>() {
 
@@ -30,6 +30,13 @@ class TrackAdapter constructor(
     }
 
     override fun getItemCount(): Int = tracks.size
+
+    fun removeAt(position: Int) {
+        val releases = ReleaseManager.findAll()
+        val release: ReleaseModel? = releases.find { r -> r.tracks == tracks }
+        release!!.tracks.removeAt(position)
+        notifyItemRemoved(position)
+    }
 
     class MainHolder(private val binding: CardTrackBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(release: ReleaseModel, track: TrackModel, listener: TrackListener) {
