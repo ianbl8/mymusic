@@ -30,6 +30,7 @@ import com.ianbl8.mymusic.utils.SwipeToEditCallback
 import com.ianbl8.mymusic.main.MainApp
 import com.ianbl8.mymusic.models.ReleaseModel
 import com.ianbl8.mymusic.ui.auth.LoggedInViewModel
+import com.ianbl8.mymusic.ui.release.ReleaseViewModel
 import timber.log.Timber
 
 @Suppress("DEPRECATION")
@@ -40,6 +41,7 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
     private val fragBinding get() = _fragBinding!!
     private val loggedInViewModel: LoggedInViewModel by activityViewModels()
     private val releaseListViewModel: ReleaseListViewModel by activityViewModels()
+    private val releaseViewModel: ReleaseViewModel by activityViewModels()
     private var releaseListEmpty: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,26 +57,34 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
         val root = fragBinding.root
         setupMenu()
         fragBinding.recyclerView.layoutManager = LinearLayoutManager(activity)
-        releaseListViewModel.observableReleasesList.observe(viewLifecycleOwner, Observer {
-            releases -> releases?.let { render(releases as ArrayList<ReleaseModel>) }
-        })
+        releaseListViewModel.observableReleasesList.observe(
+            viewLifecycleOwner,
+            Observer { releases ->
+                releases?.let { render(releases as ArrayList<ReleaseModel>)
+                checkSwipeRefresh()
+                }
+            })
 
-        val swipeDeleteHandler = object: SwipeToDeleteCallback(requireContext()) {
+        setSwipeRefresh()
+
+        val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val adapter = fragBinding.recyclerView.adapter as ReleaseAdapter
                 adapter.removeAt(viewHolder.adapterPosition)
+                releaseViewModel.deleteRelease(loggedInViewModel.liveFirebaseUser.value?.uid!!, (viewHolder.itemView.tag as ReleaseModel).uid!!)
             }
         }
 
         val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
         itemTouchDeleteHelper.attachToRecyclerView(fragBinding.recyclerView)
 
-        val swipeEditHandler = object: SwipeToEditCallback(requireContext()) {
+        val swipeEditHandler = object : SwipeToEditCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val release = viewHolder.itemView.tag as ReleaseModel
-                val action = ReleaseListFragmentDirections.actionReleaseListFragmentToReleaseFragment(
-                    release.uid.toString()
-                )
+                val action =
+                    ReleaseListFragmentDirections.actionReleaseListFragmentToReleaseFragment(
+                        release.uid.toString()
+                    )
                 findNavController().navigate(action)
             }
         }
@@ -86,7 +96,7 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
     }
 
     private fun setupMenu() {
-        (requireActivity() as MenuHost).addMenuProvider(object: MenuProvider {
+        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
             override fun onPrepareMenu(menu: Menu) {
                 // handle visibility of menu items
                 if (!releaseListEmpty) {
@@ -118,14 +128,19 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
                         findNavController().navigate(fragmentid)
                         true
                     }
-                    else -> NavigationUI.onNavDestinationSelected(menuItem, requireView().findNavController())
+
+                    else -> NavigationUI.onNavDestinationSelected(
+                        menuItem,
+                        requireView().findNavController()
+                    )
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun render(releasesList: ArrayList<ReleaseModel>) {
-        fragBinding.recyclerView.adapter = ReleaseAdapter(releasesList, this, releaseListViewModel.readOnly.value!!)
+        fragBinding.recyclerView.adapter =
+            ReleaseAdapter(releasesList, this, releaseListViewModel.readOnly.value!!)
         if (releasesList.isEmpty()) {
             fragBinding.recyclerView.visibility = View.GONE
             fragBinding.noReleasesFound.visibility = View.VISIBLE
@@ -137,6 +152,19 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
         }
     }
 
+    private fun setSwipeRefresh() {
+        fragBinding.swiperefresh.setOnRefreshListener {
+            fragBinding.swiperefresh.isRefreshing = true
+            if (releaseListViewModel.readOnly.value!!) releaseListViewModel.loadAll()
+            else releaseListViewModel.loadUser()
+        }
+    }
+
+    private fun checkSwipeRefresh() {
+        if (fragBinding.swiperefresh.isRefreshing)
+            fragBinding.swiperefresh.isRefreshing = false
+    }
+
     override fun onResume() {
         super.onResume()
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner, Observer { firebaseUser ->
@@ -146,6 +174,7 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
             }
         })
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _fragBinding = null
