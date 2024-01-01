@@ -28,6 +28,7 @@ import com.ianbl8.mymusic.ui.release.ReleaseViewModel
 import com.ianbl8.mymusic.ui.releaselist.ReleaseListViewModel
 import com.ianbl8.mymusic.ui.tracklist.TrackListViewModel
 import timber.log.Timber
+import java.util.UUID
 
 @Suppress("DEPRECATION")
 class TrackFragment : Fragment() {
@@ -40,9 +41,6 @@ class TrackFragment : Fragment() {
     private val args by navArgs<TrackFragmentArgs>()
     private var _fragBinding: FragmentTrackBinding? = null
     private val fragBinding get() = _fragBinding!!
-    var release = ReleaseModel()
-    var track = TrackModel()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,11 +66,13 @@ class TrackFragment : Fragment() {
 
         releaseViewModel.observableRelease.observe(
             viewLifecycleOwner,
-            Observer { release -> render(release) })
+            Observer { release -> renderRelease(release) })
 
+        /*
         trackViewModel.observableTrack.observe(
             viewLifecycleOwner,
-            Observer { track -> render(track) })
+            Observer { track -> renderTrack(track) })
+         */
 
         setButtonListener(fragBinding)
 
@@ -81,17 +81,6 @@ class TrackFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val ridtid: String? = args.ridtid
-        val ids = ridtid?.split("#")
-        val releaseid = ids?.elementAtOrNull(0).toString()
-        var trackid = ids?.elementAtOrNull(1).toString()
-        if (trackid == "null") trackid = ""
-
-        if (releaseid.isNotEmpty() && trackid.isNotEmpty()) {
-            track = trackViewModel.observableTrack.value!!
-            (activity as AppCompatActivity).supportActionBar?.title = "edit ${track.trackTitle}"
-        }
     }
 
     private fun setupMenu() {
@@ -120,11 +109,31 @@ class TrackFragment : Fragment() {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    private fun render(release: ReleaseModel) {
+    private fun renderRelease(release: ReleaseModel) {
         fragBinding.release = release
+        Timber.i("TF Release: $release")
+
+        val ridtid: String? = args.ridtid
+        val ids = ridtid?.split("#")
+        val trackid = ids?.elementAtOrNull(1).toString()
+        var track = release.tracks.find { t -> t.uid == trackid }
+        fragBinding.track = track
+        Timber.i("TF Track: $track")
+        if (track != null) {
+            fragBinding.etDiscNumber.setText(track.discNumber.toString())
+            fragBinding.etTrackNumber.setText(track.trackNumber.toString())
+            fragBinding.etTrackTitle.setText(track.trackTitle)
+            fragBinding.etTrackArtist.setText(track.trackArtist)
+            fragBinding.btnAddTrack.setText(R.string.btn_edit_track)
+            fragBinding.btnDeleteTrack.isEnabled = true
+            (activity as AppCompatActivity).supportActionBar?.title = "edit ${track.trackTitle}"
+        }
     }
 
-    private fun render(track: TrackModel) {
+    /*
+    private fun renderTrack(track: TrackModel) {
+        fragBinding.track = track
+        Timber.i("TF Track: $track")
         fragBinding.etDiscNumber.setText(track.discNumber.toString())
         fragBinding.etTrackNumber.setText(track.trackNumber.toString())
         fragBinding.etTrackTitle.setText(track.trackTitle)
@@ -132,8 +141,10 @@ class TrackFragment : Fragment() {
         if (track.trackTitle.isNotEmpty()) {
             fragBinding.btnAddTrack.setText(R.string.btn_edit_track)
             fragBinding.btnDeleteTrack.isEnabled = true
+            (activity as AppCompatActivity).supportActionBar?.title = "edit ${track.trackTitle}"
         }
     }
+     */
 
     private fun setButtonListener(layout: FragmentTrackBinding) {
         layout.btnAddTrack.setOnClickListener {
@@ -148,27 +159,46 @@ class TrackFragment : Fragment() {
             addTrack.discNumber = fragBinding.etDiscNumber.text.toString().toInt()
             addTrack.trackNumber = fragBinding.etTrackNumber.text.toString().toInt()
             addTrack.trackTitle = fragBinding.etTrackTitle.text.toString()
-            addTrack.trackArtist = fragBinding.etTrackArtist.text.toString()
-            if (addTrack.trackArtist.isEmpty()) {
-                addTrack.trackArtist = release.artist
+
+            if (fragBinding.etTrackArtist.text.toString().isEmpty()) {
+                addTrack.trackArtist = fragBinding.release?.artist!!
+            } else {
+                addTrack.trackArtist = fragBinding.etTrackArtist.text.toString()
             }
+
             if (addTrack.trackTitle.isNotEmpty()) {
                 if (releaseid.isNotEmpty() && trackid.isNotEmpty()) {
                     Timber.i("Update track: ${addTrack.trackTitle}")
                     addTrack.uid = trackid
+                    val updateRelease = fragBinding.release!!
+                    val updateTrack = updateRelease.tracks.find { t -> t.uid == trackid }
+                    val trackIndex = updateRelease.tracks.indexOf(updateTrack)
+                    updateRelease.tracks[trackIndex] = addTrack.copy()
+                    /*
                     trackViewModel.updateTrack(
                         loggedInViewModel.liveFirebaseUser.value?.uid!!,
                         releaseid,
                         trackid,
                         addTrack.copy()
                     )
+                     */
                 } else {
                     Timber.i("Add track: ${addTrack.trackTitle}")
+                    addTrack.uid = UUID.randomUUID().toString()
+                    val updateRelease = fragBinding.release!!
+                    updateRelease.tracks.add(addTrack.copy())
+                    releaseViewModel.updateRelease(
+                        loggedInViewModel.liveFirebaseUser.value?.uid!!,
+                        releaseid,
+                        updateRelease.copy()
+                    )
+                    /*
                     trackViewModel.createTrack(
                         loggedInViewModel.liveFirebaseUser.value?.uid!!,
                         releaseid,
                         addTrack.copy()
                     )
+                     */
                 }
                 // val action = TrackFragmentDirections.actionTrackFragmentToTrackListFragment(release.id)
                 // findNavController().navigate(action)
@@ -185,11 +215,20 @@ class TrackFragment : Fragment() {
             val ids = ridtid?.split("#")
             val releaseid = ids?.elementAtOrNull(0).toString()
             val trackid = ids?.elementAtOrNull(1).toString()
+            val updateRelease = fragBinding.release!!
+            updateRelease.tracks.remove(fragBinding.track)
+            releaseViewModel.updateRelease(
+                loggedInViewModel.liveFirebaseUser.value?.uid!!,
+                releaseid,
+                updateRelease.copy()
+            )
+            /*
             trackViewModel.deleteTrack(
                 loggedInViewModel.liveFirebaseUser.value?.uid!!,
                 releaseid,
                 trackid
             )
+             */
             // val action = TrackFragmentDirections.actionTrackFragmentToTrackListFragment(release.id)
             // findNavController().navigate(action)
             findNavController().popBackStack()

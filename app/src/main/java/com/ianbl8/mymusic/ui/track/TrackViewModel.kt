@@ -11,8 +11,9 @@ class TrackViewModel: ViewModel() {
 
     private val track = MutableLiveData<TrackModel>()
 
-    val observableTrack: LiveData<TrackModel>
+    var observableTrack: LiveData<TrackModel>
         get() = track
+        set(value) { track.value = value.value }
 
     fun findTrack(userId: String, releaseId: String, trackId: String) {
         try {

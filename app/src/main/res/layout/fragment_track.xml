@@ -6,6 +6,9 @@
         <variable
             name="release"
             type="com.ianbl8.mymusic.models.ReleaseModel" />
+        <variable
+            name="track"
+            type="com.ianbl8.mymusic.models.TrackModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
