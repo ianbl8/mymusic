@@ -13,6 +13,7 @@ import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -56,11 +57,10 @@ class TrackListFragment : Fragment(), TrackListener {
         _fragBinding = FragmentTrackListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         setupMenu()
-        val releaseid = args.releaseid
-        val release: ReleaseModel = releaseViewModel.observableRelease.value!!
-        fragBinding.recyclerView.setLayoutManager(LinearLayoutManager(activity))
-        fragBinding.recyclerView.adapter = TrackAdapter(release, release.tracks as ArrayList, this)
-        render(release)
+        Timber.i("args releaseid = ${args.releaseid}")
+
+        fragBinding.recyclerView.layoutManager = LinearLayoutManager(activity)
+        releaseViewModel.observableRelease.observe(viewLifecycleOwner, Observer { release -> render(release) })
 
         val swipeDeleteHandler = object: SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -107,8 +107,7 @@ class TrackListFragment : Fragment(), TrackListener {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem?.itemId) {
                     R.id.trackFragment -> {
-                        val release: ReleaseModel = releaseViewModel.observableRelease.value!!
-                        val releaseid = release.uid
+                        val releaseid = fragBinding.release?.uid!!
                         val ridtid = releaseid.plus("#")
                         val action = TrackListFragmentDirections.actionTrackListFragmentToTrackFragment(ridtid)
                         findNavController().navigate(action)
@@ -125,6 +124,7 @@ class TrackListFragment : Fragment(), TrackListener {
     }
 
     private fun render(release: ReleaseModel) {
+        fragBinding.release = release
         fragBinding.recyclerView.adapter = TrackAdapter(release, release.tracks as ArrayList<TrackModel>, this)
         val noTracks: String = getString(R.string.no_tracks_found).plus(release.title)
         fragBinding.noTracksFound.text = noTracks
