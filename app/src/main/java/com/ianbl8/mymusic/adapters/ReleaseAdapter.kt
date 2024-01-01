@@ -14,7 +14,8 @@ interface ReleaseListener {
 
 class ReleaseAdapter constructor(
     private var releases: ArrayList<ReleaseModel>,
-    private val listener: ReleaseListener
+    private val listener: ReleaseListener,
+    private val readOnly: Boolean
 ) : RecyclerView.Adapter<ReleaseAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
@@ -35,6 +36,7 @@ class ReleaseAdapter constructor(
     }
 
     inner class MainHolder(val binding: CardReleaseBinding) : RecyclerView.ViewHolder(binding.root) {
+        val readOnlyRow = readOnly
         @SuppressLint("SetTextI18n")
         fun bind(release: ReleaseModel, listener: ReleaseListener) {
             binding.root.tag = release

@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.ianbl8.mymusic.databinding.CardTrackBinding
-import com.ianbl8.mymusic.models.ReleaseManager
+import com.ianbl8.mymusic.firebase.FirebaseDBManager
 import com.ianbl8.mymusic.models.ReleaseModel
 import com.ianbl8.mymusic.models.TrackModel
 
@@ -13,8 +13,10 @@ interface TrackListener {
 }
 
 class TrackAdapter constructor(
+    private val release: ReleaseModel,
     private var tracks: ArrayList<TrackModel>,
-    private val listener: TrackListener
+    private val listener: TrackListener,
+    private val readOnly: Boolean
 ) : RecyclerView.Adapter<TrackAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
@@ -24,24 +26,21 @@ class TrackAdapter constructor(
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
         val track = tracks[holder.adapterPosition]
-        val releases = ReleaseManager.findAll()
-        val release: ReleaseModel? = releases.find { r -> r.tracks == tracks }
-        holder.bind(release!!, track, listener)
+        holder.bind(release, track, listener)
     }
 
     override fun getItemCount(): Int = tracks.size
 
     fun removeAt(position: Int) {
-        val releases = ReleaseManager.findAll()
-        val release: ReleaseModel? = releases.find { r -> r.tracks == tracks }
-        release!!.tracks.removeAt(position)
+        release.tracks.removeAt(position)
         notifyItemRemoved(position)
     }
 
-    class MainHolder(private val binding: CardTrackBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MainHolder(private val binding: CardTrackBinding) : RecyclerView.ViewHolder(binding.root) {
+        val readOnlyRow = readOnly
         fun bind(release: ReleaseModel, track: TrackModel, listener: TrackListener) {
-            val releaseid = release.id
-            val trackid = track.id
+            val releaseid = release.uid
+            val trackid = track.uid
             val ridtid = releaseid.plus("#").plus(trackid)
             binding.root.tag = ridtid
             binding.trackDiscNumber.text = track.discNumber.toString()

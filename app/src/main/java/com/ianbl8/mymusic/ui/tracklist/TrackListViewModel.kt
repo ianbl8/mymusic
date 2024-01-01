@@ -1,4 +1,4 @@
-package com.ianbl8.mymusic.ui
+package com.ianbl8.mymusic.ui.tracklist
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

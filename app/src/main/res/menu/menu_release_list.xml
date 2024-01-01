@@ -8,6 +8,11 @@
         android:title="@string/menu_sample_data"
         app:showAsAction="always" />
     <item
+        android:id="@+id/toggleReleases"
+        android:title=""
+        app:actionLayout="@layout/togglebutton_layout"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/releaseFragment"
         android:icon="@drawable/baseline_playlist_add_24"
         android:title="@string/menu_add_release"

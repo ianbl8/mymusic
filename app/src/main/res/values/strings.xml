@@ -2,6 +2,23 @@
 
     <string name="app_name">mymusic</string>
 
+    <!-- Helpers -->
+    <string name="messageLoading">loading…\nplease wait</string>
+
+    <!-- Login -->
+    <string name="auth_failed">authentication failed</string>
+    <string name="create_account">create account</string>
+    <string name="desc_login_image">mymusic login image</string>
+    <string name="emailpassword_status_fmt">email user %1$s (verified %2$b)</string>
+    <string name="firebase_status_fmt">Firebase user %s</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="login_title_text">log in to mymusic</string>
+    <string name="sign_in">sign in</string>
+    <string name="sign_out">sign out</string>
+    <string name="signed_out">signed out</string>
+    <string name="verify_email">verify email</string>
+
     <!-- Release -->
     <string name="btn_add_cover">cover</string>
     <string name="btn_add_release" tools:ignore="ButtonCase">add</string>
@@ -62,11 +79,12 @@
     <string name="welcome_line">welcome to</string>
 
     <!-- Navigation header -->
-    <string name="nav_header_title">mymusic</string>
-    <string name="nav_header_subtitle">account</string>
+    <string name="nav_header_title">user name</string>
+    <string name="nav_header_subtitle">user email</string>
     <string name="nav_header_description">Navigation header</string>
 
     <!-- Nav Drawer -->
+    <string name="nav_drawer_account">account</string>
     <string name="nav_drawer_mymusic">mymusic</string>
 
 </resources>

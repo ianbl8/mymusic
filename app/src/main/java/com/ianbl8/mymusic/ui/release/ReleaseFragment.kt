@@ -1,4 +1,4 @@
-package com.ianbl8.mymusic.ui
+package com.ianbl8.mymusic.ui.release
 
 import android.content.Intent
 import android.net.Uri
@@ -15,9 +15,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -25,9 +25,9 @@ import androidx.navigation.ui.NavigationUI
 import com.google.android.material.snackbar.Snackbar
 import com.ianbl8.mymusic.R
 import com.ianbl8.mymusic.databinding.FragmentReleaseBinding
-import com.ianbl8.mymusic.helpers.showImagePicker
-import com.ianbl8.mymusic.models.ReleaseManager
+import com.ianbl8.mymusic.utils.showImagePicker
 import com.ianbl8.mymusic.models.ReleaseModel
+import com.ianbl8.mymusic.ui.auth.LoggedInViewModel
 import com.squareup.picasso.Picasso
 import timber.log.Timber
 import java.util.Calendar
@@ -37,11 +37,11 @@ class ReleaseFragment : Fragment() {
 
     val thisYear = Calendar.getInstance().get(Calendar.YEAR)
     val nextYear = thisYear + 1
-    private lateinit var releaseViewModel: ReleaseViewModel
+    private val loggedInViewModel: LoggedInViewModel by activityViewModels()
+    private val releaseViewModel: ReleaseViewModel by activityViewModels()
     private val args by navArgs<ReleaseFragmentArgs>()
     private var _fragBinding: FragmentReleaseBinding? = null
     private val fragBinding get() = _fragBinding!!
-    var release = ReleaseModel()
     private var imageUri: Uri? = null
 
     private lateinit var imageIntentLauncher: ActivityResultLauncher<Intent>
@@ -58,42 +58,17 @@ class ReleaseFragment : Fragment() {
         _fragBinding = FragmentReleaseBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         setupMenu()
-        releaseViewModel = ViewModelProvider(this).get(ReleaseViewModel::class.java)
-        releaseViewModel.observableRelease.observe(viewLifecycleOwner, Observer { render() })
+        releaseViewModel.observableRelease.observe(
+            viewLifecycleOwner,
+            Observer { release -> render(release) })
 
-        val releaseid = args.releaseid
-        if (releaseid.isNotEmpty()) {
-            release = ReleaseManager.findById(releaseid)!!
-            fragBinding.etTitle.setText(release.title)
-            fragBinding.etArtist.setText(release.artist)
-            fragBinding.etYear.setText(release.year)
-            fragBinding.etDiscs.setText(release.discs.toString())
-            fragBinding.etTracks.setText(release.tracks.size.toString())
-            fragBinding.cbPhysical.isChecked = release.physical
-            fragBinding.cbDigital.isChecked = release.digital
-            if (release.cover.toString().isNotEmpty()) {
-                Picasso.get().load(release.cover).into(fragBinding.ivCover)
-            }
-            fragBinding.btnAddRelease.setText(R.string.btn_edit_release)
-            fragBinding.btnTracks.isEnabled = true
-            fragBinding.btnDeleteRelease.isEnabled = true
-        }
+        Timber.i("args releaseid = ${args.releaseid}")
 
         setButtonListener(fragBinding)
 
         registerImagePickerCallback()
 
         return root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val releaseid = args.releaseid
-        if (releaseid.isNotEmpty()) {
-            release = ReleaseManager.findById(releaseid)!!
-            (activity as AppCompatActivity).supportActionBar?.title = "edit ${release.title}"
-        }
     }
 
     private fun setupMenu() {
@@ -112,14 +87,33 @@ class ReleaseFragment : Fragment() {
                         findNavController().popBackStack()
                         return true
                     }
-                    else -> return NavigationUI.onNavDestinationSelected(menuItem, requireView().findNavController())
+
+                    else -> return NavigationUI.onNavDestinationSelected(
+                        menuItem,
+                        requireView().findNavController()
+                    )
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    private fun render() {
-        //
+    private fun render(release: ReleaseModel) {
+        fragBinding.release = release
+        fragBinding.etTitle.setText(release.title)
+        fragBinding.etArtist.setText(release.artist)
+        fragBinding.etYear.setText(release.year)
+        fragBinding.etDiscs.setText(release.discs.toString())
+        fragBinding.etTracks.setText(release.tracks.size.toString())
+        fragBinding.cbPhysical.isChecked = release.physical
+        fragBinding.cbDigital.isChecked = release.digital
+        if (release.cover.isNotEmpty()) {
+            val coverUri = Uri.parse(release.cover)
+            Picasso.get().load(coverUri).into(fragBinding.ivCover)
+        }
+        fragBinding.btnAddRelease.setText(R.string.btn_edit_release)
+        fragBinding.btnTracks.isEnabled = true
+        fragBinding.btnDeleteRelease.isEnabled = true
+        (activity as AppCompatActivity).supportActionBar?.title = "edit ${release.title}"
     }
 
     private fun setButtonListener(layout: FragmentReleaseBinding) {
@@ -128,12 +122,11 @@ class ReleaseFragment : Fragment() {
             val addRelease = ReleaseModel()
             val releaseid = args.releaseid
             if (releaseid.isNotEmpty()) {
-                release = ReleaseManager.findById(releaseid)!!
-                addRelease.tracks = release.tracks
-                addRelease.cover = release.cover
+                addRelease.tracks = fragBinding.release?.tracks!!
+                addRelease.cover = fragBinding.release?.cover!!
             }
             if (imageUri != null) {
-                addRelease.cover = imageUri as Uri
+                addRelease.cover = imageUri.toString()
             }
             addRelease.title = fragBinding.etTitle.text.toString()
             addRelease.artist = fragBinding.etArtist.text.toString()
@@ -157,11 +150,18 @@ class ReleaseFragment : Fragment() {
                 } else {
                     if (releaseid.isNotEmpty()) {
                         Timber.i("Update release: ${addRelease.title}")
-                        addRelease.id = releaseid
-                        releaseViewModel.updateRelease(addRelease.copy())
+                        addRelease.uid = releaseid
+                        releaseViewModel.updateRelease(
+                            loggedInViewModel.liveFirebaseUser.value?.uid!!,
+                            releaseid,
+                            addRelease.copy()
+                        )
                     } else {
                         Timber.i("Create release: ${addRelease.title}")
-                        releaseViewModel.createRelease(addRelease.copy())
+                        releaseViewModel.createRelease(
+                            loggedInViewModel.liveFirebaseUser,
+                            addRelease.copy()
+                        )
                     }
                     // findNavController().navigate(R.id.releaseListFragment)
                     findNavController().popBackStack()
@@ -180,13 +180,17 @@ class ReleaseFragment : Fragment() {
 
         layout.btnTracks.setOnClickListener {
             Timber.i("btnTracks pressed")
-            val action = ReleaseFragmentDirections.actionReleaseFragmentToTrackListFragment(release.id)
+            val action =
+                ReleaseFragmentDirections.actionReleaseFragmentToTrackListFragment(args.releaseid)
             findNavController().navigate(action)
         }
 
         layout.btnDeleteRelease.setOnClickListener {
             Timber.i("btnDeleteRelease pressed")
-            releaseViewModel.deleteRelease(release)
+            releaseViewModel.deleteRelease(
+                loggedInViewModel.liveFirebaseUser.value?.uid!!,
+                args.releaseid
+            )
             // findNavController().navigate(R.id.releaseListFragment)
             findNavController().popBackStack()
         }
@@ -195,6 +199,14 @@ class ReleaseFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _fragBinding = null
+    }
+
+    override fun onResume() {
+        super.onResume()
+        releaseViewModel.findReleaseById(
+            loggedInViewModel.liveFirebaseUser.value?.uid!!,
+            args.releaseid
+        )
     }
 
     private fun registerImagePickerCallback() {
