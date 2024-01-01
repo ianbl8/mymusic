@@ -11,13 +11,17 @@ import timber.log.Timber
 class ReleaseViewModel: ViewModel() {
 
     private val release = MutableLiveData<ReleaseModel>()
+
     var observableRelease: LiveData<ReleaseModel>
         get() = release
         set(value) { release.value = value.value }
 
+    /*
     private val status = MutableLiveData<Boolean>()
+
     val observableStatus: LiveData<Boolean>
         get() = status
+     */
 
     fun findReleaseById(userId: String, id: String) {
         try {

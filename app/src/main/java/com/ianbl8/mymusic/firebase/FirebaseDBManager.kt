@@ -62,9 +62,9 @@ object FirebaseDBManager: ReleaseStore {
     ) {
         database.child("user-releases").child(userId).child(releaseId).get().addOnSuccessListener {
             release.value = it.getValue(ReleaseModel::class.java)
-            Timber.i("Firebase got value ${it.value}")
+            Timber.i("Firebase findById got value ${it.value}")
         }.addOnFailureListener { 
-            Timber.e("Firebase error getting data $it")
+            Timber.e("Firebase findById error getting data $it")
         }
     }
 

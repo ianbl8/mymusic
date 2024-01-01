@@ -1,38 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.release.ReleaseFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!--
-    <RelativeLayout
+    <data>
+        <!--
+        <variable
+            name="releasevm"
+            type="com.ianbl8.mymusic.ui.release.ReleaseViewModel" />
+            -->
+        <variable
+            name="release"
+            type="com.ianbl8.mymusic.models.ReleaseModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent"
+        tools:context=".ui.release.ReleaseFragment">
 
-
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/black"
-            android:fitsSystemWindows="true"
-            app:elevation="0dip"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
-                android:minHeight="?attr/actionBarSize"
-                android:theme="?attr/actionBarTheme" />
-
-        </com.google.android.material.appbar.AppBarLayout>
-        -->
 
         <ScrollView
             android:layout_width="match_parent"
@@ -91,8 +77,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:baselineAligned="false">
+                    android:baselineAligned="false"
+                    android:orientation="horizontal">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -151,7 +137,6 @@
                             android:layout_marginStart="8dp"
                             android:layout_marginEnd="8dp"
                             android:layout_marginBottom="8dp"
-                            android:textAlignment="textEnd"
                             android:autofillHints="hint"
                             android:ems="4"
                             android:hint="@string/hint_discs"
@@ -159,6 +144,7 @@
                             android:maxEms="4"
                             android:minEms="4"
                             android:numeric="integer"
+                            android:textAlignment="textEnd"
                             tools:ignore="Deprecated" />
 
                     </LinearLayout>
@@ -184,11 +170,11 @@
                             android:layout_width="match_parent"
                             android:layout_height="30dp"
                             android:layout_marginStart="8dp"
-                            android:layout_marginEnd="8dp"
                             android:layout_marginTop="10dp"
+                            android:layout_marginEnd="8dp"
                             android:hint="@string/hint_tracks"
                             android:textAlignment="viewEnd"
-                            android:textSize="20sp"/>
+                            android:textSize="20sp" />
 
                     </LinearLayout>
 
@@ -323,6 +309,6 @@
 
         </ScrollView>
 
-    <!-- </RelativeLayout> -->
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
