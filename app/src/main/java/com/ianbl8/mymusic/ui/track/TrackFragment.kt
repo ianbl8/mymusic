@@ -47,6 +47,15 @@ class TrackFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _fragBinding = FragmentTrackBinding.inflate(inflater, container, false)
+        val root = fragBinding.root
+        setupMenu()
 
         val ridtid: String? = args.ridtid
         val ids = ridtid?.split("#")
@@ -57,37 +66,13 @@ class TrackFragment : Fragment() {
         Timber.i("rid: \"$releaseid\"")
         Timber.i("tid: \"$trackid\"")
 
-    }
+        releaseViewModel.observableRelease.observe(
+            viewLifecycleOwner,
+            Observer { release -> render(release) })
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _fragBinding = FragmentTrackBinding.inflate(inflater, container, false)
-        val root = fragBinding.root
-        setupMenu()
-        releaseViewModel.observableRelease.observe(viewLifecycleOwner, Observer { render() })
-
-        val possRelease = releaseViewModel.observableRelease.value?.uid
-        Timber.i("R?: $possRelease")
-
-        trackViewModel.observableTrack.observe(viewLifecycleOwner, Observer { render() })
-
-        val ridtid: String? = args.ridtid
-        val ids = ridtid?.split("#")
-        val releaseid = ids?.elementAtOrNull(0).toString()
-        var trackid = ids?.elementAtOrNull(1).toString()
-        if (trackid == "null") trackid = ""
-
-        if (releaseid.isNotEmpty() && trackid.isNotEmpty()) {
-            track = trackViewModel.observableTrack.value!!
-            fragBinding.etDiscNumber.setText(track.discNumber.toString())
-            fragBinding.etTrackNumber.setText(track.trackNumber.toString())
-            fragBinding.etTrackTitle.setText(track.trackTitle)
-            fragBinding.etTrackArtist.setText(track.trackArtist)
-            fragBinding.btnAddTrack.setText(R.string.btn_edit_track)
-            fragBinding.btnDeleteTrack.isEnabled = true
-        }
+        trackViewModel.observableTrack.observe(
+            viewLifecycleOwner,
+            Observer { track -> render(track) })
 
         setButtonListener(fragBinding)
 
@@ -135,8 +120,19 @@ class TrackFragment : Fragment() {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    private fun render() {
-        //
+    private fun render(release: ReleaseModel) {
+        fragBinding.release = release
+    }
+
+    private fun render(track: TrackModel) {
+        fragBinding.etDiscNumber.setText(track.discNumber.toString())
+        fragBinding.etTrackNumber.setText(track.trackNumber.toString())
+        fragBinding.etTrackTitle.setText(track.trackTitle)
+        fragBinding.etTrackArtist.setText(track.trackArtist)
+        if (track.trackTitle.isNotEmpty()) {
+            fragBinding.btnAddTrack.setText(R.string.btn_edit_track)
+            fragBinding.btnDeleteTrack.isEnabled = true
+        }
     }
 
     private fun setButtonListener(layout: FragmentTrackBinding) {
@@ -149,9 +145,6 @@ class TrackFragment : Fragment() {
             var trackid = ids?.elementAtOrNull(1).toString()
             if (trackid == "null") trackid = ""
 
-            if (releaseid.isNotEmpty()) {
-                track = trackViewModel.observableTrack.value!!
-            }
             addTrack.discNumber = fragBinding.etDiscNumber.text.toString().toInt()
             addTrack.trackNumber = fragBinding.etTrackNumber.text.toString().toInt()
             addTrack.trackTitle = fragBinding.etTrackTitle.text.toString()

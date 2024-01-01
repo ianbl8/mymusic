@@ -58,7 +58,9 @@ class ReleaseFragment : Fragment() {
         _fragBinding = FragmentReleaseBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         setupMenu()
-        releaseViewModel.observableRelease.observe(viewLifecycleOwner, Observer { release -> render(release) })
+        releaseViewModel.observableRelease.observe(
+            viewLifecycleOwner,
+            Observer { release -> render(release) })
 
         Timber.i("args releaseid = ${args.releaseid}")
 
