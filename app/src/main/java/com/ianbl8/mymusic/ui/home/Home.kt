@@ -19,6 +19,8 @@ import com.ianbl8.mymusic.databinding.HomeBinding
 import com.ianbl8.mymusic.databinding.NavHeaderBinding
 import com.ianbl8.mymusic.ui.auth.LoggedInViewModel
 import com.ianbl8.mymusic.ui.auth.Login
+import com.ianbl8.mymusic.utils.customTransformation
+import com.squareup.picasso.Picasso
 
 class Home : AppCompatActivity() {
 
@@ -69,6 +71,13 @@ class Home : AppCompatActivity() {
         navHeaderBinding = NavHeaderBinding.bind(headerView)
         navHeaderBinding.navHeaderName.text = currentUser.displayName
         navHeaderBinding.navHeaderEmail.text = currentUser.email
+        if (currentUser.photoUrl != null) {
+            Picasso.get().load(currentUser.photoUrl)
+                .resize(200, 200)
+                .transform(customTransformation())
+                .centerCrop()
+                .into(navHeaderBinding.navHeaderImage)
+        }
     }
 
     fun signOut(item: MenuItem) {
