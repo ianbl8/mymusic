@@ -174,6 +174,11 @@ class TrackFragment : Fragment() {
                     val updateTrack = updateRelease.tracks.find { t -> t.uid == trackid }
                     val trackIndex = updateRelease.tracks.indexOf(updateTrack)
                     updateRelease.tracks[trackIndex] = addTrack.copy()
+                    releaseViewModel.updateRelease(
+                        loggedInViewModel.liveFirebaseUser.value?.uid!!,
+                        releaseid,
+                        updateRelease.copy()
+                    )
                     /*
                     trackViewModel.updateTrack(
                         loggedInViewModel.liveFirebaseUser.value?.uid!!,
