@@ -11,9 +11,9 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -21,17 +21,22 @@ import androidx.navigation.ui.NavigationUI
 import com.google.android.material.snackbar.Snackbar
 import com.ianbl8.mymusic.R
 import com.ianbl8.mymusic.databinding.FragmentTrackBinding
-import com.ianbl8.mymusic.models.ReleaseManager
 import com.ianbl8.mymusic.models.ReleaseModel
 import com.ianbl8.mymusic.models.TrackModel
+import com.ianbl8.mymusic.ui.auth.LoggedInViewModel
 import com.ianbl8.mymusic.ui.release.ReleaseViewModel
+import com.ianbl8.mymusic.ui.releaselist.ReleaseListViewModel
+import com.ianbl8.mymusic.ui.tracklist.TrackListViewModel
 import timber.log.Timber
 
 @Suppress("DEPRECATION")
 class TrackFragment : Fragment() {
 
-    private lateinit var releaseViewModel: ReleaseViewModel
-    private lateinit var trackViewModel: TrackViewModel
+    private val loggedInViewModel: LoggedInViewModel by activityViewModels()
+    private val releaseListViewModel: ReleaseListViewModel by activityViewModels()
+    private val releaseViewModel: ReleaseViewModel by activityViewModels()
+    private val trackListViewModel: TrackListViewModel by activityViewModels()
+    private val trackViewModel: TrackViewModel by activityViewModels()
     private val args by navArgs<TrackFragmentArgs>()
     private var _fragBinding: FragmentTrackBinding? = null
     private val fragBinding get() = _fragBinding!!
@@ -61,13 +66,11 @@ class TrackFragment : Fragment() {
         _fragBinding = FragmentTrackBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         setupMenu()
-        releaseViewModel = ViewModelProvider(this).get(ReleaseViewModel::class.java)
         releaseViewModel.observableRelease.observe(viewLifecycleOwner, Observer { render() })
 
-        val possRelease = releaseViewModel.observableRelease.value?.id
+        val possRelease = releaseViewModel.observableRelease.value?.uid
         Timber.i("R?: $possRelease")
 
-        trackViewModel = ViewModelProvider(this).get(TrackViewModel::class.java)
         trackViewModel.observableTrack.observe(viewLifecycleOwner, Observer { render() })
 
         val ridtid: String? = args.ridtid
@@ -77,8 +80,7 @@ class TrackFragment : Fragment() {
         if (trackid == "null") trackid = ""
 
         if (releaseid.isNotEmpty() && trackid.isNotEmpty()) {
-            release = ReleaseManager.findById(releaseid)!!
-            track = ReleaseManager.findTrack(releaseid, trackid)!!
+            track = trackViewModel.observableTrack.value!!
             fragBinding.etDiscNumber.setText(track.discNumber.toString())
             fragBinding.etTrackNumber.setText(track.trackNumber.toString())
             fragBinding.etTrackTitle.setText(track.trackTitle)
@@ -102,7 +104,7 @@ class TrackFragment : Fragment() {
         if (trackid == "null") trackid = ""
 
         if (releaseid.isNotEmpty() && trackid.isNotEmpty()) {
-            track = ReleaseManager.findTrack(releaseid, trackid)!!
+            track = trackViewModel.observableTrack.value!!
             (activity as AppCompatActivity).supportActionBar?.title = "edit ${track.trackTitle}"
         }
     }
@@ -123,7 +125,11 @@ class TrackFragment : Fragment() {
                         findNavController().popBackStack()
                         return true
                     }
-                    else -> return NavigationUI.onNavDestinationSelected(menuItem, requireView().findNavController())
+
+                    else -> return NavigationUI.onNavDestinationSelected(
+                        menuItem,
+                        requireView().findNavController()
+                    )
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
@@ -144,7 +150,7 @@ class TrackFragment : Fragment() {
             if (trackid == "null") trackid = ""
 
             if (releaseid.isNotEmpty()) {
-                release = ReleaseManager.findById(releaseid)!!
+                track = trackViewModel.observableTrack.value!!
             }
             addTrack.discNumber = fragBinding.etDiscNumber.text.toString().toInt()
             addTrack.trackNumber = fragBinding.etTrackNumber.text.toString().toInt()
@@ -156,11 +162,20 @@ class TrackFragment : Fragment() {
             if (addTrack.trackTitle.isNotEmpty()) {
                 if (releaseid.isNotEmpty() && trackid.isNotEmpty()) {
                     Timber.i("Update track: ${addTrack.trackTitle}")
-                    addTrack.id = trackid
-                    trackViewModel.updateTrack(release, addTrack.copy())
+                    addTrack.uid = trackid
+                    trackViewModel.updateTrack(
+                        loggedInViewModel.liveFirebaseUser.value?.uid!!,
+                        releaseid,
+                        trackid,
+                        addTrack.copy()
+                    )
                 } else {
                     Timber.i("Add track: ${addTrack.trackTitle}")
-                    trackViewModel.createTrack(release, addTrack.copy())
+                    trackViewModel.createTrack(
+                        loggedInViewModel.liveFirebaseUser.value?.uid!!,
+                        releaseid,
+                        addTrack.copy()
+                    )
                 }
                 // val action = TrackFragmentDirections.actionTrackFragmentToTrackListFragment(release.id)
                 // findNavController().navigate(action)
@@ -173,7 +188,15 @@ class TrackFragment : Fragment() {
 
         layout.btnDeleteTrack.setOnClickListener {
             Timber.i("btnDeleteTrack pressed")
-            trackViewModel.deleteTrack(release, track)
+            val ridtid: String? = args.ridtid
+            val ids = ridtid?.split("#")
+            val releaseid = ids?.elementAtOrNull(0).toString()
+            val trackid = ids?.elementAtOrNull(1).toString()
+            trackViewModel.deleteTrack(
+                loggedInViewModel.liveFirebaseUser.value?.uid!!,
+                releaseid,
+                trackid
+            )
             // val action = TrackFragmentDirections.actionTrackFragmentToTrackListFragment(release.id)
             // findNavController().navigate(action)
             findNavController().popBackStack()

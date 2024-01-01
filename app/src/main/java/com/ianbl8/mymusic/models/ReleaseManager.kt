@@ -1,6 +1,8 @@
 package com.ianbl8.mymusic.models
 
+/*
 import timber.log.Timber
+
 
 object ReleaseManager: ReleaseStore {
     val releases = ArrayList<ReleaseModel>()
@@ -83,3 +85,5 @@ object ReleaseManager: ReleaseStore {
         }
     }
 }
+
+ */

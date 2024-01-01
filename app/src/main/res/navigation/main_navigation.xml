@@ -43,6 +43,9 @@
         <action
             android:id="@+id/action_trackListFragment_to_releaseFragment"
             app:destination="@id/releaseFragment" />
+        <action
+            android:id="@+id/action_trackListFragment_to_releaseListFragment"
+            app:destination="@id/releaseListFragment" />
         <argument
             android:name="releaseid"
             app:argType="string"
@@ -57,6 +60,9 @@
         <action
             android:id="@+id/action_trackFragment_to_trackListFragment"
             app:destination="@id/trackListFragment" />
+        <action
+            android:id="@+id/action_trackFragment_to_releaseListFragment"
+            app:destination="@id/releaseListFragment" />
         <argument
             android:name="ridtid"
             app:argType="string"

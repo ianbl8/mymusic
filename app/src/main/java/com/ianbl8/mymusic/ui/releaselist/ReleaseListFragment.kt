@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -27,6 +28,7 @@ import com.ianbl8.mymusic.utils.SwipeToDeleteCallback
 import com.ianbl8.mymusic.utils.SwipeToEditCallback
 import com.ianbl8.mymusic.main.MainApp
 import com.ianbl8.mymusic.models.ReleaseModel
+import com.ianbl8.mymusic.ui.auth.LoggedInViewModel
 import timber.log.Timber
 
 @Suppress("DEPRECATION")
@@ -35,7 +37,8 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
     lateinit var app: MainApp
     private var _fragBinding: FragmentReleaseListBinding? = null
     private val fragBinding get() = _fragBinding!!
-    private lateinit var releaseListViewModel: ReleaseListViewModel
+    private val loggedInViewModel: LoggedInViewModel by activityViewModels()
+    private val releaseListViewModel: ReleaseListViewModel by activityViewModels()
     private var releaseListEmpty: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +54,6 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
         val root = fragBinding.root
         setupMenu()
         fragBinding.recyclerView.layoutManager = LinearLayoutManager(activity)
-        releaseListViewModel = ViewModelProvider(this).get(ReleaseListViewModel::class.java)
         releaseListViewModel.observableReleasesList.observe(viewLifecycleOwner, Observer {
             releases -> releases?.let { render(releases as ArrayList<ReleaseModel>) }
         })
@@ -69,7 +71,9 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
         val swipeEditHandler = object: SwipeToEditCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val release = viewHolder.itemView.tag as ReleaseModel
-                val action = ReleaseListFragmentDirections.actionReleaseListFragmentToReleaseFragment(release.id)
+                val action = ReleaseListFragmentDirections.actionReleaseListFragmentToReleaseFragment(
+                    release.uid.toString()
+                )
                 findNavController().navigate(action)
             }
         }
@@ -124,7 +128,12 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
 
     override fun onResume() {
         super.onResume()
-        releaseListViewModel.loadAll()
+        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner, Observer { firebaseUser ->
+            if (firebaseUser != null) {
+                releaseListViewModel.liveFirebaseUser.value = firebaseUser
+                releaseListViewModel.loadAll()
+            }
+        })
     }
     override fun onDestroyView() {
         super.onDestroyView()
@@ -133,7 +142,9 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
 
     override fun onReleaseClick(release: ReleaseModel) {
         Timber.i("ReleaseClick $release")
-        val action = ReleaseListFragmentDirections.actionReleaseListFragmentToReleaseFragment(release.id)
+        val action = ReleaseListFragmentDirections.actionReleaseListFragmentToReleaseFragment(
+            release.uid.toString()
+        )
         findNavController().navigate(action)
     }
 

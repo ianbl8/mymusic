@@ -3,17 +3,20 @@ package com.ianbl8.mymusic.ui.releaselist
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.ianbl8.mymusic.models.ReleaseManager
+import com.google.firebase.auth.FirebaseUser
+import com.ianbl8.mymusic.firebase.FirebaseDBManager
 import com.ianbl8.mymusic.models.ReleaseModel
 import com.ianbl8.mymusic.models.TrackModel
 import timber.log.Timber
 
-class ReleaseListViewModel: ViewModel() {
+class ReleaseListViewModel : ViewModel() {
 
     private val releasesList = MutableLiveData<List<ReleaseModel>>()
 
     val observableReleasesList: LiveData<List<ReleaseModel>>
         get() = releasesList
+
+    val liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
     init {
         loadAll()
@@ -21,7 +24,7 @@ class ReleaseListViewModel: ViewModel() {
 
     fun loadAll() {
         try {
-            releasesList.value = ReleaseManager.findAll()
+            FirebaseDBManager.findAll(releasesList)
             Timber.i("loadAll success")
         } catch (e: Exception) {
             Timber.i("loadAll error: ${e.message}")
@@ -29,13 +32,112 @@ class ReleaseListViewModel: ViewModel() {
     }
 
     fun sampleData() {
+        val email: String = liveFirebaseUser.value?.email.toString()
+
+        // Releases
+        FirebaseDBManager.create(
+            liveFirebaseUser, ReleaseModel(
+                title = "Ring Ring",
+                artist = "ABBA",
+                year = "1973",
+                discs = 1,
+                physical = true,
+                digital = true,
+                email = email
+            )
+        )
+        FirebaseDBManager.create(
+            liveFirebaseUser, ReleaseModel(
+                title = "Waterloo",
+                artist = "ABBA",
+                year = "1974",
+                discs = 1,
+                physical = true,
+                digital = true,
+                email = email
+            )
+        )
+        FirebaseDBManager.create(
+            liveFirebaseUser, ReleaseModel(
+                title = "ABBA",
+                artist = "ABBA",
+                year = "1975",
+                discs = 1,
+                physical = true,
+                digital = true, email = email
+            )
+        )
+        FirebaseDBManager.create(
+            liveFirebaseUser, ReleaseModel(
+                title = "Arrival",
+                artist = "ABBA",
+                year = "1976",
+                discs = 1,
+                physical = true,
+                digital = true, email = email
+            )
+        )
+        FirebaseDBManager.create(
+            liveFirebaseUser, ReleaseModel(
+                title = "The Album",
+                artist = "ABBA",
+                year = "1977",
+                discs = 1,
+                physical = true,
+                digital = true, email = email
+            )
+        )
+        FirebaseDBManager.create(
+            liveFirebaseUser, ReleaseModel(
+                title = "Voulez-Vous",
+                artist = "ABBA",
+                year = "1979",
+                discs = 1,
+                physical = true,
+                digital = true, email = email
+            )
+        )
+        FirebaseDBManager.create(
+            liveFirebaseUser, ReleaseModel(
+                title = "Super Trouper",
+                artist = "ABBA",
+                year = "1980",
+                discs = 1,
+                physical = true,
+                digital = true, email = email
+            )
+        )
+        FirebaseDBManager.create(
+            liveFirebaseUser, ReleaseModel(
+                title = "The Visitors",
+                artist = "ABBA",
+                year = "1981",
+                discs = 1,
+                physical = true,
+                digital = true, email = email
+            )
+        )
+        FirebaseDBManager.create(
+            liveFirebaseUser, ReleaseModel(
+                title = "Voyage",
+                artist = "ABBA",
+                year = "2021",
+                discs = 1,
+                physical = true,
+                digital = true, email = email
+            )
+        )
+
+        // Tracks
+        // to be reimplemented using FirebaseDBManager
+
+        /*
         var release: ReleaseModel
 
         // Ring Ring
-        ReleaseManager.create(ReleaseModel("uuid", "Ring Ring", "ABBA", "1973", 1, true, true))
         release = ReleaseManager.findByTitle("Ring Ring")!!
         Timber.Forest.i(release.toString())
-        if (release.id.isNotEmpty()) {
+        if (release.uid!!.isNotEmpty()) {
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 1, "Ring Ring", "ABBA"))
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 2, "Another Town, Another Train", "ABBA"))
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 3, "Disillusion", "ABBA"))
@@ -51,10 +153,9 @@ class ReleaseListViewModel: ViewModel() {
         }
 
         // Waterloo
-        ReleaseManager.create(ReleaseModel("uuid", "Waterloo", "ABBA", "1974", 1, true, true))
         release = ReleaseManager.findByTitle("Waterloo")!!
         Timber.Forest.i(release.toString())
-        if (release.id.isNotEmpty()) {
+        if (release.uid!!.isNotEmpty()) {
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 1, "Waterloo", "ABBA"))
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 2, "Sitting In The Palmtree", "ABBA"))
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 3, "King Kong Song", "ABBA"))
@@ -70,10 +171,9 @@ class ReleaseListViewModel: ViewModel() {
         }
 
         // ABBA
-        ReleaseManager.create(ReleaseModel("uuid", "ABBA", "ABBA", "1975", 1, true, true))
         release = ReleaseManager.findByTitle("ABBA")!!
         Timber.Forest.i(release.toString())
-        if (release.id.isNotEmpty()) {
+        if (release.uid!!.isNotEmpty()) {
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 1, "Mamma Mia", "ABBA"))
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 2, "Hey, Hey Helen", "ABBA"))
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 3, "Tropical Loveland", "ABBA"))
@@ -88,10 +188,9 @@ class ReleaseListViewModel: ViewModel() {
         }
 
         // Arrival
-        ReleaseManager.create(ReleaseModel("uuid", "Arrival", "ABBA", "1976", 1, true, true))
         release = ReleaseManager.findByTitle("Arrival")!!
         Timber.Forest.i(release.toString())
-        if (release.id.isNotEmpty()) {
+        if (release.uid!!.isNotEmpty()) {
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 1, "When I Kissed The Teacher", "ABBA"))
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 2, "Dancing Queen", "ABBA"))
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 3, "My Love, My Life", "ABBA"))
@@ -105,10 +204,9 @@ class ReleaseListViewModel: ViewModel() {
         }
 
         // The Album
-        ReleaseManager.create(ReleaseModel("uuid", "The Album", "ABBA", "1977", 1, true, true))
         release = ReleaseManager.findByTitle("The Album")!!
         Timber.Forest.i(release.toString())
-        if (release.id.isNotEmpty()) {
+        if (release.uid!!.isNotEmpty()) {
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 1, "Eagle", "ABBA"))
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 2, "Take A Chance On Me", "ABBA"))
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 3, "One Man, One Woman", "ABBA"))
@@ -121,10 +219,9 @@ class ReleaseListViewModel: ViewModel() {
         }
 
         // Voulez-Vous
-        ReleaseManager.create(ReleaseModel("uuid", "Voulez-Vous", "ABBA", "1979", 1, true, true))
         release = ReleaseManager.findByTitle("Voulez-Vous")!!
         Timber.Forest.i(release.toString())
-        if (release.id.isNotEmpty()) {
+        if (release.uid!!.isNotEmpty()) {
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 1, "As Good As New", "ABBA"))
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 2, "Voulez-Vous", "ABBA"))
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 3, "I Have A Dream", "ABBA"))
@@ -138,10 +235,9 @@ class ReleaseListViewModel: ViewModel() {
         }
 
         // Super Trouper
-        ReleaseManager.create(ReleaseModel("uuid", "Super Trouper", "ABBA", "1980", 1, true, true))
         release = ReleaseManager.findByTitle("Super Trouper")!!
         Timber.Forest.i(release.toString())
-        if (release.id.isNotEmpty()) {
+        if (release.uid!!.isNotEmpty()) {
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 1, "Super Trouper", "ABBA"))
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 2, "The Winner Takes It All", "ABBA"))
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 3, "On And On And On", "ABBA"))
@@ -155,10 +251,9 @@ class ReleaseListViewModel: ViewModel() {
         }
 
         // The Visitors
-        ReleaseManager.create(ReleaseModel("uuid", "The Visitors", "ABBA", "1981", 1, true, true))
         release = ReleaseManager.findByTitle("The Visitors")!!
         Timber.Forest.i(release.toString())
-        if (release.id.isNotEmpty()) {
+        if (release.uid!!.isNotEmpty()) {
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 1, "The Visitors", "ABBA"))
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 2, "Head Over Heels", "ABBA"))
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 3, "When All Is Said And Done", "ABBA"))
@@ -171,10 +266,9 @@ class ReleaseListViewModel: ViewModel() {
         }
 
         // Voyage
-        ReleaseManager.create(ReleaseModel("uuid", "Voyage", "ABBA", "2021", 1, true, true))
         release = ReleaseManager.findByTitle("Voyage")!!
         Timber.Forest.i(release.toString())
-        if (release.id.isNotEmpty()) {
+        if (release.uid!!.isNotEmpty()) {
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 1, "I Still Have Faith In You", "ABBA"))
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 2, "When You Danced With Me", "ABBA"))
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 3, "Little Things", "ABBA"))
@@ -186,5 +280,6 @@ class ReleaseListViewModel: ViewModel() {
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 9, "No Doubt About It", "ABBA"))
             ReleaseManager.createTrack(release, TrackModel("uuid", 1, 10, "Ode To Freedom", "ABBA"))
         }
+         */
     }
 }

@@ -3,49 +3,57 @@ package com.ianbl8.mymusic.ui.release
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.ianbl8.mymusic.models.ReleaseManager
+import com.google.firebase.auth.FirebaseUser
+import com.ianbl8.mymusic.firebase.FirebaseDBManager
 import com.ianbl8.mymusic.models.ReleaseModel
 import timber.log.Timber
 
 class ReleaseViewModel: ViewModel() {
 
     private val release = MutableLiveData<ReleaseModel>()
-
-    val observableRelease: LiveData<ReleaseModel>
+    var observableRelease: LiveData<ReleaseModel>
         get() = release
+        set(value) { release.value = value.value }
 
-    fun findReleaseById(id: String) {
+    private val status = MutableLiveData<Boolean>()
+    val observableStatus: LiveData<Boolean>
+        get() = status
+
+    fun findReleaseById(userId: String, id: String) {
         try {
-            ReleaseManager.findById(id)
-            Timber.i("findRelease success: $release")
+            FirebaseDBManager.findById(userId, id, release)
+            Timber.i("RVM findRelease success: ${release.value.toString()}")
         } catch (e: Exception) {
-            Timber.i("findRelease error: ${e.message}")
+            Timber.e("RVM findRelease error: ${e.message}")
         }
     }
 
-    fun createRelease(release: ReleaseModel) {
+    fun createRelease(firebaseUser: MutableLiveData<FirebaseUser>, release: ReleaseModel) {
+        // status.value = try {
         try {
-            ReleaseManager.create(release)
+            FirebaseDBManager.create(firebaseUser, release)
             Timber.i("createRelease success: $release")
+            // true
         } catch (e: Exception) {
-            Timber.i("createRelease error: ${e.message}")
+            Timber.e("createRelease error: ${e.message}")
+            // false
         }
     }
-    fun updateRelease(release: ReleaseModel) {
+    fun updateRelease(userId: String, releaseId: String, release: ReleaseModel) {
         try {
-            ReleaseManager.update(release)
+            FirebaseDBManager.update(userId, releaseId, release)
             Timber.i("updateRelease success: $release")
         } catch (e: Exception) {
-            Timber.i("updateRelease error: ${e.message}")
+            Timber.e("updateRelease error: ${e.message}")
         }
     }
 
-    fun deleteRelease(release: ReleaseModel) {
+    fun deleteRelease(userId: String, releaseId: String) {
         try {
-            ReleaseManager.delete(release)
-            Timber.i("deleteRelease success: $release")
+            FirebaseDBManager.delete(userId, releaseId)
+            Timber.i("deleteRelease success: $releaseId")
         } catch (e: Exception) {
-            Timber.i("deleteRelease error: ${e.message}")
+            Timber.e("deleteRelease error: ${e.message}")
         }
     }
 }
