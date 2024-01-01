@@ -12,6 +12,7 @@ import timber.log.Timber
 class ReleaseListViewModel : ViewModel() {
 
     private val releasesList = MutableLiveData<List<ReleaseModel>>()
+    var readOnly = MutableLiveData(false)
 
     val observableReleasesList: LiveData<List<ReleaseModel>>
         get() = releasesList
@@ -19,11 +20,22 @@ class ReleaseListViewModel : ViewModel() {
     val liveFirebaseUser = MutableLiveData<FirebaseUser>()
 
     init {
-        loadAll()
+        loadUser()
+    }
+
+    fun loadUser() {
+        try {
+            readOnly.value = false
+            FirebaseDBManager.findAll(liveFirebaseUser.value?.uid!!, releasesList)
+            Timber.i("loadAll success")
+        } catch (e: Exception) {
+            Timber.i("loadAll error: ${e.message}")
+        }
     }
 
     fun loadAll() {
         try {
+            readOnly.value = true
             FirebaseDBManager.findAll(releasesList)
             Timber.i("loadAll success")
         } catch (e: Exception) {

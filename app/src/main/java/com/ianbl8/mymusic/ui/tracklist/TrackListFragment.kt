@@ -125,7 +125,7 @@ class TrackListFragment : Fragment(), TrackListener {
 
     private fun render(release: ReleaseModel) {
         fragBinding.release = release
-        fragBinding.recyclerView.adapter = TrackAdapter(release, release.tracks as ArrayList<TrackModel>, this)
+        fragBinding.recyclerView.adapter = TrackAdapter(release, release.tracks as ArrayList<TrackModel>, this, releaseListViewModel.readOnly.value!!)
         val noTracks: String = getString(R.string.no_tracks_found).plus(release.title)
         fragBinding.noTracksFound.text = noTracks
         if (release.tracks.isEmpty()) {
@@ -148,6 +148,6 @@ class TrackListFragment : Fragment(), TrackListener {
         val trackid = track.uid
         val ridtid = releaseid.plus("#").plus(trackid)
         val action = TrackListFragmentDirections.actionTrackListFragmentToTrackFragment(ridtid)
-        findNavController().navigate(action)
+        if (!releaseListViewModel.readOnly.value!!) findNavController().navigate(action)
     }
 }

@@ -15,7 +15,8 @@ interface TrackListener {
 class TrackAdapter constructor(
     private val release: ReleaseModel,
     private var tracks: ArrayList<TrackModel>,
-    private val listener: TrackListener
+    private val listener: TrackListener,
+    private val readOnly: Boolean
 ) : RecyclerView.Adapter<TrackAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
@@ -35,7 +36,8 @@ class TrackAdapter constructor(
         notifyItemRemoved(position)
     }
 
-    class MainHolder(private val binding: CardTrackBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MainHolder(private val binding: CardTrackBinding) : RecyclerView.ViewHolder(binding.root) {
+        val readOnlyRow = readOnly
         fun bind(release: ReleaseModel, track: TrackModel, listener: TrackListener) {
             val releaseid = release.uid
             val trackid = track.uid

@@ -8,6 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.activityViewModels
@@ -95,6 +96,16 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
 
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.menu_release_list, menu)
+
+                val item = menu.findItem(R.id.toggleReleases) as MenuItem
+                item.setActionView(R.layout.togglebutton_layout)
+                val toggleReleases: SwitchCompat = item.actionView!!.findViewById(R.id.toggleButton)
+                toggleReleases.isChecked = false
+
+                toggleReleases.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) releaseListViewModel.loadAll()
+                    else releaseListViewModel.loadUser()
+                }
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -114,7 +125,7 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
     }
 
     private fun render(releasesList: ArrayList<ReleaseModel>) {
-        fragBinding.recyclerView.adapter = ReleaseAdapter(releasesList, this)
+        fragBinding.recyclerView.adapter = ReleaseAdapter(releasesList, this, releaseListViewModel.readOnly.value!!)
         if (releasesList.isEmpty()) {
             fragBinding.recyclerView.visibility = View.GONE
             fragBinding.noReleasesFound.visibility = View.VISIBLE
@@ -131,7 +142,7 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
         loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner, Observer { firebaseUser ->
             if (firebaseUser != null) {
                 releaseListViewModel.liveFirebaseUser.value = firebaseUser
-                releaseListViewModel.loadAll()
+                releaseListViewModel.loadUser()
             }
         })
     }
@@ -145,7 +156,7 @@ class ReleaseListFragment : Fragment(), ReleaseListener {
         val action = ReleaseListFragmentDirections.actionReleaseListFragmentToReleaseFragment(
             release.uid.toString()
         )
-        findNavController().navigate(action)
+        if (!releaseListViewModel.readOnly.value!!) findNavController().navigate(action)
     }
 
 }
